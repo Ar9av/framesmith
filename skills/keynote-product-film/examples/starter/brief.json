@@ -352,7 +352,7 @@
       "caption_y": 170,
       "caption": [
         "[Where it runs] {icon:lock}",
-        "_[the promise]"
+        "_[the _promise]"
       ],
       "media": "dashboard.png",
       "crop": [
@@ -390,7 +390,7 @@
       "size": 92,
       "lines": [
         "{icon:brand:github} [Open source / licence line]",
-        "_[licence] _· _[repo URL]"
+        "_[licence] _· _[repo _URL]"
       ]
     },
     {
