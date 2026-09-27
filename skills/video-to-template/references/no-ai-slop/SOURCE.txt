@@ -1,0 +1,1 @@
+Source: https://github.com/petergyang/no-ai-slop (MIT, Peter Yang). Vendored unchanged.

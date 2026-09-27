@@ -49,7 +49,7 @@ Get: the reference, the target brand or product, and its **real** logo plus real
 3. If the reference is narrated: write the script to the reference's words-per-second, generate the voice (`framesmith.narration.tts` + `transcribe_words`), and re-time beats to spoken cues instead of fixed durations. `narrated-collage-explainer` shows the pattern.
 
 ## Phase 4: Content and assets
-- **Copy:** every claim comes from the product's own docs. Never invent testimonials, quotes or posts from real people; show real artefacts instead.
+- **Copy:** run every line through the no-ai-slop skill and its eval (`references/no-ai-slop/`) before building scenes; on-screen text has no trailing periods. Every claim comes from the product's own docs. Never invent testimonials, quotes or posts from real people; show real artefacts instead.
 - **Real material first:** the logo (never generated or reinterpreted), product screenshots, and terminal transcripts retyped as native text (not GIF crops).
 - **Brand icons:** use the `brand-icons` skill (thesvg.org), with the light or dark variant to match the background, licences checked, and credits kept.
 - **Generated scenery** (gpt-image-2, `low`/`medium`):

@@ -9,5 +9,6 @@ These came from direct feedback on real deliverables. Treat each as a failing te
 5. **No italics.** Emphasis comes from inverse video, the pixel face, scale, or brand light.
 6. **Type roles:** Inter Display for statements, Geist Mono for literal code only (ligatures off), Departure Mono (`pixel`) for accents, voice and labels, snapped to its 11 px grid.
 7. **Make it move.** Text enters with masked rises (40–60 ms staggers), highlights sweep, and cameras drift and punch on beats. Hold a static frame longer than ~0.5 s only on purpose.
-8. **Honest content.** Claims come from the product's docs. No invented testimonials, quotes, tweets or metrics. AI voices should be disclosed to viewers.
-9. **Licensed assets.** Fonts are OFL/MIT and bundled. Icons are licence-checked (brand-icons). Reference frames stay out of the repo (the scaffold gitignores them).
+8. **No AI-slop copy.** Every on-screen line, caption and voiceover script goes through the no-ai-slop skill (`references/no-ai-slop/SKILL.md`, from github.com/petergyang/no-ai-slop) and its `eval.md` before rendering. Watch for binary contrasts ("not X, it's Y"), faux-insight setups, colon reveals, fake-profound kickers, banned words (leverage, robust, seamless…), and em dashes. No trailing periods on on-screen text.
+9. **Honest content.** Claims come from the product's docs. No invented testimonials, quotes, tweets or metrics. AI voices should be disclosed to viewers.
+10. **Licensed assets.** Fonts are OFL/MIT and bundled. Icons are licence-checked (brand-icons). Reference frames stay out of the repo (the scaffold gitignores them).

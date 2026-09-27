@@ -63,8 +63,7 @@
       "bg": "dark",
       "size": 110,
       "lines": [
-        "And ask",
-        "_And _ask"
+        "And ask again"
       ],
       "stagger": 0.14
     },
@@ -337,7 +336,7 @@
       "value": "sk_live_51Hx9QeKd0aZ7rT2",
       "masked": "@@SECRET:STRIPE_SECRET@@",
       "click_at": 2.3,
-      "footnote": "Swapped back to the real value only at execution, then scrubbed from the output",
+      "footnote": "Prismor swaps in the real value only at execution and scrubs it from the output",
       "object": "key",
       "object_size": 380
     },
@@ -375,7 +374,6 @@
         "Works with the agents you already use"
       ],
       "icons": [
-        "logo",
         "claude-code",
         "openai",
         "cursor",
@@ -384,6 +382,16 @@
         "windsurf"
       ],
       "bg": "black"
+    },
+    {
+      "type": "sentence",
+      "dur": 3.2,
+      "bg": "black",
+      "size": 92,
+      "lines": [
+        "{icon:brand:github} Independent and open source",
+        "_Apache-2.0 _· _github.com/PrismorSec/prismor"
+      ]
     },
     {
       "type": "sentence",

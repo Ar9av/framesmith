@@ -61,5 +61,12 @@
   "source": "https://thesvg.org/icons/langchain/default.svg",
   "license": "CC0-1.0",
   "brand_url": "https://www.langchain.com"
+ },
+ "github": {
+  "title": "GitHub",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/github/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://github.com/"
  }
 }
