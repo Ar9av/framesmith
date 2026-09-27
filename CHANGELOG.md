@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0 (2026-09-27)
+- Skill `brand-icons`: search / info / fetch / sheet / credits for thesvg.org brand icons, licence-aware (unknown refused by default, ND never recoloured, trademark flagged), attribution tables.
+- Engine: `thesvg_registry()` (cached), `search_icons()`; Chromium rasterisation staged under $HOME so snap-confined Chromium works from any output path.
+
 ## 0.3.1 (2026-09-27)
 - Brand icons from thesvg.org: `fetch_icons` (registry-driven variant + licence metadata), Chromium rasterisation, `icon()` with auto-tint for white marks.
 - narrated-collage-explainer: native terminal screens that auto-size to the device's safe area (no clipped GIF crops), `mac` retro-computer device, `icons` beat, `icons` command.

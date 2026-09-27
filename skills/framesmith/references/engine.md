@@ -63,6 +63,7 @@ Font roles (bundled): `sans` / `sans_medium` (Inter Display), `mono` / `mono_med
 - `cover(im, w, h, zoom, fx, fy)` does a cover-fit crop. `cover_point(...)` maps a source point into the crop, e.g. for overlays that track a detail.
 - `sprite_masks(sheet, cols, rows)` returns line-art frames cropped to a shared bbox. `pingpong(n)` gives a seamless loop order.
 - `generate_images(specs, out_dir, key=None, names=None, force=False, fmt=None)` calls gpt-image-2 in parallel, skipping existing files.
+- `thesvg_registry()` returns the cached thesvg.org registry, and `search_icons(query)` ranks matches by slug, title, alias and category.
 - `fetch_icons(slugs, out_dir)` pulls brand SVGs from thesvg.org, using its registry to pick the light-background variant and record the licence. Each is rasterised once to PNG with headless Chromium (`rasterize_svg`), since ImageMagick's SVG parser fails on compact path syntax.
 - `icon(svg_path, size, tint=None)` loads the cached PNG, trimmed and squared. `is_light_mark(im)` detects white marks that would vanish on a light ground, so you can tint them to ink.
 

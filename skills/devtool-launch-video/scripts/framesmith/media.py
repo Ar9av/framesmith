@@ -109,11 +109,42 @@ def generate_images(specs, out_dir, key=None, names=None, force=False, workers=6
 THESVG_REGISTRY = "https://raw.githubusercontent.com/GLINCKER/thesvg/main/src/data/icons.json"
 
 
+def thesvg_registry(max_age_h=24):
+    """thesvg.org icon registry (list of {slug, title, aliases, categories, variants, license, hex, url}),
+    cached in ~/.cache/framesmith for max_age_h hours."""
+    import time
+    cache = os.path.join(os.path.expanduser("~"), ".cache", "framesmith", "thesvg-icons.json")
+    if os.path.exists(cache) and time.time() - os.path.getmtime(cache) < max_age_h * 3600:
+        return json.load(open(cache))
+    data = json.load(urllib.request.urlopen(THESVG_REGISTRY, timeout=60))
+    os.makedirs(os.path.dirname(cache), exist_ok=True)
+    with open(cache, "w") as f:
+        json.dump(data, f)
+    return data
+
+
+def search_icons(query, limit=20):
+    """Rank registry entries for a query: exact slug > title > alias > substring > category."""
+    q = query.lower().strip()
+    scored = []
+    for i in thesvg_registry():
+        slug, title = i["slug"], i.get("title", "").lower()
+        aliases = [a.lower() for a in i.get("aliases", []) or []]
+        cats = [c.lower() for c in i.get("categories", []) or []]
+        score = (100 if slug == q else 90 if title == q else 80 if q in aliases else
+                 60 if slug.startswith(q) or title.startswith(q) else 40 if q in slug or q in title else
+                 20 if any(q in a for a in aliases) else 10 if q in cats else 0)
+        if score:
+            scored.append((score, -len(slug), i))
+    scored.sort(key=lambda x: (-x[0], -x[1]))
+    return [i for _, _, i in scored[:limit]]
+
+
 def fetch_icons(slugs, out_dir, prefer=("light", "default", "mono")):
     """Download brand SVGs from thesvg.org into out_dir/<slug>.svg and write out_dir/icons.json
     (slug, variant, source URL, licence) so attribution travels with the assets."""
     os.makedirs(out_dir, exist_ok=True)
-    reg = {i["slug"]: i for i in json.load(urllib.request.urlopen(THESVG_REGISTRY, timeout=60))}
+    reg = {i["slug"]: i for i in thesvg_registry()}
     meta_path = os.path.join(out_dir, "icons.json")
     meta = json.load(open(meta_path)) if os.path.exists(meta_path) else {}
     out = []
@@ -145,24 +176,35 @@ def _chromium():
 
 def rasterize_svg(svg_path, png_path, size=512):
     """Render an SVG with headless Chromium (a real SVG engine) to a transparent size×size PNG.
-    Keep paths out of hidden folders: snap-confined Chromium can't read or write them."""
-    import subprocess
+
+    Work happens in a staging folder under $HOME (not hidden, not /tmp): snap-confined Chromium can
+    only see those, and has a private /tmp. The PNG is then moved to png_path.
+    """
+    import shutil, subprocess, uuid
     exe = _chromium()
     if not exe:
         return False
-    d = os.path.dirname(os.path.abspath(svg_path))
-    page = os.path.join(d, "_raster.html")
-    with open(page, "w") as f:
-        f.write(f'<html><body style="margin:0;background:transparent"><img src="{os.path.basename(svg_path)}" '
-                f'style="width:{size}px;height:{size}px;object-fit:contain;display:block"></body></html>')
+    stage = os.path.join(os.path.expanduser("~"), "framesmith-svg-stage", uuid.uuid4().hex[:8])
+    os.makedirs(stage, exist_ok=True)
     try:
+        shutil.copy(svg_path, os.path.join(stage, "icon.svg"))
+        page, out = os.path.join(stage, "page.html"), os.path.join(stage, "out.png")
+        with open(page, "w") as f:
+            f.write(f'<html><body style="margin:0;background:transparent"><img src="icon.svg" '
+                    f'style="width:{size}px;height:{size}px;object-fit:contain;display:block"></body></html>')
         subprocess.run([exe, "--headless=new", "--disable-gpu", "--no-sandbox", "--hide-scrollbars",
                         "--default-background-color=00000000", f"--window-size={size},{size}",
-                        f"--screenshot={os.path.abspath(png_path)}", "file://" + page],
-                       capture_output=True, timeout=90)
+                        f"--screenshot={out}", "file://" + page], capture_output=True, timeout=90)
+        if not os.path.exists(out):
+            return False
+        shutil.move(out, png_path)
+        return True
     finally:
-        os.unlink(page)
-    return os.path.exists(png_path)
+        shutil.rmtree(stage, ignore_errors=True)
+        try:
+            os.rmdir(os.path.dirname(stage))
+        except OSError:
+            pass
 
 
 @lru_cache(None)
