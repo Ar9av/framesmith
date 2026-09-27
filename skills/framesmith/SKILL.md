@@ -16,6 +16,7 @@ framesmith templates are **skills**: a `SKILL.md`, a brief schema, an example br
 <!-- catalog:start -->
 | Skill | Output | Pick it when |
 |---|---|---|
+| [`video-to-template`](../video-to-template/SKILL.md) | a new template skill + the finished video | The user shares a **reference video** ("make one like this", "copy this style"). Runs the whole pipeline: analyse → storyboard → animatic → assets → build → compare → ship |
 | [`brutalist-product-promo`](../brutalist-product-promo/SKILL.md) | 22.6 s 9:16 MP4, 21 scenes | Hardware/tech product promo, spec-sheet motion graphic, industrial/brutalist look, one accent colour on black and white |
 | [`devtool-launch-video`](../devtool-launch-video/SKILL.md) | 33.8 s 16:9 MP4, 11 scenes | Launch or "what is X" film for a CLI, dev tool, AI-agent or security product: rogue-terminal problem, brand reveal, verdict-chip proof, features, dashboard, install, CTA |
 | [`narrated-collage-explainer`](../narrated-collage-explainer/SKILL.md) | ~50 s 1:1 MP4 with voiceover, beats on spoken cues | Narrated explainer or founder story in a paper-white collage style (big pixel keywords, synced subtitles, CRT TV / XP window / cards / starbursts), built from a script plus real screenshots and GIFs |
@@ -38,11 +39,6 @@ python3 skills/<name>/scripts/<entry>.py render --brief brief.json [--audio a.mp
 
 Always review stills or the contact sheet before a full render, and report which assets are placeholders.
 
-## 3. Build a new template (e.g. recreating a reference video)
+## 3. Build a new template
 
-1. **Deconstruct the reference.** Extract frames at 4 fps with ffmpeg, tile them into timestamped contact sheets, and write a storyboard table (scene, start, duration, what moves, the text it carries). Note the palette, type roles (display / mono), the transition types and the beat grid.
-2. **Scaffold.** Run `python3 tools/new_skill.py <kebab-name>` from the repo root. This creates the skill folder, vendors the engine, and writes a starter CLI and brief.
-3. **Build scenes.** Write one function per scene, `fn(ctx) -> HxWx3 uint8`. Use `ctx.lt` (local seconds) and `ctx.p(a, b)` for progress, and keep all copy in the brief. Engine API: `references/engine.md`.
-4. **Assets.** Define image slots with explicit framing and background in the brief. Generate at `low`/`medium`. Use sprite sheets (a grid of the same subject with one part changing) for looping motion.
-5. **Iterate with stills.** Compare against the reference side by side (`ffmpeg hstack`). Then test a second brief with a different brand, a light accent and a long name to prove it generalises.
-6. **Ship.** Add a README catalog entry by running `python3 tools/catalog.py`, then run `python3 tools/sync_core.py --check` and `python3 tools/validate.py`.
+Use [`video-to-template`](../video-to-template/SKILL.md). It holds the full process: reference analysis (`analyze.py`), a timed animatic scaffold (`scaffold.py`), side-by-side review (`compare.py`), the design rules, and a list of pitfalls that each cost a re-render. With no reference video, scaffold a blank template with `python3 tools/new_skill.py <name>` and follow the same phases from Phase 2.

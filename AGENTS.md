@@ -13,6 +13,9 @@ This is for agents and humans extending the repo. (`CLAUDE.md` points here.)
 
 ## Adding a skill
 
+From a reference video, follow `skills/video-to-template/SKILL.md`. Otherwise:
+
+
 1. `python3 tools/new_skill.py <kebab-name> "<description>"`
 2. Build scenes and write `references/storyboard.md`. Add an example brief plus assets under `examples/<brand>/`.
 3. Write the `description` as the trigger: what it makes, when to use it, and phrases users say. Keep it ≤ 1024 chars.

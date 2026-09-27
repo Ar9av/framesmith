@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.0 (2026-09-27)
+- Skill `video-to-template`: the end-to-end reference → template process. `analyze.py` (download, cuts via scene score ∪ adaptive changed-pixel peaks, pacing, palette, audio type, Whisper transcript, contact sheets, keyframes, storyboard skeleton), `scaffold.py` (new template as a timed animatic from the analysis, reference frames gitignored), `compare.py` (side-by-side + paired frames). References: design rules, lessons, engine map.
+
 ## 0.4.0 (2026-09-27)
 - Skill `brand-icons`: search / info / fetch / sheet / credits for thesvg.org brand icons, licence-aware (unknown refused by default, ND never recoloured, trademark flagged), attribution tables.
 - Engine: `thesvg_registry()` (cached), `search_icons()`; Chromium rasterisation staged under $HOME so snap-confined Chromium works from any output path.
