@@ -25,7 +25,7 @@ tl.still(3.2, "f.png"); tl.contact_sheet("sheet.png"); tl.render("out.mp4", audi
 
 ## Typography (`fs.typography`)
 
-Font roles (bundled): `sans` / `sans_medium` (Inter Display), `mono` / `mono_medium` / `mono_bold` (Geist Mono), and `serif` / `serif_italic` / `serif_italic_bold` (Fraunces, Latin subset). Get a font with `F(role, px)`. Pairing that works: a sans for statements, italic serif for the human or emotional line, mono only for real code.
+Font roles (bundled): `sans` / `sans_medium` (Inter Display), `mono` / `mono_medium` / `mono_bold` (Geist Mono), and `pixel` (Departure Mono, snapped to its 11 px grid). Get a font with `F(role, px)`. Pairing that works: the sans for statements, pixel for accents and voice, and Geist Mono only for real code. No italics.
 
 - `text(draw, xy, s, font, fill, track=0, anchor="la", max_w=None, fit_to=None)`: tracking in px; anchors as in PIL (`mm`, `rm`…). **Always pass `max_w`.** The type shrinks to fit (down to 55%). Unfittable text is logged in `OVERFLOWS`, and heavy shrinks in `SHRINKS`; `overflow_report()` / `overflow_report(warn=True)` summarise them. Pass `fit_to=final_copy` during reveals so the size stays stable.
 - `scramble(s, p, seed, fi, tail=5)`: decode reveal. `typed(s, p)`: typewriter. `decay(s, p, keep)`: random dropout.
@@ -73,5 +73,5 @@ For software and dev-tool videos:
 - `rise(img, xy, s, font, fill, p, ...)` is the kinetic-type entrance: text rises out of a mask at its baseline. `fill` can be a colour or a texture function.
 - `fill_text(img, xy, s, font, fill_fn, ...)` fills glyphs with any texture, e.g. brand light.
 - `marker(draw, box, col, p)` is a highlighter swipe, for inverse-video emphasis.
-- Terminal spans take an optional font role, `(text, rgb, "serif_italic")`, so an agent's narration can be set in italic serif next to mono commands. `"mark": rgb` on a line sweeps a highlighter behind it. Code renders with ligatures off (`CODE_FEATURES`), so `<!--` and `-->` stay literal.
+- Terminal spans take an optional font role, `(text, rgb, "pixel")`, so an agent's narration can be set in pixel type next to mono commands. `"mark": rgb` on a line sweeps a highlighter behind it. Code renders with ligatures off (`CODE_FEATURES`), so `<!--` and `-->` stay literal.
 - `holo_field(w, h, t, palette)` produces animated iridescent interference light in any palette. Render it small and upscale for speed.

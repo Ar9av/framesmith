@@ -53,15 +53,15 @@ class State:
         return Image.new("RGB", (self.W, self.H), col or self.th.ink)
 
     def spans(self, text_, kind, prompt_col):
-        """Terminal line styling. Agent narration is set in italic serif (the agent's 'voice'),
+        """Terminal line styling. Agent narration is set in pixel type (the agent's 'voice'),
         commands in mono; threats are inverse video on a signal-red marker."""
         th = self.th
         if kind == "cmd" and text_.startswith("$ "):
             return [("$ ", prompt_col), (text_[2:], th.paper)], None
-        if kind == "agent":                                   # bullet stays mono (the serif has no ●)
+        if kind == "agent":                                   # agent narration in pixel type; bullet stays mono
             if text_.startswith("● "):
-                return [("● ", th.paper), (text_[2:], th.paper, "serif_italic")], None
-            return [(text_, th.paper, "serif_italic")], None
+                return [("● ", th.paper), (text_[2:], th.paper, "pixel")], None
+            return [(text_, th.paper, "pixel")], None
         if kind in ("inject", "leak"):
             return [(text_, th.ink, "mono_medium")], self.danger
         if kind == "ok":
@@ -176,10 +176,10 @@ def s_names(c):
              G.danger, -6, "mm", max_w=c.W - 240, fit_to=s)
     else:
         jx = int((h(5, i) - 0.5) * 240)
-        serif = i % 3 == 2
+        px = i % 3 == 2                                   # every third name flashes in pixel type
         text(d, (c.W / 2 + jx, c.H / 2 + int((h(6, i) - 0.5) * 160)), names[i % len(names)],
-             F("serif_italic" if serif else "sans_medium", 210 if serif else 200), th.ink if inv else th.paper,
-             -3 if serif else -6, "mm", max_w=c.W - 240 - 2 * abs(jx))
+             F("pixel" if px else "sans_medium", 176 if px else 200), th.ink if inv else th.paper,
+             0 if px else -6, "mm", max_w=c.W - 240 - 2 * abs(jx))
     return arr(im)
 
 
@@ -230,14 +230,15 @@ def s_rogue(c, frozen=False):
         if c.lt >= t0:
             y = 250 + k * 235
             ui.rise(im, (cx, y), a, F("sans_medium", 64), th.paper, ease_out(c.p(t0, t0 + 0.35)), -2, max_w=cw)
-            f2 = F("serif_italic_bold", 76)
-            bb = ui.rise(im, (cx + 14, y + 78), b, f2, th.ink, ease_out(c.p(t0 + 0.12, t0 + 0.45)), -1, max_w=cw - 28)
+            f2 = F("pixel", 77)
+            b = b.upper()
+            bb = ui.rise(im, (cx + 14, y + 82), b, f2, th.ink, ease_out(c.p(t0 + 0.12, t0 + 0.45)), 0, max_w=cw - 28)
             if bb:                                          # inverse block wipes in behind the second line
                 blk = Image.new("RGB", im.size, (0, 0, 0))
                 ui.marker(ImageDraw.Draw(blk), (cx, bb[1] - 14, bb[2] + 16, bb[3] + 18), (255, 255, 255), ease_out(c.p(t0 + 0.05, t0 + 0.3)))
                 m = blk.convert("L")
                 im.paste(Image.new("RGB", im.size, G.danger), (0, 0), m)
-                ui.rise(im, (cx + 14, y + 78), b, f2, th.ink, ease_out(c.p(t0 + 0.12, t0 + 0.45)), -1, max_w=cw - 28)
+                ui.rise(im, (cx + 14, y + 82), b, f2, th.ink, ease_out(c.p(t0 + 0.12, t0 + 0.45)), 0, max_w=cw - 28)
     a = np.asarray(im, np.float32)
     heat = c.p(2.4, c.dur)
     v = G.cache(("vig", c.W, c.H), lambda: vignette(c.W, c.H))
@@ -270,7 +271,7 @@ def s_reveal(c):
     cy = c.H / 2 - 50
     im = glow(im, c, c.W / 2, cy, 420, 0.55 * ease_out(c.p(0, 0.5)))
     draw_logo(im, c, c.W / 2, cy, size, ease_out(c.p(0, 0.35)), sheen=c.p(0.3, 0.9))
-    ui.rise(im, (c.W / 2, c.H - 190), G.c["meet"], F("serif_italic", 56), G.th.paper, ease_out(c.p(0.35, 0.65)), 0, "mm")
+    ui.rise(im, (c.W / 2, c.H - 190), G.c["meet"], F("pixel", 44), G.th.paper, ease_out(c.p(0.35, 0.65)), 0, "mm")
     a = arr(im)
     if c.lt < 0.07:
         a = (a.astype(np.float32) * 0.3 + 255 * 0.7).astype(np.uint8)
@@ -285,7 +286,7 @@ def s_title(c):
     base_y, x = 900, 104
     cap_top = base_y - 0.73 * 230
     budget = cap_top * c.W / c.H - x - 60                     # stay inside the ink triangle
-    text(d, (112, 650), G.c["meet"], F("serif_italic", 52), th.paper, 0)
+    text(d, (112, 660), G.c["meet"], F("pixel", 44), th.paper, 0)
     b = G.c["brand"]
     text(d, (x, base_y), scramble(b, ease_out(c.p(0, 0.45)), 61, c.fi, 3), F("sans_medium", 230), th.paper, -9, "ls",
          max_w=budget, fit_to=b)
@@ -341,7 +342,7 @@ def s_intercept(c):
     pos = ui.terminal(im, (x0 + 40, y0 + 88), lines, c.lt, 30, 2.1, th.paper, c.fi, max_width=x1 - x0 - 80)
     d = ImageDraw.Draw(im)
     counts = {}
-    fv, fr = F("sans_medium", 30), F("serif_italic", 28)
+    fv, fr = F("sans_medium", 30), F("pixel", 22)
     for li, t0, v_t, it in plan:
         if li not in pos:
             continue
@@ -375,9 +376,9 @@ def s_intercept(c):
                 ui.rise(im, (ANN_X, ly + 12), word, fvw, G.fill_holo(c, 2.4) if caught else th.paper, pv, 3, "ls")
                 ui.rise(im, (ANN_X + ww + 16, ly + 12), rule, fr, th.paper, ease_out(c.p(v_t + 0.2, v_t + 0.5)), 0, "ls",
                         max_w=budget - ww - 16)
-    # running tally: numbers roll up in brand light, labels in italic serif
+    # running tally: numbers roll up in brand light, labels in pixel type
     x = c.W - 80
-    f_n, f_l = F("sans_medium", 34), F("serif_italic", 26)
+    f_n, f_l = F("sans_medium", 34), F("pixel", 22)
     d = ImageDraw.Draw(im)
     for k in reversed(list(G.verdicts)):
         lab = " " + k.lower()
@@ -418,7 +419,7 @@ def s_features(c):
     for k, wd in enumerate(words):
         ui.rise(im, (x, 610), wd, f, fg, ease_out(min(1, max(0, (b - k * 0.05) / 0.22))), -7 * f.size / 180, "ls")
         x += f.getlength(wd) - 7 * len(wd) * f.size / 180 + f.getlength(" ")
-    ui.rise(im, (ax, 660), s, F("serif_italic", 44), fg, ease_out(min(1, max(0, (b - 0.1) / 0.25))), 0, anchor + "a",
+    ui.rise(im, (ax, 660), s, F("pixel", 33), fg, ease_out(min(1, max(0, (b - 0.1) / 0.25))), 0, anchor + "a",
             max_w=c.W - 216)
     return arr(im)
 
@@ -535,7 +536,7 @@ def s_end(c):
     draw_logo(im, c, c.W / 2, 330, 220, ease_out(c.p(0, 0.45)), sheen=c.p(0.5, 1.2))
     d = ImageDraw.Draw(im)
     a, b = G.c["tagline"], G.c.get("tagline_accent", "")
-    fa, fb = F("sans_medium", 88), F("serif_italic_bold", 100)
+    fa, fb = F("sans_medium", 88), F("pixel", 88)
     wa, wb = fa.getlength(a + " ") - 3 * len(a), fb.getlength(b)
     from framesmith.typography import fit as _fit
     k = min(1.0, (c.W - 240) / max(1, wa + wb))
@@ -551,7 +552,7 @@ def s_end(c):
     d = ImageDraw.Draw(im)
     ui.fill_text(im, (c.W / 2, 830), typed(G.c["links"], c.p(1.0, 1.5)), F("mono", 28), G.fill_holo(c, 1.2), 1, "mm",
                  max_w=c.W - 240, fit_to=G.c["links"])
-    ui.rise(im, (c.W / 2, 880), G.c["license"], F("serif_italic", 30), th.paper, ease_out(c.p(1.3, 1.6)), 0, "mm",
+    ui.rise(im, (c.W / 2, 880), G.c["license"], F("pixel", 22), th.paper, ease_out(c.p(1.3, 1.6)), 0, "mm",
             max_w=c.W - 240)
     return arr(im)
 

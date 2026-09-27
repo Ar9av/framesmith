@@ -13,17 +13,21 @@ ROLES = {
     "mono": "GeistMono-Regular.otf",
     "mono_medium": "GeistMono-Medium.otf",
     "mono_bold": "GeistMono-SemiBold.otf",
-    "serif": "Fraunces-Regular.ttf",              # Latin subset: letters, digits, basic punctuation
-    "serif_italic": "Fraunces-Italic.ttf",
-    "serif_italic_bold": "Fraunces-SemiBoldItalic.ttf",
+    "pixel": "DepartureMono-Regular.otf",        # arcade/bitmap accent face; snapped to its 11 px grid
 }
+PIXEL_GRID = 11
 GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@$*+=<>/\\|"
 
 
 @lru_cache(None)
 def F(role, size):
-    """Font by role name (sans, sans_medium, mono, mono_bold) or file path."""
+    """Font by role name (sans, sans_medium, mono, mono_medium, mono_bold, pixel) or file path.
+
+    Pixel type is snapped to multiples of its 11 px design grid so every stroke lands on whole pixels.
+    """
     path = os.path.join(FONT_DIR, ROLES[role]) if role in ROLES else role
+    if role == "pixel":
+        size = max(PIXEL_GRID, round(size / PIXEL_GRID) * PIXEL_GRID)
     return ImageFont.truetype(path, int(size))
 
 

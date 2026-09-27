@@ -24,7 +24,8 @@ This is for agents and humans extending the repo. (`CLAUDE.md` points here.)
 
 - **No overflow, ever.** Every string drawn with `text()` gets a `max_w` budget (pass `fit_to=` the final copy while it scrambles or types). Terminals get `max_width` and word-wrap. A template's `check` samples the cut and fails on overflow. It warns when copy shrinks below 80% of its designed size; the fix is shorter copy.
 - **No pills, chips or badges.** They read as generic AI-UI slop. Status is typeset: a coloured word in mono caps, with a leader line or rule if it needs anchoring. Captions sit on a scrim, not inside a rounded box. (`ui.chip` was removed on purpose.)
-- **No default-terminal look.** No typewriter or slab mono, and no salmon/amber/grey 'syntax theme' colouring. Use a tight palette: ink, paper, one signal colour used as solid fields (inverse video), and the brand's own light for positive states. Mono is for literal code only. Statements go in the sans and the human line in italic serif.
+- **No default-terminal look.** No typewriter or slab mono, and no salmon/amber/grey 'syntax theme' colouring. Use a tight palette: ink, paper, one signal colour used as solid fields (inverse video), and the brand's own light for positive states. Mono is for literal code only. Statements go in the sans; accents, the agent's voice and reasons go in `pixel` (Departure Mono).
+- **No italics.** Not for emphasis, captions or taglines. Emphasis comes from inverse video, the pixel face, scale or brand light.
 - **Make it move.** Text enters with `ui.rise` (masked, staggered 40–60 ms), highlights sweep with `ui.marker`, cameras drift and punch on beats. A static frame held for more than ~0.5 s needs a reason.
 - **Use the brand's real logo.** Logos are a supplied asset slot, never generated or reinterpreted. Don't substitute a literal metaphor for the name (e.g. a stock prism for "Prismor").
 
