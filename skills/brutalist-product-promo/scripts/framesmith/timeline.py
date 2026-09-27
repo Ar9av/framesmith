@@ -60,6 +60,23 @@ class Mosaic:
 
 
 @dataclass
+class Dissolve:
+    """Crossfade from the previous scene (still running) with an optional blur peak mid-way."""
+    dur: float = 0.35
+    blur: float = 10.0
+    ease: Callable = ease_in_out
+
+    def blend(self, a, b, p, theme=None):
+        from PIL import Image, ImageFilter
+        p = self.ease(p)
+        out = a.astype(np.float32) * (1 - p) + b.astype(np.float32) * p
+        r = self.blur * (1 - abs(2 * p - 1))
+        if r > 0.5:
+            out = np.asarray(Image.fromarray(out.astype(np.uint8)).filter(ImageFilter.GaussianBlur(r)), np.float32)
+        return out.astype(np.uint8)
+
+
+@dataclass
 class Cut:
     """Hard cut (the default)."""
     dur: float = 0.0
@@ -110,7 +127,7 @@ class Timeline:
         i = min(i, len(self.scenes) - 1)
         cur = self._run(i, t, fi)
         tr = self.scenes[i].transition
-        if i > 0 and isinstance(tr, Mosaic) and t - self.starts[i] < tr.dur:
+        if i > 0 and tr is not None and hasattr(tr, "blend") and t - self.starts[i] < tr.dur:
             prev = self._run(i - 1, t, fi)      # previous scene keeps running under the wipe
             cur = tr.blend(prev, cur, (t - self.starts[i]) / tr.dur, self.theme)
         return np.ascontiguousarray(cur)

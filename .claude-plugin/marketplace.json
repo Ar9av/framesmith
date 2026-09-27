@@ -7,7 +7,7 @@
       "name": "framesmith",
       "source": "./",
       "description": "Brief-driven motion-graphics templates (product promos, spec-sheet videos, kinetic type) rendered with deterministic Python + ffmpeg.",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "category": "design",
       "keywords": ["motion-graphics", "video", "design", "gpt-image-2"]
     }

@@ -21,6 +21,7 @@ framesmith templates are **skills**: a `SKILL.md`, a brief schema, an example br
 | [`devtool-launch-video`](../devtool-launch-video/SKILL.md) | 33.8 s 16:9 MP4, 11 scenes | Launch or "what is X" film for a CLI, dev tool, AI-agent or security product: rogue-terminal problem, brand reveal, verdict-chip proof, features, dashboard, install, CTA |
 | [`narrated-collage-explainer`](../narrated-collage-explainer/SKILL.md) | ~50 s 1:1 MP4 with voiceover, beats on spoken cues | Narrated explainer or founder story in a paper-white collage style (big pixel keywords, synced subtitles, CRT TV / XP window / cards / starbursts), built from a script plus real screenshots and GIFs |
 | [`brand-icons`](../brand-icons/SKILL.md) | SVG + PNG brand marks with a licence and attribution table | Any design needs real company/tool logos ("works with" rows, stack grids, partner walls); fetched from thesvg.org with the right variant for the background |
+| [`keynote-product-film`](../keynote-product-film/SKILL.md) | ~60–90 s 16:9 MP4, music-driven, no VO | Apple-event-style launch or "introducing" film: kinetic sentences with inline icons, real product UI (prompt, agent session, permission prompts, steps, benchmark chart, ticker, masked field), logo reveal on a gradient wash |
 <!-- catalog:end -->
 
 If nothing fits, say so and offer to build a new template (section 3) rather than forcing the wrong one.

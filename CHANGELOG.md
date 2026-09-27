@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0 (2026-09-27)
+- Skill `keynote-product-film` (built with `video-to-template` from a keynote-style reference): kinetic blur-in sentences with Lucide line icons and app tiles, prompt bar, Claude Code-style session panel, permission prompts, brand-icon step list, morphing benchmark chart, ticker, masked-secret field, icon row, hero-wash logo reveal. Example: Prismor, using its site components, scenarios and OWASP benchmark.
+- Engine: `Dissolve` transition (crossfade with blur peak); transitions are duck-typed (`blend`).
+
 ## 0.5.0 (2026-09-27)
 - Skill `video-to-template`: the end-to-end reference → template process. `analyze.py` (download, cuts via scene score ∪ adaptive changed-pixel peaks, pacing, palette, audio type, Whisper transcript, contact sheets, keyframes, storyboard skeleton), `scaffold.py` (new template as a timed animatic from the analysis, reference frames gitignored), `compare.py` (side-by-side + paired frames). References: design rules, lessons, engine map.
 

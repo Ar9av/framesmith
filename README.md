@@ -25,6 +25,7 @@ The skills share a tiny engine (`core/framesmith`) with a seekable timeline, exa
 | [`brand-icons`](skills/brand-icons/SKILL.md) | Find, fetch, preview and credit real brand/logo SVG icons from thesvg.org (7,400+ marks, e.g. | — |
 | [`brutalist-product-promo`](skills/brutalist-product-promo/SKILL.md) | Render a 22-second brutalist / industrial product promo video (spec-sheet motion graphics) for any hardware, device, robot, drone, vehicle or tech product. | <img src="docs/media/brutalist-product-promo.gif" width="120"> |
 | [`devtool-launch-video`](skills/devtool-launch-video/SKILL.md) | Render a 34-second 16:9 launch film for a developer tool, CLI, AI agent product or security product. | <img src="docs/media/devtool-launch-video.gif" width="120"> |
+| [`keynote-product-film`](skills/keynote-product-film/SKILL.md) | Render a 16:9 keynote-style product film (about 60–90 s, music-driven, no voiceover) in the clean Apple-event look. | <img src="docs/media/keynote-product-film.gif" width="120"> |
 | [`narrated-collage-explainer`](skills/narrated-collage-explainer/SKILL.md) | Render a square (1080×1080), voiceover-driven explainer or founder-story video in a warm paper-white collage style. | <img src="docs/media/narrated-collage-explainer.gif" width="120"> |
 | [`video-to-template`](skills/video-to-template/SKILL.md) | Turn any reference video (a URL or file) into a reusable framesmith template and a finished video for the user's own brand. | — |
 <!-- catalog:end -->

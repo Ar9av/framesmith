@@ -1,0 +1,58 @@
+{
+ "claude-code": {
+  "title": "Claude Code",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/claude-code/color.svg",
+  "license": "MIT",
+  "brand_url": "https://code.claude.com"
+ },
+ "cursor": {
+  "title": "Cursor",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/cursor/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.cursor.com"
+ },
+ "github-copilot": {
+  "title": "GitHub Copilot",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/github-copilot/light.svg",
+  "license": "MIT",
+  "brand_url": "https://github.com/features/copilot"
+ },
+ "gmail": {
+  "title": "Gmail",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/gmail/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.gmail.com"
+ },
+ "google-gemini": {
+  "title": "Google Gemini",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/google-gemini/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://gemini.google.com"
+ },
+ "openai": {
+  "title": "OpenAI",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/openai/light.svg",
+  "license": "MIT",
+  "brand_url": "https://openai.com/"
+ },
+ "windsurf": {
+  "title": "Windsurf",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/windsurf/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://windsurf.com/editor"
+ },
+ "zendesk": {
+  "title": "Zendesk",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/zendesk/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://brandland.zendesk.com"
+ }
+}

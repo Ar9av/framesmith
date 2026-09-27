@@ -1,0 +1,679 @@
+#!/usr/bin/env python3
+"""keynote-product-film: a 16:9 keynote-style product film (music-driven, no voiceover).
+
+Text carries the story: centred sentences whose words blur in one by one, with inline line icons
+and app tiles; charcoal and white grounds alternate; real product UI (prompt bar, agent session,
+permission prompts, step lists, a benchmark chart, a masked field) does the proving.
+
+    python3 main.py check|still|sheet|render --brief brief.json [times...] [--audio music.m4a]
+    python3 main.py icons --brief brief.json      # fetch brand icons (thesvg) + line icons (lucide)
+"""
+import argparse, json, math, os, re, sys, urllib.request
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+
+import numpy as np
+from PIL import Image, ImageDraw, ImageFilter
+
+from framesmith import (Dissolve, Mosaic, Scene, Timeline, cover, ease_in_out, ease_out, hex2rgb, lerp,
+                        overflow_report, scramble, text, typed)
+from framesmith.media import fetch_icons, icon, rasterize_svg
+from framesmith.typography import F, OVERFLOWS, SHRINKS
+from framesmith import ui
+
+G = None
+LUCIDE = "https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/{}.svg"
+
+
+class State:
+    def __init__(self, brief, base):
+        self.b, self.base = brief, base
+        th = brief.get("theme", {})
+        c = lambda k, d: hex2rgb(th[k]) if k in th else d
+        self.dark = c("dark", (38, 38, 38))
+        self.light = c("light", (255, 255, 255))
+        self.ink = c("ink", (18, 18, 19))
+        self.muted_d = c("muted_dark", (120, 120, 126))
+        self.muted_l = c("muted_light", (161, 161, 170))
+        self.accent = c("accent", (168, 213, 186))
+        self.wash = [hex2rgb(x) for x in brief.get("wash", ["#FDFBF7", "#FEEEDC", "#DCF5FC", "#FEE3DF"])]
+        self.W, self.H = brief.get("size", [1920, 1080])
+        self.assets = os.path.join(base, brief.get("assets_dir", "assets"))
+        self._c = {}
+
+    def cache(self, k, fn):
+        if k not in self._c:
+            self._c[k] = fn()
+        return self._c[k]
+
+
+def arr(im):
+    return np.asarray(im.convert("RGB")).copy()
+
+
+def ground(kind):
+    return {"dark": G.dark, "light": G.light}.get(kind, G.light)
+
+
+def fg(kind):
+    return G.light if kind == "dark" else G.ink
+
+
+# ------------------------------------------------------------------ icons
+def icon_img(ref, size, color=None):
+    """'lucide:globe' (line icon, tinted) or 'brand:slug' (thesvg mark; tinted only if a colour is given)."""
+    kind, name = ref.split(":", 1)
+    size = int(size)
+    if kind == "lucide":
+        return icon(os.path.join(G.assets, "lucide", name + ".svg"), size, tuple(color) if color else G.ink)
+    path = os.path.join(G.assets, "icons", name + ".svg")
+    return icon(path, size, tuple(color)) if color is not None else icon(path, size)
+
+
+def logo(size):
+    size = int(size)
+    return G.cache(("logo", size), lambda: Image.open(os.path.join(G.assets, "logo.png")).convert("RGBA").resize((size, size), Image.LANCZOS))
+
+
+def tile(ref, s, bg=(255, 255, 255)):
+    """App-icon tile: rounded square with a soft shadow and the mark inside."""
+    def build():
+        pad = int(s * 0.25)
+        im = Image.new("RGBA", (s + pad * 2, s + pad * 2), (0, 0, 0, 0))
+        sh = Image.new("L", im.size, 0)
+        ImageDraw.Draw(sh).rounded_rectangle((pad, pad + s * 0.06, pad + s, pad + s * 1.06), s * 0.23, fill=120)
+        im.paste((0, 0, 0, 255), (0, 0), sh.filter(ImageFilter.GaussianBlur(s * 0.08)))
+        body = Image.new("L", im.size, 0)
+        ImageDraw.Draw(body).rounded_rectangle((pad, pad, pad + s, pad + s), s * 0.23, fill=255)
+        im.paste(bg + (255,), (0, 0), body)
+        mark = logo(s * 0.8) if ref == "logo" else icon_img(ref, s * 0.6)
+        im.alpha_composite(mark, (pad + (s - mark.width) // 2, pad + (s - mark.height) // 2))
+        return im
+    return G.cache(("tile", ref, s), build)
+
+
+# ------------------------------------------------------------------ kinetic sentence
+TOK = re.compile(r"\{[^}]+\}|\S+")
+
+
+def tokens_of(line):
+    return TOK.findall(line)
+
+
+def token_size(tok, f):
+    if tok.startswith("{icon:"):
+        s = int(f.size * 0.82)
+        return s, s
+    if tok.startswith("{tiles:"):
+        n = len(tok[7:-1].split(","))
+        s = int(f.size * 1.35)
+        return n * s + (n - 1) * int(s * 0.18), s
+    t = tok[1:] if tok.startswith("_") else tok
+    return f.getlength(t), f.size
+
+
+def draw_token(img, tok, x, baseline, f, color, muted, p):
+    """Blur-in: alpha, blur and a small rise all driven by p."""
+    if p <= 0:
+        return
+    w, hgt = token_size(tok, f)
+    pad = int(f.size * 0.6)
+    layer = Image.new("RGBA", (int(w) + pad * 2, int(f.size * 1.6) + pad * 2), (0, 0, 0, 0))
+    top = pad + int(f.size * 0.25)
+    if tok.startswith("{icon:"):
+        name = tok[6:-1]
+        ic = icon_img(name if ":" in name else "lucide:" + name, hgt, color)
+        layer.alpha_composite(ic, (pad, top + int(f.size * 0.13)))
+    elif tok.startswith("{tiles:"):
+        s = int(f.size * 1.35)
+        tx = pad
+        for r in tok[7:-1].split(","):
+            tl = tile(r if r == "logo" or ":" in r else "brand:" + r, s)
+            layer.alpha_composite(tl, (max(0, int(tx - s * 0.25)), max(0, int(top - s * 0.34))))
+            tx += s + int(s * 0.18)
+    else:
+        t = tok[1:] if tok.startswith("_") else tok
+        ImageDraw.Draw(layer).text((pad, top + f.size * 0.95), t, font=f, fill=(muted if tok.startswith("_") else color) + (255,),
+                                   anchor="ls")
+    if p < 1:
+        a = np.asarray(layer).copy()
+        a[..., 3] = (a[..., 3] * p).astype(np.uint8)
+        layer = Image.fromarray(a).filter(ImageFilter.GaussianBlur((1 - p) * 14))
+    img.alpha_composite(layer, (int(x - pad), int(baseline - top - f.size * 0.95 + (1 - p) * 22)))
+
+
+def line_width(line, f):
+    toks = tokens_of(line)
+    return sum(token_size(t, f)[0] for t in toks) + f.getlength(" ") * (len(toks) - 1)
+
+
+def sentence(img, lines, cx, cy, f, color, muted, lt, start=0.1, stagger=0.09, layout="center", line_gap=1.12,
+             align=None, max_w=None):
+    """Lay out lines of tokens (words, {icon:…}, {tiles:…}, _muted) and blur them in word by word."""
+    max_w = max_w or G.W - 220
+    widths = [line_width(l, f) for l in lines]
+    if max(widths) > max_w:                          # shrink the block uniformly rather than overflow
+        k = max_w / max(widths)
+        if k < 0.8:
+            SHRINKS.append((" / ".join(lines), k))
+        f = F("sans_medium", max(24, int(f.size * k)))
+        widths = [line_width(l, f) for l in lines]
+    lh = f.size * line_gap
+    y0 = cy - lh * (len(lines) - 1) / 2
+    k = 0
+    for li, line in enumerate(lines):
+        if layout == "stairs":
+            span = G.W - 2 * 240 - max(widths)
+            x = 240 + (span * li / max(1, len(lines) - 1) if align is None else align[li] * span)
+        else:
+            x = cx - widths[li] / 2
+        for tk in tokens_of(line):
+            p = ease_out(min(1, max(0, (lt - start - k * stagger) / 0.38)))
+            draw_token(img, tk, x, y0 + li * lh + f.size * 0.35, f, color, muted, p)
+            x += token_size(tk, f)[0] + f.getlength(" ")
+            k += 1
+    return k
+
+
+# ------------------------------------------------------------------ UI pieces
+def shadowed_box(img, box, r, fill, border=None, shadow=70, blur=26, dy=14):
+    x0, y0, x1, y1 = [int(v) for v in box]
+    sh = Image.new("L", img.size, 0)
+    ImageDraw.Draw(sh).rounded_rectangle((x0, y0 + dy, x1, y1 + dy), r, fill=shadow)
+    img.paste((0, 0, 0), (0, 0), sh.filter(ImageFilter.GaussianBlur(blur)))
+    ImageDraw.Draw(img).rounded_rectangle((x0, y0, x1, y1), r, fill=fill, outline=border, width=2 if border else 0)
+
+
+def cursor(img, x, y, s=2.4, click=0.0):
+    """macOS-style arrow pointer; click in (0,1) draws a fading ring."""
+    d = ImageDraw.Draw(img)
+    if 0 < click < 1:
+        r = 14 + 26 * click
+        d.ellipse((x - r, y - r, x + r, y + r), outline=(150, 150, 150), width=max(1, int(4 * (1 - click))))
+    pts = [(0, 0), (0, 17), (4.2, 13.2), (7, 19.6), (9.6, 18.6), (6.8, 12.2), (12.4, 12.2)]
+    P = [(x + px * s, y + py * s) for px, py in pts]
+    d.polygon(P, fill=(255, 255, 255))
+    d.line(P + [P[0]], fill=(0, 0, 0), width=2)
+
+
+def ibeam(img, x, y, hgt, col=(20, 20, 20)):
+    d = ImageDraw.Draw(img)
+    d.line((x, y, x, y + hgt), fill=col, width=3)
+    d.line((x - 7, y, x + 7, y), fill=col, width=3)
+    d.line((x - 7, y + hgt, x + 7, y + hgt), fill=col, width=3)
+
+
+def elbow(d, x, y, col, s):
+    """⎿ drawn as vectors (not in the bundled fonts)."""
+    w = max(2, int(s * 0.09))
+    d.line((x, y - s * 0.55, x, y), fill=col, width=w)
+    d.line((x, y, x + s * 0.55, y), fill=col, width=w)
+
+
+def chevron(d, x, y, col, s):
+    """❯ drawn as vectors."""
+    d.line((x, y - s * 0.3, x + s * 0.3, y, x, y + s * 0.3), fill=col, width=max(2, int(s * 0.1)), joint="curve")
+
+
+def prompt_bar(img, box, textv, placeholder, dark, caret_on, extras=True):
+    x0, y0, x1, y1 = box
+    fill = (46, 46, 48) if dark else (255, 255, 255)
+    border = (64, 64, 68) if dark else (228, 228, 231)
+    shadowed_box(img, box, 22, fill, border, 90 if dark else 45)
+    d = ImageDraw.Draw(img)
+    f = F("sans", 34)
+    mid = y0 + (y1 - y0) * (0.4 if extras else 0.5)
+    tcol = (240, 240, 240) if dark else (24, 24, 27)
+    budget = x1 - x0 - 330
+    if textv:
+        text(d, (x0 + 34, mid), textv, f, tcol, 0, "lm", max_w=budget)
+        cx = x0 + 34 + min(f.getlength(textv), budget)
+    else:
+        text(d, (x0 + 34, mid), placeholder, f, (140, 140, 146), 0, "lm", max_w=budget)
+        cx = x0 + 34
+    if caret_on:
+        d.rectangle((cx + 3, mid - 20, cx + 5, mid + 20), fill=tcol)
+    if extras:
+        sf, sc = F("sans", 22), (130, 130, 136)
+        text(d, (x1 - 30, mid), "Enter to run", sf, sc, 0, "rm")
+        text(d, (x0 + 34, y1 - 30), "claude-code  ·  Opus 5", sf, sc, 0, "lm")
+        text(d, (x1 - 30, y1 - 30), "protected by Prismor", sf, sc, 0, "rm")
+    return cx, mid
+
+
+CC = {"agent": (217, 119, 87), "command": (161, 161, 170), "warden": (168, 106, 30), "blocked": (107, 79, 160),
+      "success": (46, 125, 79), "reason": (113, 113, 122), "user": (24, 24, 27), "text": (39, 39, 42)}
+
+
+def wrap(spans, max_w):
+    """[(text, font, colour)] → rows, word-wrapped at max_w (ligatures off for code)."""
+    rows, row, w = [], [], 0.0
+    for txt, f, col in spans:
+        for word in re.split(r"(\s+)", txt):
+            if not word:
+                continue
+            ww = f.getlength(word, features=ui.CODE_FEATURES)
+            if w + ww > max_w and row and not word.isspace():
+                rows.append(row)
+                row, w = [], 0.0
+            if word.isspace() and not row:
+                continue
+            row.append((word, f, col))
+            w += ww
+    if row:
+        rows.append(row)
+    return rows
+
+
+def session_panel(img, box, lines, lt, cwd="~/acme-web", model="Opus 5", s=1.0):
+    """Claude Code session, after Prismor's site hero component: notched badge, then timed lines."""
+    x0, y0, x1, y1 = [int(v) for v in box]
+    shadowed_box(img, box, 18, (255, 255, 255), (231, 231, 234), 60)
+    d = ImageDraw.Draw(img)
+    fs, fm, fb = F("sans", 27 * s), F("mono", 25 * s), F("sans_medium", 27 * s)
+    lh = 40 * s
+    bx0, by0 = x0 + 36 * s, y0 + 40 * s
+    bx1, by1 = bx0 + 470 * s, by0 + 118 * s
+    d.rounded_rectangle((bx0, by0, bx1, by1), 14 * s, outline=(236, 180, 160), width=2)
+    lab, lf = "Claude Code", F("sans", 22 * s)
+    d.rectangle((bx0 + 14 * s, by0 - 14 * s, bx0 + 28 * s + lf.getlength(lab), by0 + 12 * s), fill=(255, 255, 255))
+    d.text((bx0 + 20 * s, by0), lab, font=lf, fill=CC["agent"], anchor="lm")
+    ps = 9 * s
+    for r, row in enumerate([[0, 1, 1, 1, 0], [1, 1, 1, 1, 1], [0, 1, 0, 1, 0]]):
+        for c, v in enumerate(row):
+            if v:
+                d.rectangle((bx0 + 24 * s + c * ps, by0 + 26 * s + r * ps, bx0 + 24 * s + (c + 1) * ps - 1,
+                             by0 + 26 * s + (r + 1) * ps - 1), fill=CC["agent"])
+    d.text((bx0 + 24 * s, by0 + 88 * s), f"{model}  ·  {cwd}", font=F("sans", 21 * s), fill=(113, 113, 122), anchor="lm")
+    tx0, ty0 = x0 + 44 * s, by1 + 36 * s
+    maxw = x1 - x0 - 150 * s
+    rendered = []
+    for ln in lines:
+        if lt < ln["t"]:
+            break
+        typ, txt = ln["type"], ln["text"]
+        if typ == "user":
+            spans, lead = [(typed(txt, (lt - ln["t"]) / max(0.01, ln.get("type_s", 0.9))), fb, CC["user"])], "chev"
+        elif typ == "command":
+            cmd = txt[2:] if txt.startswith("$ ") else txt
+            spans, lead = [("Bash(", fs, CC["text"]), (cmd, fm, (113, 113, 122)), (")", fs, CC["text"])], "dotc"
+        elif typ in ("reason", "blocked"):
+            spans, lead = [(txt, fb if typ == "blocked" else fs, CC[typ])], "elbow"
+        elif typ == "success":
+            spans, lead = [(txt, fb, CC["success"])], "check"
+        elif typ == "warden":
+            spans, lead = [(txt, fb, CC["warden"])], "dotw"
+        else:
+            spans, lead = [(txt, fs, CC["text"])], "dota"
+        indent = 40 * s if lead == "elbow" else 0
+        rendered.append((ln, lead, indent, wrap(spans, maxw - indent)))
+    total = sum(len(r[3]) * lh + 10 * s for r in rendered)
+    avail = y1 - ty0 - 30 * s
+    y = ty0 - max(0, total - avail)                      # scroll so the newest line stays in view
+    for ln, lead, indent, rows in rendered:
+        p = ease_out(min(1, (lt - ln["t"]) / 0.25))
+        yy = y + (1 - p) * 14
+        ly = yy + lh * 0.5
+        lc = {"chev": (161, 161, 170), "dotc": CC["command"], "elbow": CC.get(ln["type"], CC["reason"]),
+              "check": CC["success"], "dotw": CC["warden"], "dota": CC["agent"]}[lead]
+        if ly >= ty0:
+            if lead == "chev":
+                chevron(d, tx0, ly, lc, 26 * s)
+            elif lead == "elbow":
+                elbow(d, tx0 + 12 * s, ly, lc, 26 * s)
+            elif lead == "check":
+                d.text((tx0, ly), "✓", font=fb, fill=lc, anchor="lm")
+            else:
+                d.text((tx0, ly), "●", font=F("sans", 20 * s), fill=lc, anchor="lm")
+        for ri, row in enumerate(rows):
+            ry = yy + ri * lh + lh * 0.5
+            if ry < ty0:
+                continue
+            x = tx0 + 36 * s + indent
+            for word, f, col in row:
+                d.text((x, ry), word, font=f, fill=tuple(int(lerp(255, v, p)) for v in col), anchor="lm", features=ui.CODE_FEATURES)
+                x += f.getlength(word, features=ui.CODE_FEATURES)
+        y += len(rows) * lh + 10 * s
+
+
+def permission_box(img, box, command, desc, sel, alpha=255):
+    """Claude Code's permission prompt: text UI, options chosen with a chevron (no buttons)."""
+    x0, y0, x1, y1 = [int(v) for v in box]
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    d.rounded_rectangle((x0, y0, x1, y1), 14, fill=(30, 30, 31, alpha), outline=(110, 110, 116, alpha), width=2)
+    fb, fs, fm = F("sans_medium", 30), F("sans", 28), F("mono", 26)
+    d.text((x0 + 36, y0 + 44), "Bash command", font=fb, fill=(217, 119, 87, alpha), anchor="lm")
+    text(d, (x0 + 60, y0 + 100), command, fm, (235, 235, 235, alpha), 0, "lm", max_w=x1 - x0 - 110)
+    text(d, (x0 + 60, y0 + 142), desc, fs, (150, 150, 156, alpha), 0, "lm", max_w=x1 - x0 - 110)
+    d.text((x0 + 36, y0 + 205), "Do you want to proceed?", font=fs, fill=(235, 235, 235, alpha), anchor="lm")
+    for i, o in enumerate(["1. Yes", "2. Yes, and don't ask again for this command",
+                           "3. No, and tell Claude what to do differently"]):
+        y = y0 + 258 + i * 46
+        col = (217, 119, 87, alpha) if i == sel else (200, 200, 204, alpha)
+        if i == sel:
+            chevron(d, x0 + 42, y, col, 26)
+        text(d, (x0 + 76, y), o, fs, col, 0, "lm", max_w=x1 - x0 - 110)
+    img.alpha_composite(layer)
+
+
+def wash_bg(lt):
+    """Prismor's hero wash: peach, ice and dusty rose drifting over the off-white field."""
+    w, h = G.W // 8, G.H // 8
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    base = np.zeros((h, w, 3), np.float32) + np.array(G.wash[0], np.float32)
+    for bx, by, r, col in [(0.78 + 0.05 * math.sin(lt * 0.6), 0.3, 0.55, G.wash[1]),
+                           (0.2, 0.72 + 0.04 * math.cos(lt * 0.5), 0.5, G.wash[2]),
+                           (0.55 + 0.06 * math.cos(lt * 0.4), 0.5, 0.35, G.wash[3])]:
+        dd = np.sqrt(((xx / w - bx) / r) ** 2 + ((yy / h - by) / (r * 0.8)) ** 2)
+        a = np.clip(1 - dd, 0, 1)[..., None] ** 1.5
+        base = base * (1 - a) + np.array(col, np.float32) * a
+    return Image.fromarray(base.astype(np.uint8)).resize((G.W, G.H), Image.BICUBIC).convert("RGBA")
+
+
+def fade(ic, p):
+    a = np.asarray(ic).copy()
+    a[..., 3] = (a[..., 3] * p).astype(np.uint8)
+    return Image.fromarray(a)
+
+
+# ------------------------------------------------------------------ shots
+def shot_sentence(c, s):
+    bg = s.get("bg", "dark")
+    im = wash_bg(c.lt) if bg == "wash" else Image.new("RGBA", (c.W, c.H), ground(bg) + (255,))
+    f = F("sans_medium", s.get("size", 96))
+    cy = c.H * s.get("y", 0.5)
+    if s.get("bar"):                                     # a dark input bar wrapping the first line
+        bw, bh = s["bar"]
+        p = ease_out(min(1, c.lt / 0.35))
+        x0 = c.W / 2 - bw * lerp(0.7, 1, p) / 2
+        lh = f.size * 1.12
+        ly = cy - lh * (len(s["lines"]) - 1) / 2 + f.size * 0.02
+        prompt_bar(im, (x0, ly - bh / 2, c.W - x0, ly + bh / 2), "", "", True, False, False)
+    if s.get("logo"):
+        lp = ease_out(min(1, c.lt / 0.4))
+        lg = fade(logo(s.get("logo_size", 180)), lp)
+        im.alpha_composite(lg, (int(c.W / 2 - lg.width / 2), int(cy - lg.height - 80 + (1 - lp) * 30)))
+    sentence(im, s["lines"], c.W / 2, cy, f, G.ink if bg in ("light", "wash") else G.light,
+             G.muted_d if bg == "dark" else G.muted_l, c.lt, s.get("start", 0.1), s.get("stagger", 0.09),
+             s.get("layout", "center"), align=s.get("align"))
+    return arr(im)
+
+
+def shot_permission(c, s):
+    im = Image.new("RGBA", (c.W, c.H), G.dark + (255,))
+    sentence(im, s["caption"], c.W / 2, 170, F("sans_medium", 80), G.light, G.muted_d, c.lt, 0.05, 0.08)
+    n, every = s.get("copies", 1), s.get("every", 0.55)
+    w, h = 1080, 400
+    for k in range(n):
+        t0 = 0.5 + k * every
+        if c.lt < t0:
+            break
+        p = ease_out(min(1, (c.lt - t0) / 0.3))
+        x0 = c.W / 2 - w / 2 - (n - 1) * 23 + k * 46
+        y0 = 330 - (n - 1) * 19 + k * 38
+        last = k == n - 1 or c.lt < t0 + every
+        alpha = int(255 * p * (1 if last else 0.3))
+        age = c.lt - t0
+        sel = s.get("select", 0) if (k == n - 1 and age > s.get("select_at", 1.0)) else 0
+        permission_box(im, (x0, y0 + (1 - p) * 30, x0 + w, y0 + h + (1 - p) * 30), s["command"], s.get("desc", ""), sel, alpha)
+        if last:
+            click_t = s.get("select_at", 1.0) if k == n - 1 else every * 0.7
+            clk = (age - click_t) / 0.35 if age > click_t else 0
+            opt_y = y0 + 258 + (s.get("select", 0) if k == n - 1 else 0) * 46
+            cursor(im, x0 + 330 + (1 - p) * 120, opt_y + 8 + (1 - p) * 90, 2.4, clk)
+    return arr(im)
+
+
+def shot_prompt(c, s):
+    dark = s.get("bg") == "dark"
+    im = Image.new("RGBA", (c.W, c.H), ground(s.get("bg", "light")) + (255,))
+    if s.get("logo_above"):
+        im.alpha_composite(fade(logo(90), 0.35), (int(c.W / 2 - 45), int(c.H / 2 - 250)))
+    p = ease_out(min(1, c.lt / 0.3))
+    w = 1240 * lerp(0.92, 1, p)
+    box = (c.W / 2 - w / 2, c.H / 2 - 90, c.W / 2 + w / 2, c.H / 2 + 90)
+    t0 = s.get("type_at", 0.5)
+    txt = typed(s["typed"], (c.lt - t0) / s.get("type_s", 1.8)) if c.lt > t0 else ""
+    cx, mid = prompt_bar(im, box, txt, s.get("placeholder", "Ask your agent anything"), dark, (c.fi // 8) % 2 == 0)
+    if c.lt < t0 + 0.4:
+        ibeam(im, box[0] + 330 + (1 - p) * 60, mid + 40, 44, (220, 220, 220) if dark else (30, 30, 30))
+    return arr(im)
+
+
+def shot_session(c, s):
+    bg = s.get("bg", "light")
+    im = Image.new("RGBA", (c.W, c.H), ground(bg) + (255,))
+    if s.get("caption"):
+        sentence(im, s["caption"], c.W / 2, 118, F("sans_medium", 64), fg(bg), G.muted_d if bg == "dark" else G.muted_l,
+                 c.lt, 0.05, 0.07)
+    top = 220 if s.get("caption") else 110
+    p = ease_out(min(1, c.lt / 0.35))
+    w = s.get("width", 1560)
+    box = (c.W / 2 - w / 2, top + (1 - p) * 40, c.W / 2 + w / 2, c.H - 70 + (1 - p) * 40)
+    session_panel(im, box, s["lines"], c.lt, s.get("cwd", "~/acme-web"), s.get("model", "Opus 5"), s.get("scale", 1.35))
+    out = im.convert("RGB")
+    z = s.get("zoom")
+    if z:                                                # slow camera push toward a focus point
+        out = cover(out, c.W, c.H, lerp(1.0, z[0], ease_in_out(c.p(0, c.dur))), z[1], z[2])
+    return np.asarray(out).copy()
+
+
+def shot_steps(c, s):
+    im = Image.new("RGBA", (c.W, c.H), G.light + (255,))
+    if s.get("caption"):
+        sentence(im, s["caption"], c.W / 2, 150, F("sans_medium", 64), G.ink, G.muted_l, c.lt, 0.05, 0.07)
+    d = ImageDraw.Draw(im)
+    y0, x0 = 320, 300
+    for k, r in enumerate(s["rows"]):
+        t0 = r.get("t", 0.4 + k * 0.8)
+        if c.lt < t0:
+            continue
+        p = ease_out(min(1, (c.lt - t0) / 0.35))
+        y = y0 + k * 132
+        col = {"blocked": CC["blocked"], "success": CC["success"]}.get(r.get("tone"), G.ink)
+        d.line((x0 - 90, y - 66, x0 - 90, y), fill=(226, 226, 229), width=3)
+        d.line((x0 - 90, y, x0 - 40, y), fill=(226, 226, 229), width=3)
+        ic = icon_img(r["icon"], 52, None if r["icon"].startswith("brand:") else col)
+        im.alpha_composite(fade(ic, p), (int(x0 - 20), int(y - 26)))
+        d = ImageDraw.Draw(im)
+        c2 = tuple(int(lerp(255, v, p)) for v in col)
+        text(d, (x0 + 60 + (1 - p) * 20, y), r["text"], F("sans_medium", 42), c2, -0.5, "lm", max_w=c.W - x0 - 300)
+        if r.get("sub"):
+            text(d, (x0 + 60 + (1 - p) * 20, y + 44), r["sub"], F("sans", 28), tuple(int(lerp(255, v, p)) for v in (140, 140, 146)),
+                 0, "lm", max_w=c.W - x0 - 300)
+    return arr(im)
+
+
+def shot_chart(c, s):
+    im = Image.new("RGBA", (c.W, c.H), G.dark + (255,))
+    phases = s["phases"]
+    seg = c.dur / len(phases)
+    ph = min(len(phases) - 1, int(c.lt / seg))
+    lt_ph = c.lt - ph * seg
+    cur, prev = phases[ph], phases[max(0, ph - 1)]
+    bw, rh, gap = 1180, 84, 26
+    n = len(s["rows"])
+    x0 = (c.W - bw - 170) / 2
+    y0 = (c.H - (n * rh + (n - 1) * gap)) / 2 + 60
+    d = ImageDraw.Draw(im)
+    text(d, (x0, y0 - 150), cur["title"], F("sans_medium", 54), G.light, -1, "lm", max_w=bw + 160)
+    text(d, (x0, y0 - 86), s["sub"], F("sans", 30), G.muted_d, 0, "lm", max_w=bw + 160)
+    for k, row in enumerate(s["rows"]):
+        v1 = cur["values"][k]
+        v0 = prev["values"][k] if ph else 0
+        v = lerp(v0, v1, ease_out(min(1, max(0, (lt_ph - 0.15 - k * 0.08) / 0.6))))
+        y = y0 + k * (rh + gap)
+        hi = row.get("highlight")
+        d.rounded_rectangle((x0, y, x0 + bw, y + rh), 12, fill=(48, 48, 50))
+        wv = max(16, bw * v / 100)
+        if hi:
+            glow = Image.new("L", im.size, 0)
+            ImageDraw.Draw(glow).rounded_rectangle((x0, y, x0 + max(90, wv), y + rh), 12, fill=150)
+            im.paste(G.accent, (0, 0), glow.filter(ImageFilter.GaussianBlur(20)))
+            d = ImageDraw.Draw(im)
+        d.rounded_rectangle((x0, y, x0 + wv, y + rh), 12, fill=G.accent if hi else (86, 86, 90))
+        lf = F("sans_medium", 36)
+        lw = lf.getlength(row["label"])
+        text(d, (x0 + 30, y + rh / 2), row["label"], lf, G.light, 0, "lm", max_w=bw - 60)
+        if row.get("note"):
+            text(d, (x0 + 30 + lw + 18, y + rh / 2), row["note"], F("sans", 30), (190, 190, 196) if not hi else G.muted_d, 0, "lm",
+                 max_w=bw - lw - 90)
+        text(d, (x0 + bw + 44, y + rh / 2), f"{v:.0f}%", F("sans_medium", 42), G.accent if hi else G.light, 0, "lm")
+    return arr(im)
+
+
+def shot_ticker(c, s):
+    im = Image.new("RGBA", (c.W, c.H), G.dark + (255,))
+    d = ImageDraw.Draw(im)
+    f = F("sans_medium", 80)
+    items, step = s["items"], s.get("every", 0.75)
+    pos = max(0.0, (c.lt - 0.35) / step)                 # continuous index of the item in focus
+    k = int(pos)
+    frac = ease_in_out(min(1, (pos - k) / 0.4))
+    focus = min(len(items) - 1, k + frac)
+    px = c.W * 0.5 - 30
+    pp = ease_out(min(1, c.lt / 0.35))
+    text(d, (px, c.H / 2), s["prefix"], f, tuple(int(lerp(v, 255, pp)) for v in G.dark), -1.5, "rm", max_w=c.W * 0.42)
+    for j, it in enumerate(items):
+        rel = j - focus
+        if rel < -0.8 or rel > 3.2:
+            continue
+        y = c.H / 2 + rel * 100
+        on = abs(rel) < 0.5
+        dim = max(0.28, 1 - abs(rel) * 0.28)
+        col = G.light if on else tuple(int(v * dim) for v in (200, 200, 205))
+        x = px + 40
+        im.alpha_composite(icon_img("lucide:" + it["icon"], 66, col), (int(x), int(y - 33)))
+        text(d, (x + 92, y), it["text"], f, col, -1.5, "lm", max_w=c.W - x - 190)
+    return arr(im)
+
+
+def shot_mask(c, s):
+    im = Image.new("RGBA", (c.W, c.H), G.light + (255,))
+    sentence(im, s["caption"], c.W / 2, 250, F("sans_medium", 72), G.ink, G.muted_l, c.lt, 0.05, 0.08)
+    p = ease_out(min(1, c.lt / 0.35))
+    w, h = 1180, 150
+    box = (c.W / 2 - w / 2, 520 + (1 - p) * 30, c.W / 2 + w / 2, 520 + h + (1 - p) * 30)
+    shadowed_box(im, box, 26, (255, 255, 255), (232, 232, 235), 55)
+    d = ImageDraw.Draw(im)
+    click = s.get("click_at", 2.2)
+    if c.lt < click:
+        val, col = typed(s["value"], (c.lt - 0.5) / 1.1), (24, 24, 27)
+    else:
+        val, col = scramble(s["masked"], ease_out(min(1, (c.lt - click) / 0.6)), 7, c.fi, 5), CC["blocked"]
+    ref = max((s["value"], s["masked"]), key=len)
+    text(d, (box[0] + 44, (box[1] + box[3]) / 2), val, F("mono", 54), col, 0, "lm", max_w=w - 170, fit_to=ref)
+    eye = icon_img("lucide:" + ("eye-off" if c.lt >= click else "eye"), 58, (90, 90, 96))
+    ex, ey = box[2] - 100, (box[1] + box[3]) / 2 - 29
+    im.alpha_composite(eye, (int(ex), int(ey)))
+    mv = ease_in_out(min(1, max(0, (c.lt - 1.2) / (click - 1.2))))
+    if c.lt > 1.0:
+        cursor(im, lerp(c.W / 2 + 200, ex + 30, mv), lerp(c.H - 200, ey + 36, mv), 2.6,
+               (c.lt - click) / 0.4 if c.lt > click else 0)
+    if s.get("footnote"):
+        text(ImageDraw.Draw(im), (c.W / 2, 800), s["footnote"], F("sans", 30), (140, 140, 146), 0, "mm", max_w=c.W - 300)
+    return arr(im)
+
+
+def shot_icons_row(c, s):
+    im = Image.new("RGBA", (c.W, c.H), G.dark + (255,))
+    sentence(im, s["caption"], c.W / 2, 330, F("sans_medium", 76), G.light, G.muted_d, c.lt, 0.05, 0.08)
+    refs, size, gap = s["icons"], 110, 70
+    x = c.W / 2 - (len(refs) * size + (len(refs) - 1) * gap) / 2
+    for k, r in enumerate(refs):
+        p = ease_out(min(1, max(0, (c.lt - 0.6 - k * 0.1) / 0.35)))
+        if p > 0:
+            if r == "logo":
+                ic = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+                ImageDraw.Draw(ic).rounded_rectangle((0, 0, size - 1, size - 1), 26, fill=(26, 26, 28, 255), outline=(62, 62, 66, 255), width=2)
+                lg = logo(size * 0.7)
+                ic.alpha_composite(lg, ((size - lg.width) // 2, (size - lg.height) // 2))
+            else:
+                ic = icon_img("brand:" + r, size * 0.74, G.light)
+            im.alpha_composite(fade(ic, p), (int(x + (size - ic.width) / 2), int(620 - ic.height / 2 + (1 - p) * 24)))
+        x += size + gap
+    return arr(im)
+
+
+def shot_black(c, s):
+    return np.zeros((c.H, c.W, 3), np.uint8)
+
+
+SHOTS = {"sentence": shot_sentence, "permission": shot_permission, "prompt": shot_prompt, "session": shot_session,
+         "steps": shot_steps, "chart": shot_chart, "ticker": shot_ticker, "mask": shot_mask, "icons_row": shot_icons_row,
+         "black": shot_black}
+
+
+def build(path):
+    global G
+    brief = json.load(open(path))
+    G = State(brief, os.path.dirname(os.path.abspath(path)))
+    scenes = []
+    for k, s in enumerate(brief["shots"]):
+        tr = {"dissolve": Dissolve(0.35, 10), "pixel": Mosaic(0.35, 24, 14, k + 3, (G.dark,))}.get(s.get("tr"))
+        scenes.append(Scene(f"{k:02d}-{s['type']}", s["dur"], (lambda f, sh: lambda c: f(c, sh))(SHOTS[s["type"]], s), tr))
+    return Timeline(scenes, G.W, G.H, brief.get("fps", 30), data=G), brief
+
+
+def fetch_line_icons(names, out_dir):
+    os.makedirs(out_dir, exist_ok=True)
+    for n in names:
+        p = os.path.join(out_dir, n + ".svg")
+        if not os.path.exists(p):
+            with open(p, "wb") as f:
+                f.write(urllib.request.urlopen(LUCIDE.format(n), timeout=60).read())
+        if not os.path.exists(p[:-4] + ".png"):
+            rasterize_svg(p, p[:-4] + ".png")
+    return names
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("cmd", choices=["icons", "check", "still", "sheet", "render"])
+    ap.add_argument("args", nargs="*")
+    ap.add_argument("--brief", default=os.path.join(HERE, "..", "examples", "prismor", "brief.json"))
+    ap.add_argument("--out")
+    ap.add_argument("--audio")
+    a = ap.parse_intermixed_args()
+    base = os.path.dirname(os.path.abspath(a.brief))
+    if a.cmd == "icons":
+        brief = json.load(open(a.brief))
+        blob = json.dumps(brief["shots"])
+        lucide = sorted(set(re.findall(r"lucide:([a-z0-9-]+)", blob)) | set(re.findall(r"\{icon:([a-z0-9-]+)\}", blob))
+                        | set(re.findall(r'"icon": "([a-z0-9-]+)"', blob)) | {"eye", "eye-off"})
+        brands = sorted(set(re.findall(r"brand:([a-z0-9-]+)", blob)) |
+                        {x for s in brief["shots"] for x in s.get("icons", []) if x != "logo"} |
+                        {x for m in re.findall(r"\{tiles:([^}]+)\}", blob) for x in m.split(",") if x != "logo"})
+        assets = os.path.join(base, brief.get("assets_dir", "assets"))
+        print("lucide:", fetch_line_icons(lucide, os.path.join(assets, "lucide")))
+        for m in fetch_icons(brands, os.path.join(assets, "icons")):
+            print("brand:", m)
+        return
+    tl, brief = build(a.brief)
+    out = os.path.join(base, "out")
+    os.makedirs(out, exist_ok=True)
+    if a.cmd == "check":
+        OVERFLOWS.clear(); SHRINKS.clear()
+        for fi in range(0, tl.n_frames, max(1, tl.fps // 4)):
+            tl.frame(fi)
+        rep = overflow_report()
+        print("text overflow:", "none" if not rep else "")
+        for r in rep:
+            print("  ✗", r)
+        for r in overflow_report(warn=True):
+            print("  ! warning:", r)
+        print(f"{tl.duration:.2f} s, {len(tl.scenes)} shots")
+        sys.exit(1 if rep else 0)
+    elif a.cmd == "still":
+        for s in a.args or ["1.0"]:
+            print(tl.still(float(s), os.path.join(out, f"still_{float(s):05.2f}.png")), "·", tl.scene_at(float(s)))
+    elif a.cmd == "sheet":
+        print(tl.contact_sheet(a.out or os.path.join(out, "contact_sheet.png"), 6, 5, 320))
+    else:
+        print(tl.render(a.out or os.path.join(out, "film.mp4"), a.audio))
+
+
+if __name__ == "__main__":
+    main()
