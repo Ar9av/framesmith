@@ -53,11 +53,15 @@ def arr(im):
 
 
 def ground(kind):
-    return {"dark": G.dark, "light": G.light}.get(kind, G.light)
+    return {"dark": G.dark, "light": G.light, "black": (0, 0, 0)}.get(kind, G.light)
+
+
+def is_dark(kind):
+    return kind in ("dark", "black")
 
 
 def fg(kind):
-    return G.light if kind == "dark" else G.ink
+    return G.light if is_dark(kind) else G.ink
 
 
 # ------------------------------------------------------------------ icons
@@ -237,7 +241,7 @@ def prompt_bar(img, box, textv, placeholder, dark, caret_on, extras=True):
     if extras:
         sf, sc = F("sans", 22), (130, 130, 136)
         text(d, (x1 - 30, mid), "Enter to run", sf, sc, 0, "rm")
-        text(d, (x0 + 34, y1 - 30), "claude-code  ·  Opus 5", sf, sc, 0, "lm")
+        text(d, (x0 + 34, y1 - 30), "claude-code  ·  " + G.b.get("model", "Opus 5.5"), sf, sc, 0, "lm")
         text(d, (x1 - 30, y1 - 30), "protected by Prismor", sf, sc, 0, "rm")
     return cx, mid
 
@@ -266,7 +270,7 @@ def wrap(spans, max_w):
     return rows
 
 
-def session_panel(img, box, lines, lt, cwd="~/acme-web", model="Opus 5", s=1.0):
+def session_panel(img, box, lines, lt, cwd="~/acme-web", model="Opus 5.5", s=1.0):
     """Claude Code session, after Prismor's site hero component: notched badge, then timed lines."""
     x0, y0, x1, y1 = [int(v) for v in box]
     shadowed_box(img, box, 18, (255, 255, 255), (231, 231, 234), 60)
@@ -352,13 +356,13 @@ def permission_box(img, box, command, desc, sel, alpha=255, back=False):
     text(d, (x0 + 60, y0 + 100), command, fm, (235, 235, 235, alpha), 0, "lm", max_w=x1 - x0 - 110)
     text(d, (x0 + 60, y0 + 142), desc, fs, (150, 150, 156, alpha), 0, "lm", max_w=x1 - x0 - 110)
     d.text((x0 + 36, y0 + 205), "Do you want to proceed?", font=fs, fill=(235, 235, 235, alpha), anchor="lm")
-    for i, o in enumerate(["1. Yes", "2. Yes, and don't ask again for this command",
-                           "3. No, and tell Claude what to do differently"]):
+    for i, o in enumerate(["Yes", "Yes, and don't ask again for this command", "No, and tell Claude what to do differently"]):
         y = y0 + 258 + i * 46
         col = (217, 119, 87, alpha) if i == sel else (200, 200, 204, alpha)
         if i == sel:
             chevron(d, x0 + 42, y, col, 26)
-        text(d, (x0 + 76, y), o, fs, col, 0, "lm", max_w=x1 - x0 - 110)
+        d.text((x0 + 76, y), str(i + 1), font=fs, fill=col if i == sel else (130, 130, 136, alpha), anchor="lm")
+        text(d, (x0 + 110, y), o, fs, col, 0, "lm", max_w=x1 - x0 - 150)
     img.alpha_composite(layer)
 
 
@@ -419,10 +423,18 @@ def shot_sentence(c, s):
                    False, False)
     if s.get("logo"):
         lp = ease_out(min(1, c.lt / 0.4))
-        lg = fade(logo(s.get("logo_size", 180)), lp)
+        ls = s.get("logo_size", 180)
+        lg = logo(ls)
+        if bg == "black":                                  # logo's black half needs a tile to read on pure black
+            t = int(ls * 1.08)
+            tl = Image.new("RGBA", (t, t), (0, 0, 0, 0))
+            ImageDraw.Draw(tl).rounded_rectangle((0, 0, t - 1, t - 1), int(t * 0.23), fill=(26, 26, 28, 255), outline=(62, 62, 66, 255), width=2)
+            tl.alpha_composite(lg, ((t - ls) // 2, (t - ls) // 2))
+            lg = tl
+        lg = fade(lg, lp)
         im.alpha_composite(lg, (int(c.W / 2 - lg.width / 2), int(cy - lg.height - 80 + (1 - lp) * 30)))
     sentence(im, s["lines"], c.W / 2, cy, f, G.ink if bg in ("light", "wash") else G.light,
-             G.muted_d if bg == "dark" else G.muted_l, c.lt, s.get("start", 0.1), s.get("stagger", 0.09),
+             G.muted_d if is_dark(bg) else G.muted_l, c.lt, s.get("start", 0.1), s.get("stagger", 0.09),
              s.get("layout", "center"), align=s.get("align"))
     return arr(im)
 
@@ -479,7 +491,7 @@ def shot_session(c, s):
     p = ease_out(min(1, c.lt / 0.35))
     w = s.get("width", 1560)
     box = (c.W / 2 - w / 2, top + (1 - p) * 40, c.W / 2 + w / 2, c.H - 70 + (1 - p) * 40)
-    session_panel(im, box, s["lines"], c.lt, s.get("cwd", "~/acme-web"), s.get("model", "Opus 5"), s.get("scale", 1.35))
+    session_panel(im, box, s["lines"], c.lt, s.get("cwd", "~/acme-web"), s.get("model", "Opus 5.5"), s.get("scale", 1.35))
     out = im.convert("RGB")
     z = s.get("zoom")
     if z:                                                # slow camera push toward a focus point
@@ -616,7 +628,7 @@ def shot_mask(c, s):
 
 
 def shot_icons_row(c, s):
-    im = Image.new("RGBA", (c.W, c.H), G.dark + (255,))
+    im = Image.new("RGBA", (c.W, c.H), ground(s.get("bg", "dark")) + (255,))
     sentence(im, s["caption"], c.W / 2, 330, F("sans_medium", 76), G.light, G.muted_d, c.lt, 0.05, 0.08)
     refs, size, gap = s["icons"], 110, 70
     x = c.W / 2 - (len(refs) * size + (len(refs) - 1) * gap) / 2
@@ -650,8 +662,22 @@ def shot_laptop(c, s):
     oy = int(c.H - devs.height - 30 + (1 - p) * 160)
     sx0, sy0, sx1, sy1 = [int(v * k) for v in (x0, y0, x1, y1)]
     scr = Image.open(os.path.join(G.assets, s["media"])).convert("RGB")
+    if s.get("crop"):                                    # trim screenshot frames / browser chrome
+        x0c, y0c, x1c, y1c = s["crop"]
+        scr = scr.crop((int(x0c * scr.width), int(y0c * scr.height), int(x1c * scr.width), int(y1c * scr.height)))
+    sw, sh = sx1 - sx0 + 2, sy1 - sy0 + 2
     zz = lerp(1.0, s.get("zoom", 1.06), ease_in_out(c.p(0, c.dur)))
-    scr = cover(scr, sx1 - sx0 + 2, sy1 - sy0 + 2, zz, *s.get("focus", [0.5, 0.4]))
+    if s.get("fit") == "contain":                        # show the whole UI; fill the rest with its own background
+        fillc = hex2rgb(s["fill"]) if s.get("fill") else scr.getpixel((scr.width // 2, scr.height // 2))
+        k2 = min(sw / scr.width, sh / scr.height) * zz
+        fitted = scr.resize((int(scr.width * k2), int(scr.height * k2)), Image.LANCZOS)
+        canvas = Image.new("RGB", (sw, sh), fillc)
+        ax = (sw - fitted.width) // 2
+        ay = 0 if s.get("anchor") == "top" else (sh - fitted.height) // 2
+        canvas.paste(fitted, (ax, ay))
+        scr = canvas
+    else:
+        scr = cover(scr, sw, sh, zz, *s.get("focus", [0.5, 0.4]))
     im.paste(scr, (ox + sx0 - 1, oy + sy0 - 1))
     im.alpha_composite(devs, (ox, oy))
     return arr(im)

@@ -26,7 +26,7 @@ The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur
 
 | type | shows | keys |
 |---|---|---|
-| `sentence` | centred lines, words blurring in | `lines` (tokens: words, `_muted`, `{icon:lucide-name}`, `{tiles:slug,slug}`), `bg` dark/light/wash, `size`, `layout: stairs` + `align`, `bar: [w, h]` (dark input bar around line 1), `logo` |
+| `sentence` | centred lines, words blurring in | `lines` (tokens: words, `_muted`, `{icon:lucide-name}`, `{tiles:slug,slug}`), `bg` dark/light/black/wash, `size`, `layout: stairs` + `align`, `bar: [w, h]` (dark input bar around line 1), `logo` |
 | `prompt` | a prompt bar being typed, with an I-beam | `typed`, `placeholder`, `bg`, `logo_above`, `type_at`, `type_s` |
 | `session` | Claude Code-style session panel with timed lines | `lines: [{t, type: user/agent/command/reason/warden/blocked/success, text}]`, `caption`, `cwd`, `zoom: [z, fx, fy]`, `scale` |
 | `permission` | the agent's permission prompt, optionally cascading, with a cursor | `caption`, `command`, `desc`, `copies`, `every`, `select`, `select_at` |
@@ -34,7 +34,7 @@ The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur
 | `chart` | a benchmark bar chart that morphs between phases | `sub`, `rows: [{label, note, highlight}]`, `phases: [{title, values}]` |
 | `ticker` | a fixed prefix with a rolling list | `prefix`, `items: [{icon, text}]`, `every` |
 | `mask` | an input whose secret becomes a placeholder on click; an optional generated object floats beside it and dissolves at the click | `caption`, `value`, `masked`, `click_at`, `footnote`, `object`, `object_size` |
-| `laptop` | caption above a laptop rising in, with real product media on its keyed screen | `caption`, `media` (a real screenshot), `device` (a generated PNG with a #00FF00 screen), `zoom`, `focus`, `width` |
+| `laptop` | caption above a laptop rising in, with real product media on its keyed screen | `caption`, `media` (a real screenshot), `device` (a generated PNG with a #00FF00 screen), `crop`, `fit: contain` + `anchor` + `fill` (show the whole UI), `zoom`, `focus`, `width` |
 | `icons_row` | caption plus a row of integration marks | `caption`, `icons: ["logo", slugs…]` |
 | `fleet_grid` | a grid of device icons: they light up, get flagged, and a policy push ripples across as a wave | `caption`, `icon`, `cols`, `rows`, `online_at`, `flag: [indices]`, `flag_at`, `flag_color`, `push_at`, `wave`, `note` |
 | `table` | a console table: header, rows sliding in, cells that update mid-shot (status flips) | `caption`, `columns: [{title, w, kind: text/strong/mono/muted/status/icons}]`, `rows: [{cells, updates: [{t, col, value}], highlight, highlight_at}]` |
