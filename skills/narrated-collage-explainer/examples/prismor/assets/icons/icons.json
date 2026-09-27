@@ -1,0 +1,135 @@
+{
+ "claude": {
+  "title": "Claude",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/claude/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://claude.ai"
+ },
+ "openai": {
+  "title": "OpenAI",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/openai/light.svg",
+  "license": "MIT",
+  "brand_url": "https://openai.com/"
+ },
+ "cursor": {
+  "title": "Cursor",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/cursor/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.cursor.com"
+ },
+ "github-copilot": {
+  "title": "GitHub Copilot",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/github-copilot/light.svg",
+  "license": "MIT",
+  "brand_url": "https://github.com/features/copilot"
+ },
+ "google-gemini": {
+  "title": "Google Gemini",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/google-gemini/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://gemini.google.com"
+ },
+ "langchain": {
+  "title": "LangChain",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/langchain/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.langchain.com"
+ },
+ "crewai": {
+  "title": "CrewAI",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/crewai/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://github.com/crewAIInc/crewAI/blob/a7696d5aed7a85333735dde370fd9f0547aaabf5/docs/favicon.svg"
+ },
+ "windsurf": {
+  "title": "Windsurf",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/windsurf/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://windsurf.com/editor"
+ },
+ "cline": {
+  "title": "Cline",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/cline/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://cline.bot/assets/branding/logos/cline-wordmark-black.svg"
+ },
+ "ollama": {
+  "title": "Ollama",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/ollama/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.ollama.com/"
+ },
+ "jetbrains": {
+  "title": "JetBrains",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/jetbrains/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.jetbrains.com/"
+ },
+ "visual-studio-code": {
+  "title": "Visual Studio Code",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/visual-studio-code/default.svg",
+  "license": "MIT",
+  "brand_url": "https://code.visualstudio.com/"
+ },
+ "model-context-protocol": {
+  "title": "Model Context Protocol",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/model-context-protocol/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://modelcontextprotocol.io/"
+ },
+ "zed": {
+  "title": "Zed",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/zed/light.svg",
+  "license": "MIT",
+  "brand_url": "https://zed.dev/"
+ },
+ "opencode": {
+  "title": "opencode",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/opencode/mono.svg",
+  "license": "MIT",
+  "brand_url": "https://opencode.ai"
+ },
+ "qwen": {
+  "title": "Qwen",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/qwen/light.svg",
+  "license": "MIT",
+  "brand_url": "https://chat.qwenlm.ai/"
+ },
+ "grok": {
+  "title": "Grok",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/grok/light.svg",
+  "license": "MIT",
+  "brand_url": "https://grok.com/"
+ },
+ "openhands": {
+  "title": "OpenHands",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/openhands/color.svg",
+  "license": "MIT",
+  "brand_url": "https://openhands.dev"
+ },
+ "continue": {
+  "title": "Continue",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/continue/default.svg",
+  "license": "Apache-2.0",
+  "brand_url": "https://continue.dev"
+ }
+}

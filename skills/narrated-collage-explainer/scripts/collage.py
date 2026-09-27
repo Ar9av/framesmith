@@ -19,6 +19,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageOps
 
 from framesmith import (Assets, Mosaic, Scene, Theme, Timeline, cover, ease_in_out, ease_out, generate_images, h,
                         hex2rgb, lerp, overflow_report, text)
+from framesmith.media import fetch_icons, icon, is_light_mark
 from framesmith import narration, ui
 from framesmith.typography import F, OVERFLOWS, SHRINKS, fit
 
@@ -96,11 +97,51 @@ def static_noise(w, hgt, fi):
     return im
 
 
+SCREEN_BG = (12, 15, 13)
+
+
+def terminal_screen(spec, lt, fi, w, hgt):
+    """Crisp native terminal text for a device screen. The font is sized so the longest line fits
+    inside the safe area; anything still too long word-wraps, and tall transcripts scroll."""
+    im = Image.new("RGB", (w, hgt), SCREEN_BG)
+    pad_x, pad_y = int(w * 0.09), int(hgt * 0.11)             # tube corners and vignette eat the edges
+    safe_w = w - 2 * pad_x
+    lines = spec["lines"]
+    longest = max(lines, key=lambda l: len(l["t"]))["t"]
+    lh = spec.get("lh", 1.55)
+    want = spec.get("size", 30)
+    # grow to fill the safe area (width and height), capped at max_size; shrink only if a line is too long
+    size = spec.get("max_size", 42)
+    while size > 16 and (F("mono", size).getlength(longest) > safe_w or len(lines) * size * lh > hgt - 2 * pad_y):
+        size -= 1
+    if size < want * 0.8:                                    # surfaced by `check`: shorten the line
+        SHRINKS.append((longest, size / want))
+    rows = max(1, int((hgt - 2 * pad_y) / (size * lh)))
+    paper, dim, good = (232, 238, 228), (130, 142, 132), (143, 227, 192)
+    tl, t = [], spec.get("delay", 0.15)
+    for ln in lines:
+        tone, txt = ln.get("tone", "plain"), ln["t"]
+        if tone == "cmd" and txt[:2] in ("$ ", "> ", "! "):
+            spans, mark = [(txt[:2], good), (txt[2:], paper)], None
+        elif tone == "bad":
+            spans, mark = [(txt, SCREEN_BG, "mono_medium")], G.signal
+        else:
+            spans, mark = [(txt, {"dim": dim, "ok": good, "hi": (190, 170, 245)}.get(tone, paper),
+                            "mono_medium" if tone in ("ok", "hi") else "mono")], None
+        typ = 0.4 if tone == "cmd" else 0
+        tl.append({"spans": spans, "t": t, "type": typ, "mark": mark, "mark_dur": 0.2})
+        t += ln.get("hold", spec.get("step", 0.45)) + typ
+    ui.terminal(im, (pad_x, pad_y), tl, lt, size, lh, paper, fi, max_lines=rows, max_width=safe_w)
+    return im
+
+
 def media(spec, lt, fi, w, hgt):
     """Render a media spec into a w×h RGB image at local time lt."""
     kind = spec.get("kind") or ("gif" if spec.get("src", "").endswith(".gif") else "image")
     if kind == "static":
         return static_noise(w, hgt, fi)
+    if kind == "terminal":
+        return terminal_screen(spec, lt, fi, w, hgt)
     if kind == "gif":
         frames, starts = gif_frames(spec["src"])
         f0, f1 = spec.get("frames", [0, len(frames) - 1])
@@ -128,10 +169,10 @@ def background(kind, lt):
     return Image.new("RGB", (G.W, G.H), G.bg)
 
 
-def tv_parts():
-    """Key the CRT asset: green screen → transparent; returns (tv RGBA, screen box in tv px)."""
+def device_parts(name="crt"):
+    """Key a device asset (CRT TV, retro computer…): green screen → transparent; returns (RGBA, screen box)."""
     def build():
-        tv = img("crt").convert("RGBA")
+        tv = img(name).convert("RGBA")
         a = np.asarray(tv).astype(np.int16)
         r, g, b, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
         green = (g > 120) & (g > r + 40) & (g > b + 40)
@@ -145,11 +186,11 @@ def tv_parts():
         spill = (~hole) & (g > r + 25) & (g > b + 25) & inside      # despill the screen edge
         out[..., 1] = np.where(spill, (r + b) // 2, g)
         return Image.fromarray(out.clip(0, 255).astype(np.uint8)), box
-    return G.cache("tv", build)
+    return G.cache(("device", name), build)
 
 
-def draw_tv(im, spec, lt, fi, cx, cy, width, pop=1.0):
-    tv, (x0, y0, x1, y1) = tv_parts()
+def draw_tv(im, spec, lt, fi, cx, cy, width, pop=1.0, device="crt"):
+    tv, (x0, y0, x1, y1) = device_parts(device)
     s = width / tv.width * lerp(0.92, 1.0, pop)
     tvs = tv.resize((int(tv.width * s), int(tv.height * s)), Image.LANCZOS)
     ox, oy = int(cx - tvs.width / 2), int(cy - tvs.height / 2)
@@ -159,7 +200,7 @@ def draw_tv(im, spec, lt, fi, cx, cy, width, pop=1.0):
     a[::3] *= 0.82                                                  # scanlines
     yy, xx = np.mgrid[0:a.shape[0], 0:a.shape[1]]
     v = ((xx / a.shape[1] - 0.5) ** 2 + (yy / a.shape[0] - 0.5) ** 2) ** 0.5
-    a *= np.clip(1.15 - v * 0.9, 0, 1)[..., None]                   # tube vignette
+    a *= np.clip(1.12 - v * 0.55, 0, 1)[..., None]                  # gentle tube vignette (edges stay readable)
     im.paste(Image.fromarray(a.clip(0, 255).astype(np.uint8)), (ox + sx0 - 2, oy + sy0 - 2))
     im.paste(tvs, (ox, oy), tvs)
     return (ox + sx0, oy + sy0, ox + sx1, oy + sy1)
@@ -264,6 +305,53 @@ def big_word(im, s, lt, pv, photo=None, stars=False):
         starburst(im, G.W / 2 + tw / 2 + 4, cy + fw.size * 0.34, 24, G.navy, -rot, 10, 0.45)
 
 
+def brand_icon(slug, size):
+    path = os.path.join(G.base, G.b.get("assets_dir", "assets"), "icons", slug + ".svg")
+    ic = icon(path, size)
+    return icon(path, size, G.ink) if is_light_mark(ic) else ic
+
+
+def draw_icons(im, beat, lt):
+    """Named marks land large on their cues (with a pixel caption); the rest rain in as a grid behind."""
+    lead = beat["lead"]
+    n = len(lead)
+    size = int(G.W * 0.17)
+    gap = int(G.W * 0.07)
+    total = n * size + (n - 1) * gap
+    rest = beat.get("rest", [])
+    tr = cue_time(beat, "rest_at", 1e9, beat) if rest else 1e9
+    if lt >= tr:                                             # the rest: two rows across the top, faded behind
+        per = -(-len(rest) // 2)
+        rs = int(G.W * 0.075)
+        pitch = min(G.W * 0.105, (G.W - 120) / per)
+        x0 = (G.W - (per - 1) * pitch) / 2
+        for k, slug in enumerate(rest):
+            t0 = tr + k * 0.04
+            if lt < t0:
+                continue
+            p = ease_out(min(1, (lt - t0) / 0.2))
+            r, c = divmod(k, per)
+            cx, cy = x0 + c * pitch + (pitch / 2 if r else 0), G.H * (0.09 + r * 0.11)
+            ic = brand_icon(slug, rs)
+            a = np.asarray(ic).copy()
+            a[..., 3] = (a[..., 3] * 0.55 * p).astype(np.uint8)
+            m = Image.fromarray(a)
+            im.paste(m, (int(cx - rs / 2), int(cy - rs / 2 + (1 - p) * 16)), m)
+    for k, it in enumerate(lead):
+        t0 = cue_time(it, "at", k * 0.4, beat)
+        if lt < t0:
+            continue
+        p = ease_out(min(1, (lt - t0) / 0.25))
+        x = int((G.W - total) / 2 + k * (size + gap))
+        y = int(G.H * 0.42 - size / 2 + (1 - p) * 40)
+        ic = brand_icon(it["slug"], size)
+        if p < 1:
+            ic = ic.resize((max(1, int(size * lerp(0.7, 1, p))),) * 2, Image.LANCZOS)
+        im.paste(ic, (x + (size - ic.width) // 2, y + (size - ic.height) // 2), ic)
+        text(ImageDraw.Draw(im), (x + size / 2, y + size + 34), it.get("label", it["slug"]), F("pixel", 22), G.word, 0, "mm",
+             max_w=size + gap - 10)
+
+
 # ------------------------------------------------------------------ beats
 def cue_time(spec, key="at", default=0.0, beat=None):
     """Local time (from the beat start) at which spec[key]'s cue phrase is spoken; searched from the beat's cue on."""
@@ -280,7 +368,9 @@ def render_beat(beat, c):
     kind = beat["type"]
     pop = ease_out(min(1, lt / 0.25))
     if kind == "tv":
-        draw_tv(im, beat["media"], lt, fi, G.W / 2, G.H * beat.get("y", 0.4), G.W * beat.get("width", 0.64), pop)
+        dev = beat.get("device", "crt")
+        draw_tv(im, beat["media"], lt, fi, G.W / 2, G.H * beat.get("y", 0.4 if dev == "crt" else 0.42),
+                G.W * beat.get("width", 0.64 if dev == "crt" else 0.56), pop, dev)
     elif kind == "window":
         draw_window(im, beat["media"], lt, fi, G.W / 2, G.H * beat.get("y", 0.42), G.W * beat.get("width", 0.74), pop,
                     beat.get("title", ""))
@@ -325,6 +415,8 @@ def render_beat(beat, c):
             w = int(G.W * sw * lerp(0.85, 1.0, p))
             ph = media(spec, lt - t0, fi, w, int(w * 0.78))
             im.paste(ph, (int(G.W * x - w / 2), int(G.H * y - w * 0.39)))
+    elif kind == "icons":
+        draw_icons(im, beat, lt)
     elif kind == "end":
         lg = img("logo").resize((220, 220), Image.LANCZOS)
         lp = ease_out(min(1, lt / 0.4))
@@ -381,7 +473,7 @@ def build(path):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["voice", "assets", "check", "still", "sheet", "render"])
+    ap.add_argument("cmd", choices=["voice", "assets", "icons", "check", "still", "sheet", "render"])
     ap.add_argument("args", nargs="*")
     ap.add_argument("--brief", default=os.path.join(HERE, "..", "examples", "prismor", "brief.json"))
     ap.add_argument("--out")
@@ -395,6 +487,14 @@ def main():
         wav = narration.tts(script, os.path.join(base, vo["audio"]), voice=vo.get("voice", "ash"), instructions=vo.get("instructions"))
         json.dump(narration.transcribe_words(wav, prompt=script), open(os.path.join(base, vo["words"]), "w"), indent=1)
         print("voice ok:", wav)
+        return
+    if a.cmd == "icons":                                    # brand marks from thesvg.org, with licence metadata
+        slugs = []
+        for bt in brief["beats"]:
+            if bt["type"] == "icons":
+                slugs += [x["slug"] for x in bt["lead"]] + bt.get("rest", [])
+        for m in fetch_icons(slugs, os.path.join(base, brief.get("assets_dir", "assets"), "icons")):
+            print(m)
         return
     if a.cmd == "assets":
         specs = {k: v for k, v in brief.get("assets", {}).items() if "prompt" in v}

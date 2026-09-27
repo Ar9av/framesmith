@@ -103,3 +103,122 @@ def generate_images(specs, out_dir, key=None, names=None, force=False, workers=6
 
     with ThreadPoolExecutor(workers) as ex:
         return list(ex.map(one, todo))
+
+
+# ---------- brand icons (thesvg.org) ----------
+THESVG_REGISTRY = "https://raw.githubusercontent.com/GLINCKER/thesvg/main/src/data/icons.json"
+
+
+def fetch_icons(slugs, out_dir, prefer=("light", "default", "mono")):
+    """Download brand SVGs from thesvg.org into out_dir/<slug>.svg and write out_dir/icons.json
+    (slug, variant, source URL, licence) so attribution travels with the assets."""
+    os.makedirs(out_dir, exist_ok=True)
+    reg = {i["slug"]: i for i in json.load(urllib.request.urlopen(THESVG_REGISTRY, timeout=60))}
+    meta_path = os.path.join(out_dir, "icons.json")
+    meta = json.load(open(meta_path)) if os.path.exists(meta_path) else {}
+    out = []
+    for s in slugs:
+        info = reg.get(s)
+        if not info:
+            out.append(f"{s}: not on thesvg")
+            continue
+        variant = next((v for v in prefer if v in info.get("variants", {})), "default")
+        url = "https://thesvg.org" + info["variants"][variant]
+        svg_file = os.path.join(out_dir, s + ".svg")
+        with open(svg_file, "wb") as f:
+            f.write(urllib.request.urlopen(url, timeout=60).read())
+        rasterize_svg(svg_file, os.path.join(out_dir, s + ".png"))
+        meta[s] = {"title": info.get("title", s), "variant": variant, "source": url, "license": info.get("license"),
+                   "brand_url": info.get("url")}
+        out.append(f"{s}: {variant} ({info.get('license')})")
+    json.dump(meta, open(meta_path, "w"), indent=1)
+    return out
+
+
+def _chromium():
+    import shutil
+    for b in ("chromium-browser", "chromium", "google-chrome", "google-chrome-stable"):
+        if shutil.which(b):
+            return shutil.which(b)
+    return None
+
+
+def rasterize_svg(svg_path, png_path, size=512):
+    """Render an SVG with headless Chromium (a real SVG engine) to a transparent size×size PNG.
+    Keep paths out of hidden folders: snap-confined Chromium can't read or write them."""
+    import subprocess
+    exe = _chromium()
+    if not exe:
+        return False
+    d = os.path.dirname(os.path.abspath(svg_path))
+    page = os.path.join(d, "_raster.html")
+    with open(page, "w") as f:
+        f.write(f'<html><body style="margin:0;background:transparent"><img src="{os.path.basename(svg_path)}" '
+                f'style="width:{size}px;height:{size}px;object-fit:contain;display:block"></body></html>')
+    try:
+        subprocess.run([exe, "--headless=new", "--disable-gpu", "--no-sandbox", "--hide-scrollbars",
+                        "--default-background-color=00000000", f"--window-size={size},{size}",
+                        f"--screenshot={os.path.abspath(png_path)}", "file://" + page],
+                       capture_output=True, timeout=90)
+    finally:
+        os.unlink(page)
+    return os.path.exists(png_path)
+
+
+@lru_cache(None)
+def icon(svg_path, size, tint=None):
+    """Rasterise an SVG to a size×size RGBA image (ImageMagick, or cairosvg if installed).
+    tint: RGB to recolour a single-colour mark (e.g. white-on-transparent marks on a light ground)."""
+    png_cache = os.path.splitext(svg_path)[0] + ".png"          # pre-rasterised by fetch_icons (Chromium)
+    if os.path.exists(png_cache):
+        im = Image.open(png_cache).convert("RGBA")
+        bb = im.getbbox()
+        if bb:
+            im = im.crop(bb)
+        side = max(im.size)
+        sq = Image.new("RGBA", (side, side), (0, 0, 0, 0))
+        sq.paste(im, ((side - im.width) // 2, (side - im.height) // 2))
+        im = sq.resize((size, size), Image.LANCZOS)
+        if tint is not None:
+            a = im.getchannel("A")
+            im = Image.new("RGBA", im.size, tuple(tint) + (255,))
+            im.putalpha(a)
+        return im
+    import re, subprocess, tempfile
+    svg = open(svg_path, encoding="utf-8").read()
+    # normalise web-only values rasterisers choke on: em sizes, currentColor
+    vb = re.search(r'viewBox="([\d.\s-]+)"', svg)
+    if vb:
+        _, _, vw, vh = [float(v) for v in vb.group(1).split()]
+        svg = re.sub(r'\s(width|height)="[^"]*"', "", svg, count=2)
+        svg = svg.replace("<svg", f'<svg width="{vw}" height="{vh}"', 1)
+    svg = svg.replace("currentColor", "#000000")
+    src = tempfile.NamedTemporaryFile(suffix=".svg", delete=False, mode="w", encoding="utf-8")
+    src.write(svg)
+    src.close()
+    png = tempfile.NamedTemporaryFile(suffix=".png", delete=False).name
+    try:
+        try:
+            import cairosvg
+            cairosvg.svg2png(url=src.name, write_to=png, output_width=size, output_height=size)
+        except ImportError:
+            subprocess.run(["convert", "-background", "none", "-density", "1200", src.name, "-resize", f"{size}x{size}",
+                            "-gravity", "center", "-extent", f"{size}x{size}", png], check=True, capture_output=True)
+        im = Image.open(png).convert("RGBA")
+    finally:
+        os.unlink(src.name)
+        if os.path.exists(png):
+            os.unlink(png)
+    if tint is not None:
+        a = im.getchannel("A")
+        im = Image.new("RGBA", im.size, tuple(tint) + (255,))
+        im.putalpha(a)
+    return im
+
+
+def is_light_mark(im, thresh=200):
+    """True if the visible pixels of a mark are near-white (it would vanish on a light background)."""
+    import numpy as np
+    a = np.asarray(im)
+    vis = a[..., 3] > 64
+    return bool(vis.any() and a[..., :3][vis].mean() > thresh)

@@ -33,19 +33,34 @@
       "type": "tv",
       "bg": "plain",
       "media": {
-        "src": "real_prismor-cli-demo.gif",
-        "frames": [
-          4,
-          40
-        ],
-        "crop": [
-          0.12,
-          0.14,
-          0.62,
-          0.47
-        ],
-        "zoom": 1.08
-      }
+        "kind": "terminal",
+        "size": 30,
+        "step": 0.55,
+        "lines": [
+          {
+            "t": "> add a docs page",
+            "tone": "cmd"
+          },
+          {
+            "t": "reading the docs skill",
+            "tone": "dim"
+          },
+          {
+            "t": "$ cat SKILL.md",
+            "tone": "cmd"
+          },
+          {
+            "t": "$ npm run build",
+            "tone": "cmd"
+          },
+          {
+            "t": "$ git push",
+            "tone": "cmd"
+          }
+        ]
+      },
+      "width": 0.8,
+      "y": 0.41
     },
     {
       "at": "All on its own",
@@ -208,27 +223,43 @@
       "type": "tv",
       "bg": "plain",
       "media": {
-        "src": "real_prismor-cli-demo.gif",
-        "frames": [
-          104,
-          112
-        ],
-        "crop": [
-          0.16,
-          0.0,
-          1.0,
-          0.86
-        ],
-        "zoom": 1.05
+        "kind": "terminal",
+        "size": 28,
+        "step": 0.3,
+        "delay": 0.1,
+        "lines": [
+          {
+            "t": "$ cat .env",
+            "tone": "cmd"
+          },
+          {
+            "t": "STRIPE_SECRET=",
+            "tone": "dim"
+          },
+          {
+            "t": "@@SECRET:STRIPE_SECRET@@",
+            "tone": "hi"
+          },
+          {
+            "t": "API_KEY=",
+            "tone": "dim"
+          },
+          {
+            "t": "@@SECRET:API_KEY@@",
+            "tone": "hi"
+          }
+        ]
       },
       "overlays": [
         {
           "at": "placeholders",
           "text": "CLOAKED",
-          "style": "cyan",
-          "y": 0.4
+          "style": "inverse",
+          "y": 0.765
         }
-      ]
+      ],
+      "width": 0.8,
+      "y": 0.41
     },
     {
       "at": "Dangerous commands",
@@ -236,27 +267,44 @@
       "bg": "plain",
       "tr": "cut",
       "media": {
-        "src": "real_readme-demo.gif",
-        "frames": [
-          168,
-          205
-        ],
-        "crop": [
-          0.04,
-          0.03,
-          0.72,
-          0.75
-        ],
-        "zoom": 1.05
+        "kind": "terminal",
+        "size": 28,
+        "step": 0.3,
+        "delay": 0.05,
+        "lines": [
+          {
+            "t": "$ codex --yolo",
+            "tone": "cmd",
+            "hold": 0.25
+          },
+          {
+            "t": "$ prismor check 'rm -rf /'",
+            "tone": "cmd"
+          },
+          {
+            "t": "BLOCK destructive_command",
+            "tone": "bad"
+          },
+          {
+            "t": "recursive delete of /",
+            "tone": "dim"
+          },
+          {
+            "t": "Nothing executed.",
+            "tone": "ok"
+          }
+        ]
       },
       "overlays": [
         {
           "at": "blocked",
           "text": "BLOCKED",
           "style": "inverse",
-          "y": 0.4
+          "y": 0.765
         }
-      ]
+      ],
+      "width": 0.8,
+      "y": 0.41
     },
     {
       "at": "Every action is signed",
@@ -282,28 +330,51 @@
     },
     {
       "at": "It works with",
-      "type": "collage",
-      "step": 0.5,
-      "media": [
+      "type": "icons",
+      "tr": "pixel",
+      "lead": [
         {
-          "src": "photo2.jpg"
+          "slug": "claude",
+          "label": "claude code",
+          "at": "Claude Code"
         },
         {
-          "src": "photo1.jpg"
+          "slug": "openai",
+          "label": "codex",
+          "at": "Codex"
         },
         {
-          "src": "photo4.jpg"
-        },
-        {
-          "src": "photo3.jpg"
+          "slug": "cursor",
+          "label": "cursor",
+          "at": "Cursor"
         }
       ],
+      "rest": [
+        "github-copilot",
+        "google-gemini",
+        "langchain",
+        "crewai",
+        "windsurf",
+        "cline",
+        "ollama",
+        "jetbrains",
+        "visual-studio-code",
+        "zed",
+        "opencode",
+        "qwen",
+        "grok",
+        "openhands",
+        "continue",
+        "model-context-protocol"
+      ],
+      "rest_at": "twenty more",
+      "cols": 6,
       "overlays": [
         {
           "at": "twenty more",
           "text": "20+ AGENTS",
           "style": "inverse",
-          "y": 0.46
+          "y": 0.74
         }
       ]
     },
@@ -349,20 +420,39 @@
       "type": "tv",
       "bg": "hills",
       "media": {
-        "src": "real_readme-demo.gif",
-        "frames": [
-          8,
-          110
-        ],
-        "crop": [
-          0.03,
-          0.02,
-          0.75,
-          0.62
-        ],
-        "speed": 1.8,
-        "zoom": 1.04
-      }
+        "kind": "terminal",
+        "size": 26,
+        "step": 0.35,
+        "lines": [
+          {
+            "t": "$ pip install prismor",
+            "tone": "cmd"
+          },
+          {
+            "t": "installed 1.54.1",
+            "tone": "ok"
+          },
+          {
+            "t": "$ prismor setup",
+            "tone": "cmd"
+          },
+          {
+            "t": "[x] Claude Code",
+            "tone": "plain"
+          },
+          {
+            "t": "[x] Codex",
+            "tone": "plain"
+          },
+          {
+            "t": "[x] Cursor",
+            "tone": "plain"
+          }
+        ]
+      },
+      "device": "mac",
+      "width": 0.74,
+      "y": 0.43
     },
     {
       "at": "Stop your agents",
@@ -406,6 +496,12 @@
     },
     "logo": {
       "note": "The brand's real logo (square PNG with alpha). Supplied, never generated."
+    },
+    "mac": {
+      "size": "1024x1024",
+      "quality": "medium",
+      "background": "transparent",
+      "prompt": "Straight-on front view of a 1984 beige all-in-one personal computer (compact vertical case with a built-in 9-inch CRT screen in the upper half, a floppy disk slot below the screen, a small rainbow-free plain badge), the screen is a flat solid pure green (#00FF00) with no reflections, sitting on a matching beige keyboard. Isolated on a transparent background, soft even studio lighting, product photo, no logos, no text."
     }
   }
 }

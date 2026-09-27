@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 (2026-09-27)
+- Brand icons from thesvg.org: `fetch_icons` (registry-driven variant + licence metadata), Chromium rasterisation, `icon()` with auto-tint for white marks.
+- narrated-collage-explainer: native terminal screens that auto-size to the device's safe area (no clipped GIF crops), `mac` retro-computer device, `icons` beat, `icons` command.
+
 ## 0.3.0 (2026-09-27)
 - Skill `narrated-collage-explainer`: square, voiceover-driven collage explainer (TTS + Whisper-timed beats, CRT TV / XP window / cards / starburst / collage, pixel dissolves). Example: Prismor, built from its real README GIFs and screenshots.
 - Engine: `framesmith.narration` (TTS, word timestamps, script alignment, cue lookup, subtitle chunking).
