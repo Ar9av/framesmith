@@ -11,7 +11,11 @@ metadata:
 
 # Keynote product film
 
-The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur`. Text carries the story, so write it like a keynote: short lines, one idea per shot, the product UI as proof. Examples: `examples/prismor/` (74.6 s product film, 21 shots) and `examples/fleet/` (66.3 s feature film for Prismor's enterprise fleet management / control plane, 18 shots, sharing the Prismor assets). Its copy and UI come from Prismor's real site components and benchmark. Storyboard: `references/storyboard.md`.
+The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur`. Text carries the story, so write it like a keynote: short lines, one idea per shot, the product UI as proof. Examples: `examples/starter/` (fill-in template), `examples/prismor/` (74.6 s product film, 21 shots) and `examples/fleet/` (66.3 s feature film for Prismor's enterprise fleet management / control plane, 18 shots, sharing the Prismor assets). Its copy and UI come from Prismor's real site components and benchmark. Storyboard: `references/storyboard.md`.
+
+## Start a new film
+
+`python3 scripts/main.py init my-film` copies the starter template (`examples/starter/`): the full 22-shot story arc of the Prismor keynote, with every line as a `[placeholder]`, a placeholder logo, a stand-in screenshot, and generic laptop and hero-object PNGs. Fill it in, then `check` warns about any unfilled `[placeholder]` and any on-screen line ending in a period. Write the copy through the `no-ai-slop` skill.
 
 ## Workflow
 

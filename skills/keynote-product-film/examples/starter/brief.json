@@ -1,0 +1,432 @@
+{
+  "size": [
+    1920,
+    1080
+  ],
+  "fps": 30,
+  "model": "[model name]",
+  "theme": {
+    "dark": "#262626",
+    "light": "#FFFFFF",
+    "ink": "#121213",
+    "muted_dark": "#78787E",
+    "muted_light": "#A1A1AA",
+    "accent": "#A8D5BA"
+  },
+  "wash": [
+    "#FDFBF7",
+    "#FEEEDC",
+    "#DCF5FC",
+    "#FEE3DF"
+  ],
+  "assets": {
+    "laptop": {
+      "size": "1536x1024",
+      "quality": "medium",
+      "background": "transparent",
+      "prompt": "Straight-on front view of a modern thin aluminium laptop, open, lid facing the viewer, dark space-grey finish, no logo on the lid or bezel. The screen area is a flat solid pure green (#00FF00) with no reflections or glare, thin black bezel. Isolated on a transparent background with no shadow, crisp studio product photo, no text."
+    },
+    "key": {
+      "size": "1024x1024",
+      "quality": "medium",
+      "background": "transparent",
+      "prompt": "[A single hero object that stands for what your product protects or makes, e.g. a frosted-glass key with a soft pastel sheen], soft studio lighting, isolated on a transparent background with no shadow, minimal 3D product render, no text."
+    }
+  },
+  "shots": [
+    {
+      "type": "sentence",
+      "dur": 3.4,
+      "bg": "dark",
+      "bar": [
+        1560,
+        230
+      ],
+      "size": 104,
+      "lines": [
+        "[What your users gave away] {tiles:claude-code,openai,cursor}",
+        "[the stakes]"
+      ],
+      "stagger": 0.12
+    },
+    {
+      "type": "sentence",
+      "dur": 2.6,
+      "bg": "dark",
+      "size": 96,
+      "lines": [
+        "[The promise they were sold]",
+        "[second line]"
+      ]
+    },
+    {
+      "type": "permission",
+      "dur": 3.6,
+      "caption": [
+        "[What actually happens]"
+      ],
+      "copies": 4,
+      "every": 0.55,
+      "command": "[a routine command]",
+      "desc": "[what it does]",
+      "select": 0,
+      "select_at": 0.6
+    },
+    {
+      "type": "sentence",
+      "dur": 1.8,
+      "bg": "dark",
+      "size": 110,
+      "lines": [
+        "[The escalation, one line]"
+      ]
+    },
+    {
+      "type": "permission",
+      "dur": 2.8,
+      "caption": [
+        "[The dangerous habit]"
+      ],
+      "command": "[the risky command]",
+      "desc": "[its innocent-looking description]",
+      "select": 1,
+      "select_at": 1.3
+    },
+    {
+      "type": "session",
+      "dur": 4.2,
+      "bg": "dark",
+      "caption": [
+        "[The failure in one sentence]"
+      ],
+      "cwd": "~/[project]",
+      "lines": [
+        {
+          "t": 0.3,
+          "type": "user",
+          "text": "[the user's request]",
+          "type_s": 0.8
+        },
+        {
+          "t": 1.3,
+          "type": "agent",
+          "text": "[the agent's narration]"
+        },
+        {
+          "t": 2.0,
+          "type": "command",
+          "text": "$ [the harmful command]"
+        },
+        {
+          "t": 2.8,
+          "type": "agent",
+          "text": "[the agent reporting it's done]"
+        }
+      ]
+    },
+    {
+      "type": "sentence",
+      "dur": 1.6,
+      "bg": "wash",
+      "size": 64,
+      "lines": [
+        "_Introducing"
+      ],
+      "tr": "dissolve"
+    },
+    {
+      "type": "sentence",
+      "dur": 2.6,
+      "bg": "wash",
+      "size": 150,
+      "lines": [
+        "[Product]"
+      ],
+      "logo": true,
+      "logo_size": 190
+    },
+    {
+      "type": "sentence",
+      "dur": 5.2,
+      "bg": "light",
+      "size": 88,
+      "layout": "stairs",
+      "stagger": 0.11,
+      "align": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "lines": [
+        "[What it is]",
+        "[what it does to]",
+        "{icon:terminal} [thing one]",
+        "{icon:key-round} [thing two]",
+        "{icon:package} [thing three]"
+      ]
+    },
+    {
+      "type": "prompt",
+      "dur": 3.2,
+      "bg": "light",
+      "logo_above": true,
+      "placeholder": "[prompt placeholder]",
+      "typed": "[a real task a user would type]",
+      "type_at": 0.5,
+      "type_s": 2.0
+    },
+    {
+      "type": "session",
+      "dur": 8.4,
+      "bg": "light",
+      "cwd": "~/[project]",
+      "zoom": [
+        1.08,
+        0.5,
+        0.62
+      ],
+      "lines": [
+        {
+          "t": 0.2,
+          "type": "user",
+          "text": "[the same task]",
+          "type_s": 0.6
+        },
+        {
+          "t": 1.0,
+          "type": "agent",
+          "text": "[agent explains what your product lets it do safely]"
+        },
+        {
+          "t": 1.9,
+          "type": "command",
+          "text": "$ [product command]"
+        },
+        {
+          "t": 2.6,
+          "type": "warden",
+          "text": "[PRODUCT]  [what it did]"
+        },
+        {
+          "t": 3.2,
+          "type": "reason",
+          "text": "[how, in one line]"
+        },
+        {
+          "t": 4.7,
+          "type": "warden",
+          "text": "[PRODUCT]  [second safeguard]"
+        },
+        {
+          "t": 5.6,
+          "type": "agent",
+          "text": "[the task finished, safely]"
+        },
+        {
+          "t": 6.5,
+          "type": "success",
+          "text": "[the measurable result]"
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "dur": 6.2,
+      "caption": [
+        "[It stops the attack mid-task]"
+      ],
+      "rows": [
+        {
+          "t": 0.5,
+          "icon": "lucide:file-text",
+          "text": "[step one]",
+          "sub": "[detail]"
+        },
+        {
+          "t": 1.4,
+          "icon": "lucide:mail",
+          "text": "[the malicious step]",
+          "sub": "[where it came from]"
+        },
+        {
+          "t": 2.6,
+          "icon": "lucide:shield-check",
+          "text": "[BLOCKED  rule]",
+          "tone": "blocked"
+        },
+        {
+          "t": 3.8,
+          "icon": "lucide:circle-check",
+          "text": "[the outcome]",
+          "tone": "success"
+        }
+      ]
+    },
+    {
+      "type": "chart",
+      "dur": 5.6,
+      "tr": "dissolve",
+      "sub": "[what the benchmark measures · source · lower/higher is better]",
+      "rows": [
+        {
+          "label": "[Competitor A]",
+          "note": "[setup]"
+        },
+        {
+          "label": "[Competitor B]",
+          "note": "[setup]"
+        },
+        {
+          "label": "[Product]",
+          "note": "[setup]",
+          "highlight": true
+        }
+      ],
+      "phases": [
+        {
+          "title": "[Category one]",
+          "values": [
+            80,
+            60,
+            5
+          ]
+        },
+        {
+          "title": "[Category two]",
+          "values": [
+            70,
+            40,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ticker",
+      "dur": 4.4,
+      "prefix": "[Product] can",
+      "every": 0.8,
+      "items": [
+        {
+          "icon": "lock",
+          "text": "[capability]"
+        },
+        {
+          "icon": "shield-check",
+          "text": "[capability]"
+        },
+        {
+          "icon": "package",
+          "text": "[capability]"
+        },
+        {
+          "icon": "mail",
+          "text": "[capability]"
+        },
+        {
+          "icon": "scroll-text",
+          "text": "[capability]"
+        }
+      ]
+    },
+    {
+      "type": "mask",
+      "dur": 4.4,
+      "caption": [
+        "[The trust detail]"
+      ],
+      "value": "[the sensitive value]",
+      "masked": "[what it becomes]",
+      "click_at": 2.3,
+      "footnote": "[how it works, active voice]",
+      "object": "key",
+      "object_size": 380
+    },
+    {
+      "type": "laptop",
+      "dur": 3.6,
+      "bg": "light",
+      "size": 76,
+      "caption_y": 170,
+      "caption": [
+        "[Where it runs] {icon:lock}",
+        "_[the promise]"
+      ],
+      "media": "dashboard.png",
+      "crop": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "fit": "contain",
+      "anchor": "top",
+      "fill": "#F9FAFB",
+      "zoom": 1.0,
+      "width": 0.6
+    },
+    {
+      "type": "icons_row",
+      "dur": 3.6,
+      "bg": "black",
+      "caption": [
+        "[Works with the tools you already use]"
+      ],
+      "icons": [
+        "claude-code",
+        "openai",
+        "cursor",
+        "github-copilot",
+        "google-gemini",
+        "windsurf"
+      ]
+    },
+    {
+      "type": "sentence",
+      "dur": 3.2,
+      "bg": "black",
+      "size": 92,
+      "lines": [
+        "{icon:brand:github} [Open source / licence line]",
+        "_[licence] _· _[repo URL]"
+      ]
+    },
+    {
+      "type": "sentence",
+      "dur": 2.4,
+      "bg": "black",
+      "size": 120,
+      "lines": [
+        "[Product]"
+      ],
+      "logo": true,
+      "logo_size": 150,
+      "tr": "dissolve"
+    },
+    {
+      "type": "sentence",
+      "dur": 2.6,
+      "bg": "black",
+      "size": 96,
+      "lines": [
+        "[Tagline, line one]",
+        "[line two]"
+      ]
+    },
+    {
+      "type": "sentence",
+      "dur": 2.4,
+      "bg": "black",
+      "size": 80,
+      "lines": [
+        "[product URL]"
+      ]
+    },
+    {
+      "type": "black",
+      "dur": 0.6
+    }
+  ]
+}

@@ -27,6 +27,7 @@ The skills share a tiny engine (`core/framesmith`) with a seekable timeline, exa
 | [`devtool-launch-video`](skills/devtool-launch-video/SKILL.md) | Render a 34-second 16:9 launch film for a developer tool, CLI, AI agent product or security product. | <img src="docs/media/devtool-launch-video.gif" width="120"> |
 | [`keynote-product-film`](skills/keynote-product-film/SKILL.md) | Render a 16:9 keynote-style product film (about 60–90 s, music-driven, no voiceover) in the clean Apple-event look. | <img src="docs/media/keynote-product-film.gif" width="120"> |
 | [`narrated-collage-explainer`](skills/narrated-collage-explainer/SKILL.md) | Render a square (1080×1080), voiceover-driven explainer or founder-story video in a warm paper-white collage style. | <img src="docs/media/narrated-collage-explainer.gif" width="120"> |
+| [`no-ai-slop`](skills/no-ai-slop/SKILL.md) | Edit drafts into sharper, more human writing while preserving the writer's personal voice, or detect AI-slop patterns without rewriting. | — |
 | [`video-to-template`](skills/video-to-template/SKILL.md) | Turn any reference video (a URL or file) into a reusable framesmith template and a finished video for the user's own brand. | — |
 <!-- catalog:end -->
 

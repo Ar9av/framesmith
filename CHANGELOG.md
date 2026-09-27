@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.0 (2026-09-27)
+- Skill `no-ai-slop` (Peter Yang, MIT) added to the catalog; required pass for all video copy.
+- keynote-product-film: `examples/starter/` fill-in template (the Prismor keynote arc with [placeholders]) and `init` verb; `check` warns on unfilled placeholders and trailing periods.
+
 ## 0.7.0 (2026-09-27)
 - keynote-product-film: shot types `fleet_grid` (device fleet with enrol / flag / policy-push wave), `table` (console table with live cell updates), `feed` (streaming receipts), `card` (approval / exemption / enrolment / attestation detail with typeset actions); `brand_icons` in briefs.
 - New example `examples/fleet/`: Prismor Control Plane feature film (enrol, devices live, signed org policy push, redacted live receipts, human approvals, expiring exemptions, shadow-AI discovery, attestation).

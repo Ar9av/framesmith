@@ -920,13 +920,23 @@ def fetch_line_icons(names, out_dir):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["icons", "assets", "check", "still", "sheet", "render"])
+    ap.add_argument("cmd", choices=["init", "icons", "assets", "check", "still", "sheet", "render"])
     ap.add_argument("args", nargs="*")
     ap.add_argument("--brief", default=os.path.join(HERE, "..", "examples", "prismor", "brief.json"))
     ap.add_argument("--out")
     ap.add_argument("--audio")
     a = ap.parse_intermixed_args()
     base = os.path.dirname(os.path.abspath(a.brief))
+    if a.cmd == "init":                                  # copy the starter template into a new project folder
+        import shutil
+        dst = os.path.abspath(a.args[0] if a.args else "keynote-film")
+        if os.path.exists(dst):
+            sys.exit(f"{dst} already exists")
+        shutil.copytree(os.path.join(HERE, "..", "examples", "starter"), dst, ignore=shutil.ignore_patterns("out"))
+        print(f"created {dst}\n  1. replace every [placeholder] in brief.json (run the copy through the no-ai-slop skill)"
+              f"\n  2. assets/logo.png = your real logo, assets/dashboard.png = a real screenshot"
+              f"\n  3. python3 {os.path.join(HERE, 'main.py')} icons|assets|check|render --brief {os.path.join(dst, 'brief.json')}")
+        return
     if a.cmd == "assets":                                # gpt-image-2 PNGs declared in brief["assets"]
         brief = json.load(open(a.brief))
         for m in generate_images(brief.get("assets", {}), os.path.join(base, brief.get("assets_dir", "assets")),
@@ -959,6 +969,14 @@ def main():
             print("  ✗", r)
         for r in overflow_report(warn=True):
             print("  ! warning:", r)
+        blob = json.dumps(brief["shots"])
+        todo = sorted(set(re.findall(r"\[[A-Za-z][^\]\[\"]{1,60}\]", blob)))
+        if todo:
+            print(f"  ! {len(todo)} unfilled placeholders, e.g. " + ", ".join(todo[:4]))
+        trailing = [t for t in re.findall(r'"(?:text|caption|footnote|note|sub)"?: ?"([^"]+\.)"', blob)
+                    if not re.search(r"\.(com|dev|io|md|json|env|csv|sh|py)$", t)]
+        if trailing:
+            print(f"  ! {len(trailing)} on-screen lines end with a period, e.g. {trailing[0]!r}")
         print(f"{tl.duration:.2f} s, {len(tl.scenes)} shots")
         sys.exit(1 if rep else 0)
     elif a.cmd == "still":
