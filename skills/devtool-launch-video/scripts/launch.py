@@ -33,7 +33,7 @@ class State:
         th = brief.get("theme", {})
         self.th = Theme.from_dict(th)
         col = lambda k, d: hex2rgb(th[k]) if k in th else d
-        self.danger = col("danger", (255, 93, 93))
+        self.danger = col("signal", col("danger", (255, 59, 31)))   # threat: used as solid fields, not tinted text
         self.muted = col("muted", (113, 113, 122))
         self.panel = col("panel", (18, 18, 20))
         self.line = col("line", (38, 38, 42))
@@ -52,10 +52,24 @@ class State:
     def canvas(self, col=None):
         return Image.new("RGB", (self.W, self.H), col or self.th.ink)
 
-    def kind(self, k):
+    def spans(self, text_, kind, prompt_col):
+        """Terminal line styling. Agent narration is set in italic serif (the agent's 'voice'),
+        commands in mono; threats are inverse video on a signal-red marker."""
         th = self.th
-        return {"agent": (161, 161, 170), "inject": self.danger, "cmd": th.paper, "leak": (255, 181, 91),
-                "dim": self.muted, "ok": self.good, "note": (161, 161, 170)}.get(k, th.paper)
+        if kind == "cmd" and text_.startswith("$ "):
+            return [("$ ", prompt_col), (text_[2:], th.paper)], None
+        if kind == "agent":                                   # bullet stays mono (the serif has no ●)
+            if text_.startswith("● "):
+                return [("● ", th.paper), (text_[2:], th.paper, "serif_italic")], None
+            return [(text_, th.paper, "serif_italic")], None
+        if kind in ("inject", "leak"):
+            return [(text_, th.ink, "mono_medium")], self.danger
+        if kind == "ok":
+            return [(text_, self.good)], None
+        return [(text_, th.paper)], None
+
+    def fill_holo(self, c, speed=1.6):
+        return lambda w, h_: holo(c, w, h_, speed)
 
 
 def arr(im):
@@ -133,17 +147,6 @@ def glitch_bands(a, fi, amount, seed=0):
     return out
 
 
-def holo_text(im, c, xy, s, font, anchor="mm", track=0):
-    """Text filled with the brand light (no box behind it)."""
-    m = Image.new("L", im.size, 0)
-    text(ImageDraw.Draw(m), xy, s, font, 255, track, anchor, max_w=G.W - 200)
-    bb = m.getbbox()
-    if not bb:
-        return
-    patch = Image.fromarray(holo(c, bb[2] - bb[0], bb[3] - bb[1], 1.4))
-    im.paste(patch, bb[:2], m.crop(bb))
-
-
 # ------------------------------------------------------------------ scenes
 def s_hook(c):
     th = G.th
@@ -173,8 +176,10 @@ def s_names(c):
              G.danger, -6, "mm", max_w=c.W - 240, fit_to=s)
     else:
         jx = int((h(5, i) - 0.5) * 240)
-        text(d, (c.W / 2 + jx, c.H / 2 + int((h(6, i) - 0.5) * 160)), names[i % len(names)], F("sans_medium", 200),
-             th.ink if inv else th.paper, -6, "mm", max_w=c.W - 240 - 2 * abs(jx))
+        serif = i % 3 == 2
+        text(d, (c.W / 2 + jx, c.H / 2 + int((h(6, i) - 0.5) * 160)), names[i % len(names)],
+             F("serif_italic" if serif else "sans_medium", 210 if serif else 200), th.ink if inv else th.paper,
+             -3 if serif else -6, "mm", max_w=c.W - 240 - 2 * abs(jx))
     return arr(im)
 
 
@@ -188,9 +193,8 @@ def rogue_schedule():
     for k, ln in enumerate(rl):
         gap = lerp(0.62, 0.3, k / max(1, n - 1))           # accelerating
         typ = {"cmd": lerp(0.32, 0.18, k / max(1, n - 1))}.get(ln["kind"], 0.12)
-        spans = [("$ ", G.good), (ln["text"][2:], G.kind("cmd"))] if ln["kind"] == "cmd" and ln["text"].startswith("$ ") \
-            else [(ln["text"], G.kind(ln["kind"]))]
-        out.append({"spans": spans, "t": t, "type": typ, "bg": (70, 12, 14) if ln["kind"] == "inject" else None})
+        spans, mark = G.spans(ln["text"], ln["kind"], G.danger)
+        out.append({"spans": spans, "t": t, "type": typ, "mark": mark, "mark_dur": 0.2})
         t += gap
     return out
 
@@ -206,22 +210,34 @@ def s_rogue(c, frozen=False):
     z = lerp(1.0, 1.08, c.p(0, c.dur))
     bg = np.asarray(cover(G.assets.get("threat").convert("RGB"), c.W, c.H, z, 0.62, 0.5), np.float32) * 0.42
     im = Image.fromarray(bg.astype(np.uint8)).convert("RGBA")
-    layer = Image.new("RGBA", im.size, (0, 0, 0, 0))
     x0, y0, x1, y1 = ROGUE_BOX
-    ui.window(layer, ROGUE_BOX, G.panel + (238,), G.line + (255,), G.c["rogue_title"], font_size=15)
+    sched = rogue_schedule()
+    # each new line lands with a small camera punch; the window drifts the whole time
+    since = min([c.lt - ln["t"] for ln in sched if c.lt >= ln["t"]] or [9])
+    punch = 0 if frozen else max(0.0, 1 - since / 0.12) * 6
+    dx, dy = int(math.sin(c.lt * 0.9) * 10), int(math.cos(c.lt * 0.7) * 6 - punch)
+    box = (x0 + dx, y0 + dy, x1 + dx, y1 + dy)
+    layer = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    ui.window(layer, box, G.panel + (240,), G.line + (255,), G.c["rogue_title"], font_size=15)
     im.alpha_composite(layer)
     im = im.convert("RGB")
-    ui.terminal(im, (x0 + 40, y0 + 85), rogue_schedule(), c.lt, 30, 1.8, th.paper, 0 if frozen else c.fi,
+    ui.terminal(im, (box[0] + 40, box[1] + 88), sched, c.lt, 30, 1.85, th.paper, 0 if frozen else c.fi,
                 max_lines=13, max_width=x1 - x0 - 80)
     d = ImageDraw.Draw(im)
-    cx, cw = x1 + 70, c.W - x1 - 70 - 70                    # caption column and its width budget
+    cx, cw = x1 + 70, c.W - x1 - 70 - 60                    # caption column and its width budget
     for k, (a, b) in enumerate(G.c["rogue_captions"]):
         t0 = 0.75 + k * 1.1
         if c.lt >= t0:
-            p = ease_out(c.p(t0, t0 + 0.3))
-            y = 300 + k * 230
-            text(d, (cx, y), scramble(a, p, 40 + k, c.fi, 3), F("sans_medium", 66), th.paper, -2, max_w=cw, fit_to=a)
-            text(d, (cx, y + 78), scramble(b, p, 50 + k, c.fi, 3), F("sans_medium", 66), G.danger, -2, max_w=cw, fit_to=b)
+            y = 250 + k * 235
+            ui.rise(im, (cx, y), a, F("sans_medium", 64), th.paper, ease_out(c.p(t0, t0 + 0.35)), -2, max_w=cw)
+            f2 = F("serif_italic_bold", 76)
+            bb = ui.rise(im, (cx + 14, y + 78), b, f2, th.ink, ease_out(c.p(t0 + 0.12, t0 + 0.45)), -1, max_w=cw - 28)
+            if bb:                                          # inverse block wipes in behind the second line
+                blk = Image.new("RGB", im.size, (0, 0, 0))
+                ui.marker(ImageDraw.Draw(blk), (cx, bb[1] - 14, bb[2] + 16, bb[3] + 18), (255, 255, 255), ease_out(c.p(t0 + 0.05, t0 + 0.3)))
+                m = blk.convert("L")
+                im.paste(Image.new("RGB", im.size, G.danger), (0, 0), m)
+                ui.rise(im, (cx + 14, y + 78), b, f2, th.ink, ease_out(c.p(t0 + 0.12, t0 + 0.45)), -1, max_w=cw - 28)
     a = np.asarray(im, np.float32)
     heat = c.p(2.4, c.dur)
     v = G.cache(("vig", c.W, c.H), lambda: vignette(c.W, c.H))
@@ -254,7 +270,7 @@ def s_reveal(c):
     cy = c.H / 2 - 50
     im = glow(im, c, c.W / 2, cy, 420, 0.55 * ease_out(c.p(0, 0.5)))
     draw_logo(im, c, c.W / 2, cy, size, ease_out(c.p(0, 0.35)), sheen=c.p(0.3, 0.9))
-    text(ImageDraw.Draw(im), (c.W / 2, c.H - 190), typed(G.c["meet"], c.p(0.35, 0.6)), F("mono", 36), G.th.paper, 4, "mm")
+    ui.rise(im, (c.W / 2, c.H - 190), G.c["meet"], F("serif_italic", 56), G.th.paper, ease_out(c.p(0.35, 0.65)), 0, "mm")
     a = arr(im)
     if c.lt < 0.07:
         a = (a.astype(np.float32) * 0.3 + 255 * 0.7).astype(np.uint8)
@@ -269,12 +285,12 @@ def s_title(c):
     base_y, x = 900, 104
     cap_top = base_y - 0.73 * 230
     budget = cap_top * c.W / c.H - x - 60                     # stay inside the ink triangle
-    text(d, (118, 640), G.c["meet"], F("mono", 34), G.muted, 4)
+    text(d, (112, 650), G.c["meet"], F("serif_italic", 52), th.paper, 0)
     b = G.c["brand"]
     text(d, (x, base_y), scramble(b, ease_out(c.p(0, 0.45)), 61, c.fi, 3), F("sans_medium", 230), th.paper, -9, "ls",
          max_w=budget, fit_to=b)
     sub = G.c["product_sub"]
-    text(d, (116, 975), typed(sub, c.p(0.3, 0.8)), F("mono", 34), th.paper, 1, max_w=(975 * c.W / c.H) - 116 - 60, fit_to=sub)
+    ui.rise(im, (116, 955), sub, F("mono", 34), th.paper, ease_out(c.p(0.3, 0.65)), 1, max_w=(975 * c.W / c.H) - 116 - 60)
     return arr(im)
 
 
@@ -287,15 +303,26 @@ def intercept_plan():
     lines, plan, t = [], [], 0.55
     step = (G.intercept_dur - 1.3) / len(items)
     for it in items:
-        spans = [("$ ", G.good), (it["cmd"][2:], G.th.paper)] if it["cmd"].startswith("$ ") else [(it["cmd"], G.kind("agent"))]
+        kind = "cmd" if it["cmd"].startswith("$ ") else "agent"
+        spans, _ = G.spans(it["cmd"], kind, G.holo_pal[1])
         li = len(lines)
         lines.append({"spans": spans, "t": t, "type": 0.28 if it["cmd"].startswith("$ ") else 0.1})
         v_t = t + 0.5
         if it.get("out"):
-            lines.append({"spans": [(it["out"], G.verdicts.get(it["verdict"], G.muted))], "t": v_t, "type": 0})
+            lines.append({"spans": [(it["out"], G.holo_pal[2], "mono_medium")], "t": v_t, "type": 0})
         plan.append((li, t, v_t, it))
         t += step
     return lines, plan
+
+
+def holo_line(im, c, a, b, width=2):
+    """A thin rule filled with brand light."""
+    (xa, ya), (xb, yb) = a, b
+    if xb - xa < 1:
+        return
+    m = Image.new("L", (int(xb - xa) + 2, width + 2), 0)
+    ImageDraw.Draw(m).rectangle((0, 1, int(xb - xa), width), fill=255)
+    im.paste(Image.fromarray(holo(c, m.width, m.height, 2.2)), (int(xa), int(ya - width / 2)), m)
 
 
 def s_intercept(c):
@@ -303,56 +330,65 @@ def s_intercept(c):
     im = G.canvas()
     d = ImageDraw.Draw(im)
     for x in range(0, c.W, 60):
-        d.line((x, 0, x, c.H), fill=(17, 17, 19))
+        d.line((x, 0, x, c.H), fill=(16, 16, 18))
     for y in range(0, c.H, 60):
-        d.line((0, y, c.W, y), fill=(17, 17, 19))
+        d.line((0, y, c.W, y), fill=(16, 16, 18))
     cap = G.c["intercept_caption"]
-    text(d, (80, 92), scramble(cap, ease_out(c.p(0, 0.45)), 70, c.fi, 4), F("sans_medium", 54), th.paper, -2, "lm",
-         max_w=1100, fit_to=cap)
+    ui.rise(im, (80, 70), cap, F("sans_medium", 56), th.paper, ease_out(c.p(0, 0.45)), -2, "la", max_w=1100)
     x0, y0, x1, y1 = TERM_BOX
     ui.window(im, TERM_BOX, G.panel, G.line, G.c["intercept_title"], font_size=15)
     lines, plan = intercept_plan()
-    pos = ui.terminal(im, (x0 + 40, y0 + 85), lines, c.lt, 30, 2.05, th.paper, c.fi, max_width=x1 - x0 - 80)
+    pos = ui.terminal(im, (x0 + 40, y0 + 88), lines, c.lt, 30, 2.1, th.paper, c.fi, max_width=x1 - x0 - 80)
     d = ImageDraw.Draw(im)
     counts = {}
-    fv, fr = F("mono_bold", 24), F("mono", 19)
+    fv, fr = F("sans_medium", 30), F("serif_italic", 28)
     for li, t0, v_t, it in plan:
         if li not in pos:
             continue
         rows = pos[li]
         rx0, ry, rx1 = rows[0]
-        col = G.verdicts.get(it["verdict"], G.muted)
-        sp = c.p(v_t - 0.2, v_t)                                  # scan line sweeps the command
+        caught = it["verdict"] != "ALLOWED"
+        sp = c.p(v_t - 0.22, v_t)                                 # scan light sweeps the command
         if 0 < sp < 1:
-            sx = lerp(rx0, max(rows[-1][2], rx0 + 200), sp)
-            d.line((sx, ry - 8, sx, rows[-1][1] + 40), fill=G.holo_pal[int(sp * 5) % 5], width=4)
+            sx = lerp(rx0 - 10, max(rows[-1][2], rx0 + 200) + 10, ease_in_out(sp))
+            band = Image.fromarray(holo(c, 10, int(rows[-1][1] - ry + 50), 3.0))
+            im.paste(band, (int(sx), int(ry - 10)))
         if c.lt >= v_t:
             counts[it["verdict"]] = counts.get(it["verdict"], 0) + 1
             if it["verdict"] == "BLOCKED":
                 for a0, ay, a1 in rows:
-                    d.line((a0, ay + 18, a1, ay + 18), fill=G.danger, width=3)
-            # leader line from the command out to the margin, then the verdict typeset as words
-            lp = ease_out(c.p(v_t, v_t + 0.18))
-            ly = ry + 18
-            lx0 = rows[0][2] + 18 if len(rows) == 1 else x1 - 30
-            lx1 = lerp(lx0, ANN_X - 18, lp)
-            d.line((lx0, ly, lx1, ly), fill=col, width=1)
-            if lp >= 1:
-                d.rectangle((ANN_X - 22, ly - 3, ANN_X - 16, ly + 3), fill=col)
-                word = it["verdict"]
-                text(d, (ANN_X, ly), typed(word, c.p(v_t + 0.18, v_t + 0.3)), fv, col, 2, "lm", max_w=c.W - ANN_X - 80, fit_to=word)
-                text(d, (ANN_X, ly + 30), typed(it["rule"], c.p(v_t + 0.22, v_t + 0.45)), fr, (150, 150, 158), 0, "lm",
-                     max_w=c.W - ANN_X - 80, fit_to=it["rule"])
-    # running tally, typeset (number in the verdict colour, label muted)
+                    holo_line(im, c, (a0, ay + 19), (a0 + (a1 - a0) * ease_out(c.p(v_t, v_t + 0.2)), ay + 19), 3)
+            lp = ease_out(c.p(v_t, v_t + 0.2))
+            ly = ry + 19
+            lx0 = rows[0][2] + 20 if len(rows) == 1 else x1 - 30
+            lx1 = lerp(lx0, ANN_X - 20, lp)
+            if caught:
+                holo_line(im, c, (lx0, ly), (lx1, ly), 2)
+            else:
+                ImageDraw.Draw(im).line((lx0, ly, lx1, ly), fill=th.paper, width=1)
+            if lp > 0.6:                                     # verdict + reason on one baseline
+                word, rule = it["verdict"], it["rule"]
+                pv = ease_out(c.p(v_t + 0.12, v_t + 0.4))
+                budget = c.W - ANN_X - 70
+                fvw = fv if fv.getlength(word) + 3 * len(word) <= budget * 0.4 else F("sans_medium", 26)
+                ww = fvw.getlength(word) + 3 * len(word)
+                ui.rise(im, (ANN_X, ly + 12), word, fvw, G.fill_holo(c, 2.4) if caught else th.paper, pv, 3, "ls")
+                ui.rise(im, (ANN_X + ww + 16, ly + 12), rule, fr, th.paper, ease_out(c.p(v_t + 0.2, v_t + 0.5)), 0, "ls",
+                        max_w=budget - ww - 16)
+    # running tally: numbers roll up in brand light, labels in italic serif
     x = c.W - 80
-    f_n, f_l = F("mono_bold", 20), F("mono", 20)
+    f_n, f_l = F("sans_medium", 34), F("serif_italic", 26)
+    d = ImageDraw.Draw(im)
     for k in reversed(list(G.verdicts)):
-        lab = f" {k.lower()}"
+        lab = " " + k.lower()
         n = str(counts.get(k, 0))
-        text(d, (x, 92), lab, f_l, G.muted, 0, "rm")
+        text(d, (x, 96), lab, f_l, th.paper, 0, "rs")
         x -= f_l.getlength(lab)
-        text(d, (x, 92), n, f_n, G.verdicts[k], 0, "rm")
-        x -= f_n.getlength(n) + 34
+        if k != "ALLOWED":
+            ui.fill_text(im, (x, 96), n, f_n, G.fill_holo(c, 2.4), 0, "rs")
+        else:
+            text(d, (x, 96), n, f_n, th.paper, 0, "rs")
+        x -= f_n.getlength(n) + 30
     return arr(im)
 
 
@@ -363,15 +399,27 @@ def s_features(c):
     i = min(int(c.lt / beat), len(feats) - 1)
     b = c.lt - i * beat
     light = i % 2 == 1
-    im = Image.fromarray(holo(c, speed=2.0)) if light else G.canvas()
+    im = Image.fromarray(holo(c, speed=2.4)) if light else G.canvas()
     fg = th.ink if light else th.paper
     d = ImageDraw.Draw(im)
-    text(d, (112, 150), f"{i + 1:02d}/{len(feats):02d}", F("mono", 26), fg, 2)
-    text(d, (c.W - 112, 150), G.c["brand"], F("mono_bold", 26), fg, 4, "ra")
+    text(d, (112, 130), f"{i + 1:02d} / {len(feats):02d}", F("mono", 24), fg, 2)
+    text(d, (c.W - 112, 130), G.c["brand"], F("mono_medium", 24), fg, 4, "ra")
+    align = ["l", "r", "l", "m", "r", "l", "m", "r"][i % 8]
+    ax = {"l": 104, "m": c.W / 2, "r": c.W - 104}[align]
+    anchor = {"l": "l", "m": "m", "r": "r"}[align]
     w, s = feats[i]["word"], feats[i]["sub"]
-    text(d, (104, 620), scramble(w, ease_out(min(1, b / 0.2)), 80 + i, c.fi, 3), F("sans_medium", 176), fg, -7, "ls",
-         max_w=c.W - 216, fit_to=w)
-    text(d, (112, 700), typed(s, min(1, b / 0.3)), F("mono", 32), fg, 1, max_w=c.W - 224, fit_to=s)
+    words = w.split(" ")
+    f = fit_word = F("sans_medium", 180)
+    from framesmith.typography import fit as _fit
+    f = _fit(w, fit_word, c.W - 208, -7)
+    # word-by-word rise with a 50 ms stagger, laid out as one line
+    total = sum(f.getlength(x) for x in words) + f.getlength(" ") * (len(words) - 1) - 7 * len(w) * f.size / 180
+    x = {"l": ax, "m": ax - total / 2, "r": ax - total}[align]
+    for k, wd in enumerate(words):
+        ui.rise(im, (x, 610), wd, f, fg, ease_out(min(1, max(0, (b - k * 0.05) / 0.22))), -7 * f.size / 180, "ls")
+        x += f.getlength(wd) - 7 * len(wd) * f.size / 180 + f.getlength(" ")
+    ui.rise(im, (ax, 660), s, F("serif_italic", 44), fg, ease_out(min(1, max(0, (b - 0.1) / 0.25))), 0, anchor + "a",
+            max_w=c.W - 216)
     return arr(im)
 
 
@@ -403,7 +451,7 @@ def s_dashboard(c):
             d.rectangle((30, y - 18, 33, y + 18), fill=th.ink)          # active marker: a rule, not a pill
         text(d, (52, y), nav, F("sans", 20), th.ink if k == 0 else G.muted, 0, "lm", max_w=230)
     text(d, (340, 52), f"Dashboard  /  {D['title']}", F("sans", 20), G.muted, 0, "lm", max_w=900)
-    text(d, (c.W - 60, 52), "● live", F("mono", 16), (21, 128, 61), 1, "rm")
+    text(d, (c.W - 60, 52), "● live", F("mono_medium", 16), (21, 128, 61), 1, "rm")
     cw = (c.W - 340 - 60 - 3 * 20) / 4
     for k, (lab, val) in enumerate(D["cards"]):
         x = 340 + k * (cw + 20)
@@ -438,7 +486,10 @@ def s_dashboard(c):
         text(d, (366 + dx, y), call, F("sans", 20), th.ink, 0, "lm", max_w=430)
         text(d, (820 + dx, y), agent, F("mono", 18), G.muted, 0, "lm", max_w=280)
         text(d, (1120 + dx, y), rule, F("mono", 18), G.muted, 0, "lm", max_w=420)
-        text(d, (c.W - 90 + dx, y), verdict.lower(), F("mono_bold", 18), G.verdicts.get(verdict, G.muted), 1, "rm", max_w=200)
+        vx = c.W - 90 + dx
+        text(d, (vx, y), verdict.lower(), F("mono_medium", 18), th.ink, 1, "rm", max_w=200)
+        wv = F("mono_medium", 18).getlength(verdict.lower()) + 18 * 0 + len(verdict) * 1
+        d.rectangle((vx - wv - 22, y - 5, vx - wv - 12, y + 5), fill=G.verdicts.get(verdict, G.muted))
     z = lerp(1.0, 1.02, ease_in_out(c.p(0, c.dur)))
     if z > 1.001:
         im = cover(im, c.W, c.H, z, 0.5, 0.5)
@@ -462,16 +513,18 @@ def s_install(c):
     lines, t = [], 0.2
     for ln in G.c["install"]:
         k = ln["kind"]
-        spans = [("$ ", G.good), (ln["text"][2:], th.paper)] if k == "cmd" else [(ln["text"], G.kind(k))]
+        spans, mark = G.spans(ln["text"], k, G.holo_pal[1])
+        if k == "dim":
+            spans = [(ln["text"], (150, 150, 156))]
         lines.append({"spans": spans, "t": t, "type": 0.4 if k == "cmd" else 0})
         t += 0.62 if k == "cmd" else 0.28
     agents = "   ".join(G.c["install_agents"])
-    lines.append({"spans": [(agents, G.good)], "t": t + 0.05, "type": 0.35})
+    lines.append({"spans": [(agents, G.holo_pal[1], "mono_medium")], "t": t + 0.05, "type": 0.35})
     ui.terminal(im, (box[0] + 50, box[1] + 80), lines, c.lt, 28, 1.75, th.paper, c.fi, max_width=box[2] - box[0] - 100)
     if c.lt > t + 0.5:
         cap = G.c["install_caption"]
-        text(ImageDraw.Draw(im), (c.W / 2, 880), scramble(cap, ease_out(c.p(t + 0.5, t + 0.9)), 90, c.fi, 4),
-             F("sans_medium", 62), th.paper, -2, "mm", max_w=c.W - 240, fit_to=cap)
+        ui.rise(im, (c.W / 2, 880), cap, F("sans_medium", 62), th.paper, ease_out(c.p(t + 0.5, t + 0.85)), -2, "mm",
+                max_w=c.W - 240)
     return arr(im)
 
 
@@ -481,14 +534,25 @@ def s_end(c):
     im = glow(im, c, c.W / 2, 330, 300, 0.5 * ease_out(c.p(0.1, 0.8)))
     draw_logo(im, c, c.W / 2, 330, 220, ease_out(c.p(0, 0.45)), sheen=c.p(0.5, 1.2))
     d = ImageDraw.Draw(im)
-    tg = G.c["tagline"]
-    text(d, (c.W / 2, 590), scramble(tg, ease_out(c.p(0.35, 0.85)), 95, c.fi, 4), F("sans_medium", 84), th.paper, -3, "mm",
-         max_w=c.W - 240, fit_to=tg)
+    a, b = G.c["tagline"], G.c.get("tagline_accent", "")
+    fa, fb = F("sans_medium", 88), F("serif_italic_bold", 100)
+    wa, wb = fa.getlength(a + " ") - 3 * len(a), fb.getlength(b)
+    from framesmith.typography import fit as _fit
+    k = min(1.0, (c.W - 240) / max(1, wa + wb))
+    fa, fb = _fit(a, fa, (wa) * k, -3), _fit(b, fb, wb * k) if b else fb
+    wa, wb = fa.getlength(a + " ") - 3 * len(a) * fa.size / 88, fb.getlength(b)
+    x = c.W / 2 - (wa + wb) / 2
+    ui.rise(im, (x, 620), a, fa, th.paper, ease_out(c.p(0.35, 0.7)), -3 * fa.size / 88, "ls")
+    if b:
+        ui.rise(im, (x + wa, 620), b, fb, G.fill_holo(c, 1.8), ease_out(c.p(0.5, 0.85)), 0, "ls")
     if c.lt > 0.8:
-        holo_text(im, c, (c.W / 2, 715), typed(G.c["cta"], c.p(0.8, 1.15)), F("mono_bold", 44), "mm", 1)
+        text(ImageDraw.Draw(im), (c.W / 2, 715), typed(G.c["cta"], c.p(0.8, 1.15)), F("mono_medium", 40), th.paper, 1, "mm",
+             max_w=c.W - 240, fit_to=G.c["cta"])
     d = ImageDraw.Draw(im)
-    text(d, (c.W / 2, 830), typed(G.c["links"], c.p(1.0, 1.5)), F("mono", 30), (190, 190, 196), 1, "mm", max_w=c.W - 240, fit_to=G.c["links"])
-    text(d, (c.W / 2, 885), typed(G.c["license"], c.p(1.3, 1.6)), F("mono", 22), G.muted, 2, "mm", max_w=c.W - 240, fit_to=G.c["license"])
+    ui.fill_text(im, (c.W / 2, 830), typed(G.c["links"], c.p(1.0, 1.5)), F("mono", 28), G.fill_holo(c, 1.2), 1, "mm",
+                 max_w=c.W - 240, fit_to=G.c["links"])
+    ui.rise(im, (c.W / 2, 880), G.c["license"], F("serif_italic", 30), th.paper, ease_out(c.p(1.3, 1.6)), 0, "mm",
+            max_w=c.W - 240)
     return arr(im)
 
 

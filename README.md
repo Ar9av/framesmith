@@ -95,7 +95,7 @@ docs/media/             previews
 
 ## Credits
 
-Motion and craft rules draw on public skills by Emil Kowalski (animation), Jakub Krehel (type and colour), Replicate (image prompting), HeyGen HyperFrames (seekable HTML video) and Anthropic (canvas design), all found via [AI UX Playground](https://aiuxplayground.com/skills/category/visual-design/). See [docs/credits.md](docs/credits.md). Bundled fonts: Inter (OFL-1.1) and Go Mono (BSD-style).
+Motion and craft rules draw on public skills by Emil Kowalski (animation), Jakub Krehel (type and colour), Replicate (image prompting), HeyGen HyperFrames (seekable HTML video) and Anthropic (canvas design), all found via [AI UX Playground](https://aiuxplayground.com/skills/category/visual-design/). See [docs/credits.md](docs/credits.md). Bundled fonts: Inter Display, Geist Mono and Fraunces (all OFL-1.1).
 
 ## License
 

@@ -10,8 +10,12 @@ FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 ROLES = {
     "sans": "InterDisplay-Regular.otf",
     "sans_medium": "InterDisplay-Medium.otf",
-    "mono": "Go-Mono.ttf",
-    "mono_bold": "Go-Mono-Bold.ttf",
+    "mono": "GeistMono-Regular.otf",
+    "mono_medium": "GeistMono-Medium.otf",
+    "mono_bold": "GeistMono-SemiBold.otf",
+    "serif": "Fraunces-Regular.ttf",              # Latin subset: letters, digits, basic punctuation
+    "serif_italic": "Fraunces-Italic.ttf",
+    "serif_italic_bold": "Fraunces-SemiBoldItalic.ttf",
 }
 GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@$*+=<>/\\|"
 
