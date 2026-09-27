@@ -3,7 +3,7 @@
 Pure Python (numpy + Pillow) → frames → ffmpeg. No browser, no GPU.
 Templates live in skills/<name>/ and vendor this package into their scripts/.
 """
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 from .easing import bezier, ease_out, ease_in_out, ease_drawer, linear, prog, lerp, h
 from .theme import Theme, hex2rgb, mix, luminance
