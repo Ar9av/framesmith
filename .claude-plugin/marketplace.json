@@ -1,0 +1,15 @@
+{
+  "name": "framesmith",
+  "owner": { "name": "Arnav", "url": "https://github.com/Ar9av" },
+  "metadata": { "description": "Motion-graphics, video and visual-design skills for AI agents." },
+  "plugins": [
+    {
+      "name": "framesmith",
+      "source": "./",
+      "description": "Brief-driven motion-graphics templates (product promos, spec-sheet videos, kinetic type) rendered with deterministic Python + ffmpeg.",
+      "version": "0.1.0",
+      "category": "design",
+      "keywords": ["motion-graphics", "video", "design", "gpt-image-2"]
+    }
+  ]
+}

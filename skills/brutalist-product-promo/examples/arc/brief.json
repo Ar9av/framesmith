@@ -1,0 +1,87 @@
+{
+  "size": [720, 1280],
+  "fps": 25,
+  "speed": 1.0,
+  "theme": {
+    "accent": "#F2561D",
+    "ink": "#000000",
+    "paper": "#FFFFFF",
+    "tint": "#8A2E0F"
+  },
+  "copy": {
+    "brand": "ARC",
+    "company": "Arc Robotics",
+    "origin": "Made in U.S.A.",
+    "tagline": "AN AMERICAN INDUSTRIAL REVIVAL",
+    "tagline_keyword": "INDUSTRIAL",
+    "field_word": "ARC ROBOTICS",
+    "model": "S1",
+    "dim_label": "BASE DIA",
+    "sheet_title": "S1 Spec Sheet",
+    "terminal": [
+      "ARC ROBOTICS // AI OPERATIONAL TERMINAL",
+      "REPORT ID : SUPPLY-CHAIN-402",
+      "STATUS : ACTIVE MONITORING"
+    ],
+    "product_name": "P1 Industrial Robot",
+    "overview_header": "PRODUCT OVERVIEW",
+    "overview_title": ["An American", "Industrial Revival ®"],
+    "overview_words": ["Motion", "Control"],
+    "overview_specs": [
+      "PRECISION ENGINEERING",
+      "6 AXIS / 12 KG PAYLOAD",
+      "REPEATABILITY ±0.02 MM",
+      "REACH 1250 MM",
+      "IP67 SEALED JOINTS",
+      "OPERATING TEMP -10 - 50 C"
+    ],
+    "overview_fineprint": "REAL-TIME AI CONTROL LINE ADJUSTMENTS",
+    "overview_side": [["Plug and Run", "Manufacturing Unit"], ["Self-Diagnostic", "Failsafes"]],
+    "glitch_words": ["ARC ROBOTICS", "SCCITOBOR", "CRRAAAAA", "AAAARRCC", "ROBOTICSS", "OBOR", "CITTO", "ARC", "BOTICS"],
+    "specs_title": "Specs",
+    "spec_blocks": [
+      {"head": "POWER SYSTEM", "lines": ["ADVANCED LITHIUM HYBRID PACK", "RUN TIME: 8.2 HOURS", "SWAPPABLE BATTERY MODULE", "COLD START CAPABILITY: MINUS 18 C"]},
+      {"head": "SENSORS", "lines": ["MULTI-AXIS JOINT", "PRECISE ORIENTATION", "SMOOTH ROTATIONAL CONTROL"]},
+      {"head": "COMMUNICATIONS", "lines": ["ENCRYPTED MESH NETWORK", "QUANTUM RESISTANT PROTOCOL", "RANGE: 28 KM LINE OF SIGHT", "LOW BANDWIDTH FALLBACK LINK"]}
+    ],
+    "spec_side_labels": ["OPS READY // IN FIELD", "SUB-01 OVERWATCH", "ROBO FINGER //"],
+    "labels": ["BRASS HANDS DESIGN OPS", "REAL TIME AI CONTROL MODULE // ACTIVE"],
+    "connecting": "CONNECTION",
+    "connected": "CONNECTION ESTABLISHED",
+    "footer": [
+      "EXPERIMENTAL SYSTEMS // S1 SPEC SHEETS FROM ARC ROBOTICS",
+      "BRASS HANDS DESIGN OPS // 2026",
+      "ALL RIGHTS RESERVED"
+    ]
+  },
+  "meta": {
+    "hero_target": [0.8, 0.29]
+  },
+  "scenes": {},
+  "assets": {
+    "hero": {
+      "size": "1024x1024", "quality": "medium",
+      "prompt": "Studio product render of a six-axis industrial robot arm, three-quarter side view, arm raised and bent at the elbow with a two-finger gripper reaching to the right. Satin dark graphite grey metal housings with soft white rim highlights, a small bright orange \"{brand}\" logo in a blocky techno typeface on the forearm, black cylindrical base with white trim. Plain flat medium-dark grey seamless background (#3a3a3a), soft diffused top light, 85mm lens, minimal, no other objects, no text besides the logo."
+    },
+    "closeup": {
+      "size": "1536x1024", "quality": "medium",
+      "prompt": "Extreme close-up product photo of the wrist and forearm of a white industrial robot arm entering from the left edge, a thin red-orange anodized ring at the wrist joint and a metallic two-finger gripper pointing right. A small orange \"{brand}\" logo printed on the white forearm shell. Pure black background, hard rim light from above, crisp reflections, high contrast, 100mm macro lens."
+    },
+    "cutout": {
+      "size": "1536x1024", "quality": "medium", "background": "transparent",
+      "prompt": "Isolated side view of a robot forearm and two-finger gripper pointing right, matte mid-grey plastic shell with a dark \"{brand}\" logo, black flexible cable arching over the top, metallic finger joints. Flat even studio lighting, transparent background, no shadow."
+    },
+    "environment": {
+      "size": "1024x1536", "quality": "low",
+      "prompt": "Top-down black and white photograph of an automated factory floor: long parallel conveyor lines with rows of small white robot arms working along them, pipes and metal grating, strong vertical lines, high contrast, harsh overhead light, documentary industrial photography."
+    },
+    "lineart": {
+      "size": "1024x1536", "quality": "medium",
+      "prompt": "Technical contour line drawing of a six-axis industrial robot arm seen from a low three-quarter angle, arm curving up and forward with a gripper at the top left, round base at the bottom. Thin pure white outlines only on a pure black background, no shading, no fill, no text, clean vector engineering illustration, subject fills the frame."
+    },
+    "sprite": {
+      "size": "1536x1024", "quality": "medium", "grid": [2, 2],
+      "prompt": "Sprite sheet for animation: a 2 by 2 grid of four equal cells on a pure white background, each cell shows the SAME two-finger industrial robot gripper in side view pointing right, drawn as thin black technical outline line art with no shading. Same position, scale and framing in every cell; only the fingers change: cell 1 top-left fully closed, cell 2 top-right slightly open, cell 3 bottom-left half open, cell 4 bottom-right wide open. No grid lines, no numbers, no text."
+    }
+  }
+}
