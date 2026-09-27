@@ -63,3 +63,11 @@ Font roles (bundled): `sans` (Inter Display), `sans_medium`, `mono` (Go Mono), `
 - `cover(im, w, h, zoom, fx, fy)` does a cover-fit crop. `cover_point(...)` maps a source point into the crop, e.g. for overlays that track a detail.
 - `sprite_masks(sheet, cols, rows)` returns line-art frames cropped to a shared bbox. `pingpong(n)` gives a seamless loop order.
 - `generate_images(specs, out_dir, key=None, names=None, force=False, fmt=None)` calls gpt-image-2 in parallel, skipping existing files.
+
+## UI (`fs.ui`)
+
+For software and dev-tool videos:
+- `window(img, box, bg, bar, title)` draws macOS-style chrome and returns the content box.
+- `terminal(img, origin, lines, t, size)` renders a time-scheduled transcript. Each line is `{"spans": [(text, rgb)], "t": start, "type": secs, "bg": rgb?}` and it scrolls with `max_lines`. It returns line positions for overlays.
+- `chip(img, xy, label, fg, bg)` draws a pill. `stat_card(...)` and `rrect(...)` are basic panels.
+- `holo_field(w, h, t, palette)` produces animated iridescent interference light in any palette. Render it small and upscale for speed.

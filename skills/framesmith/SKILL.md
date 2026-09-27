@@ -17,6 +17,7 @@ framesmith templates are **skills**: a `SKILL.md`, a brief schema, an example br
 | Skill | Output | Pick it when |
 |---|---|---|
 | [`brutalist-product-promo`](../brutalist-product-promo/SKILL.md) | 22.6 s 9:16 MP4, 21 scenes | Hardware/tech product promo, spec-sheet motion graphic, industrial/brutalist look, one accent colour on black and white |
+| [`devtool-launch-video`](../devtool-launch-video/SKILL.md) | 33.8 s 16:9 MP4, 11 scenes | Launch or "what is X" film for a CLI, dev tool, AI-agent or security product: rogue-terminal problem, brand reveal, verdict-chip proof, features, dashboard, install, CTA |
 <!-- catalog:end -->
 
 If nothing fits, say so and offer to build a new template (section 3) rather than forcing the wrong one.
