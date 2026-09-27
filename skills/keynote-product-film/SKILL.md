@@ -17,9 +17,10 @@ The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur
 
 1. **Story:** problem (3–4 shots) → reveal ("Introducing" and the logo on the wash) → what it is (a staircase sentence) → proof in real UI (prompt → session → steps) → evidence (chart) → capabilities (ticker) → a trust detail (mask) → integrations (icon row) → name, tagline, URL.
 2. **Brief:** copy `examples/prismor/brief.json` and replace the shots. Keep every claim sourced: session lines, benchmark numbers and feature names come from the product's own repo or site.
-3. **Icons:** `python3 scripts/main.py icons --brief brief.json` fetches every `{icon:name}` / `lucide:` line icon (Lucide, ISC) and every brand mark used in `{tiles:…}`, `brand:` and `icons` (thesvg.org, with licence metadata). Put the real logo at `assets/logo.png`.
-4. **Check:** `check` fails on text overflow and warns when a sentence had to shrink below 80%. Review with `still … t1 t2 …` or `sheet`.
-5. **Render:** `render --brief … [--audio music.m4a]`. It's music-driven: keep shot lengths on the track's beat grid (0.5 s at 120 BPM).
+3. **Generated PNGs:** `python3 scripts/main.py assets --brief brief.json` makes the `assets` entries with gpt-image-2 (`medium`, `background: transparent`). Use them for devices (a laptop with a flat #00FF00 screen, keyed automatically) and hero objects (the glass key). Never use them for logos or product UI.
+4. **Icons:** `python3 scripts/main.py icons --brief brief.json` fetches every `{icon:name}` / `lucide:` line icon (Lucide, ISC) and every brand mark used in `{tiles:…}`, `brand:` and `icons` (thesvg.org, with licence metadata). Put the real logo at `assets/logo.png`.
+5. **Check:** `check` fails on text overflow and warns when a sentence had to shrink below 80%. Review with `still … t1 t2 …` or `sheet`.
+6. **Render:** `render --brief … [--audio music.m4a]`. It's music-driven: keep shot lengths on the track's beat grid (0.5 s at 120 BPM).
 
 ## Shot types
 
@@ -32,7 +33,8 @@ The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur
 | `steps` | a step list with brand or line icons and connectors | `caption`, `rows: [{t, icon: brand:slug / lucide:name, text, sub, tone: blocked/success}]` |
 | `chart` | a benchmark bar chart that morphs between phases | `sub`, `rows: [{label, note, highlight}]`, `phases: [{title, values}]` |
 | `ticker` | a fixed prefix with a rolling list | `prefix`, `items: [{icon, text}]`, `every` |
-| `mask` | an input whose secret becomes a placeholder on click | `caption`, `value`, `masked`, `click_at`, `footnote` |
+| `mask` | an input whose secret becomes a placeholder on click; an optional generated object floats beside it and dissolves at the click | `caption`, `value`, `masked`, `click_at`, `footnote`, `object`, `object_size` |
+| `laptop` | caption above a laptop rising in, with real product media on its keyed screen | `caption`, `media` (a real screenshot), `device` (a generated PNG with a #00FF00 screen), `zoom`, `focus`, `width` |
 | `icons_row` | caption plus a row of integration marks | `caption`, `icons: ["logo", slugs…]` |
 | `black` | black frame | — |
 
@@ -42,5 +44,5 @@ Transitions: `"tr": "dissolve"` (crossfade with a blur peak) or `"pixel"`; the d
 
 - No pills, chips or badges. The reference's rounded chat chips and pill buttons were translated into plain lines and the agent's real text-based permission prompt.
 - No italics. Inter Display for all copy, Geist Mono only for literal commands and keys (ligatures off).
-- Nothing overflows. Sentences shrink as a block, panels word-wrap and scroll, and `check` must pass.
+- Nothing overflows, including text escaping its container. Sentences shrink as a block, bars size to the whole block, panels word-wrap and scroll, stacked cards are opaque edges only, and chart labels sit in their own column. `check` must pass, then review stills of every UI shot.
 - Real logos and marks only (brand-icons / thesvg). Show only UI data the product can actually produce.

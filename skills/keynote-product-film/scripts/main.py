@@ -18,7 +18,7 @@ from PIL import Image, ImageDraw, ImageFilter
 
 from framesmith import (Dissolve, Mosaic, Scene, Timeline, cover, ease_in_out, ease_out, hex2rgb, lerp,
                         overflow_report, scramble, text, typed)
-from framesmith.media import fetch_icons, icon, rasterize_svg
+from framesmith.media import fetch_icons, generate_images, icon, rasterize_svg
 from framesmith.typography import F, OVERFLOWS, SHRINKS
 from framesmith import ui
 
@@ -337,12 +337,16 @@ def session_panel(img, box, lines, lt, cwd="~/acme-web", model="Opus 5", s=1.0):
         y += len(rows) * lh + 10 * s
 
 
-def permission_box(img, box, command, desc, sel, alpha=255):
-    """Claude Code's permission prompt: text UI, options chosen with a chevron (no buttons)."""
+def permission_box(img, box, command, desc, sel, alpha=255, back=False):
+    """Claude Code's permission prompt: text UI, options chosen with a chevron (no buttons).
+    back=True draws an opaque card with dimmed content, so stacked copies never show text through each other."""
     x0, y0, x1, y1 = [int(v) for v in box]
     layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(layer)
-    d.rounded_rectangle((x0, y0, x1, y1), 14, fill=(30, 30, 31, alpha), outline=(110, 110, 116, alpha), width=2)
+    d.rounded_rectangle((x0, y0, x1, y1), 14, fill=(30, 30, 31, 255 if back else alpha), outline=(110, 110, 116, alpha), width=2)
+    if back:                                                  # stacked copy: card edge only, no text
+        img.alpha_composite(layer)
+        return
     fb, fs, fm = F("sans_medium", 30), F("sans", 28), F("mono", 26)
     d.text((x0 + 36, y0 + 44), "Bash command", font=fb, fill=(217, 119, 87, alpha), anchor="lm")
     text(d, (x0 + 60, y0 + 100), command, fm, (235, 235, 235, alpha), 0, "lm", max_w=x1 - x0 - 110)
@@ -372,6 +376,27 @@ def wash_bg(lt):
     return Image.fromarray(base.astype(np.uint8)).resize((G.W, G.H), Image.BICUBIC).convert("RGBA")
 
 
+def asset_png(name):
+    return G.cache(("png", name), lambda: Image.open(os.path.join(G.assets, name + ".png")).convert("RGBA"))
+
+
+def keyed(name):
+    """A gpt-image-2 device PNG with a flat #00FF00 screen: returns (RGBA with the screen cut out, screen box)."""
+    def build():
+        im = asset_png(name)
+        a = np.asarray(im).astype(np.int16)
+        r, g, b, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
+        green = (g > 110) & (g > r + 40) & (g > b + 40) & (al > 0)
+        ys, xs = np.where(green)
+        box = (int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max()))
+        out = a.copy()
+        out[..., 3] = np.where(green, 0, al)
+        edge = (~green) & (g > r + 20) & (g > b + 20)            # despill the bezel edge
+        out[..., 1] = np.where(edge, (r + b) // 2, g)
+        return Image.fromarray(out.clip(0, 255).astype(np.uint8)), box
+    return G.cache(("keyed", name), build)
+
+
 def fade(ic, p):
     a = np.asarray(ic).copy()
     a[..., 3] = (a[..., 3] * p).astype(np.uint8)
@@ -384,13 +409,14 @@ def shot_sentence(c, s):
     im = wash_bg(c.lt) if bg == "wash" else Image.new("RGBA", (c.W, c.H), ground(bg) + (255,))
     f = F("sans_medium", s.get("size", 96))
     cy = c.H * s.get("y", 0.5)
-    if s.get("bar"):                                     # a dark input bar wrapping the first line
-        bw, bh = s["bar"]
+    if s.get("bar"):                                     # a dark input bar that contains the whole text block
         p = ease_out(min(1, c.lt / 0.35))
-        x0 = c.W / 2 - bw * lerp(0.7, 1, p) / 2
-        lh = f.size * 1.12
-        ly = cy - lh * (len(s["lines"]) - 1) / 2 + f.size * 0.02
-        prompt_bar(im, (x0, ly - bh / 2, c.W - x0, ly + bh / 2), "", "", True, False, False)
+        bw = max(line_width(l, f) for l in s["lines"]) + 160
+        tall = max(token_size(t, f)[1] for l in s["lines"] for t in tokens_of(l))   # tiles are taller than text
+        bh = f.size * 1.12 * (len(s["lines"]) - 1) + max(f.size, tall) + 120
+        bw = min(bw, c.W - 120) * lerp(0.9, 1, p)
+        prompt_bar(im, (c.W / 2 - bw / 2, cy - bh / 2 + f.size * 0.02, c.W / 2 + bw / 2, cy + bh / 2 + f.size * 0.02), "", "", True,
+                   False, False)
     if s.get("logo"):
         lp = ease_out(min(1, c.lt / 0.4))
         lg = fade(logo(s.get("logo_size", 180)), lp)
@@ -414,10 +440,11 @@ def shot_permission(c, s):
         x0 = c.W / 2 - w / 2 - (n - 1) * 23 + k * 46
         y0 = 330 - (n - 1) * 19 + k * 38
         last = k == n - 1 or c.lt < t0 + every
-        alpha = int(255 * p * (1 if last else 0.3))
+        alpha = int(255 * p)
         age = c.lt - t0
         sel = s.get("select", 0) if (k == n - 1 and age > s.get("select_at", 1.0)) else 0
-        permission_box(im, (x0, y0 + (1 - p) * 30, x0 + w, y0 + h + (1 - p) * 30), s["command"], s.get("desc", ""), sel, alpha)
+        permission_box(im, (x0, y0 + (1 - p) * 30, x0 + w, y0 + h + (1 - p) * 30), s["command"], s.get("desc", ""), sel, alpha,
+                       back=not last)
         if last:
             click_t = s.get("select_at", 1.0) if k == n - 1 else every * 0.7
             clk = (age - click_t) / 0.35 if age > click_t else 0
@@ -493,19 +520,22 @@ def shot_chart(c, s):
     ph = min(len(phases) - 1, int(c.lt / seg))
     lt_ph = c.lt - ph * seg
     cur, prev = phases[ph], phases[max(0, ph - 1)]
-    bw, rh, gap = 1180, 84, 26
+    lab_w, bw, rh, gap = 470, 900, 84, 26
     n = len(s["rows"])
-    x0 = (c.W - bw - 170) / 2
+    x0 = (c.W - (lab_w + bw + 170)) / 2 + lab_w                  # bars start after the label column
     y0 = (c.H - (n * rh + (n - 1) * gap)) / 2 + 60
     d = ImageDraw.Draw(im)
-    text(d, (x0, y0 - 150), cur["title"], F("sans_medium", 54), G.light, -1, "lm", max_w=bw + 160)
-    text(d, (x0, y0 - 86), s["sub"], F("sans", 30), G.muted_d, 0, "lm", max_w=bw + 160)
+    text(d, (x0 - lab_w, y0 - 150), cur["title"], F("sans_medium", 54), G.light, -1, "lm", max_w=lab_w + bw + 160)
+    text(d, (x0 - lab_w, y0 - 86), s["sub"], F("sans", 30), G.muted_d, 0, "lm", max_w=lab_w + bw + 160)
     for k, row in enumerate(s["rows"]):
         v1 = cur["values"][k]
         v0 = prev["values"][k] if ph else 0
         v = lerp(v0, v1, ease_out(min(1, max(0, (lt_ph - 0.15 - k * 0.08) / 0.6))))
         y = y0 + k * (rh + gap)
         hi = row.get("highlight")
+        text(d, (x0 - lab_w, y + rh * 0.36), row["label"], F("sans_medium", 36), G.accent if hi else G.light, 0, "lm", max_w=lab_w - 30)
+        if row.get("note"):
+            text(d, (x0 - lab_w, y + rh * 0.8), row["note"], F("sans", 24), G.muted_d, 0, "lm", max_w=lab_w - 30)
         d.rounded_rectangle((x0, y, x0 + bw, y + rh), 12, fill=(48, 48, 50))
         wv = max(16, bw * v / 100)
         if hi:
@@ -514,12 +544,6 @@ def shot_chart(c, s):
             im.paste(G.accent, (0, 0), glow.filter(ImageFilter.GaussianBlur(20)))
             d = ImageDraw.Draw(im)
         d.rounded_rectangle((x0, y, x0 + wv, y + rh), 12, fill=G.accent if hi else (86, 86, 90))
-        lf = F("sans_medium", 36)
-        lw = lf.getlength(row["label"])
-        text(d, (x0 + 30, y + rh / 2), row["label"], lf, G.light, 0, "lm", max_w=bw - 60)
-        if row.get("note"):
-            text(d, (x0 + 30 + lw + 18, y + rh / 2), row["note"], F("sans", 30), (190, 190, 196) if not hi else G.muted_d, 0, "lm",
-                 max_w=bw - lw - 90)
         text(d, (x0 + bw + 44, y + rh / 2), f"{v:.0f}%", F("sans_medium", 42), G.accent if hi else G.light, 0, "lm")
     return arr(im)
 
@@ -555,7 +579,8 @@ def shot_mask(c, s):
     sentence(im, s["caption"], c.W / 2, 250, F("sans_medium", 72), G.ink, G.muted_l, c.lt, 0.05, 0.08)
     p = ease_out(min(1, c.lt / 0.35))
     w, h = 1180, 150
-    box = (c.W / 2 - w / 2, 520 + (1 - p) * 30, c.W / 2 + w / 2, 520 + h + (1 - p) * 30)
+    cx = c.W / 2 + (170 if s.get("object") else 0)            # make room for the object on the left
+    box = (cx - w / 2, 520 + (1 - p) * 30, cx + w / 2, 520 + h + (1 - p) * 30)
     shadowed_box(im, box, 26, (255, 255, 255), (232, 232, 235), 55)
     d = ImageDraw.Draw(im)
     click = s.get("click_at", 2.2)
@@ -572,8 +597,21 @@ def shot_mask(c, s):
     if c.lt > 1.0:
         cursor(im, lerp(c.W / 2 + 200, ex + 30, mv), lerp(c.H - 200, ey + 36, mv), 2.6,
                (c.lt - click) / 0.4 if c.lt > click else 0)
+    if s.get("object"):                                      # gpt-image-2 object: floats, then dissolves at the click
+        ob = asset_png(s["object"])
+        size = s.get("object_size", 300)
+        obj = ob.resize((size, int(ob.height * size / ob.width)), Image.LANCZOS)
+        appear = ease_out(min(1, c.lt / 0.5))
+        gone = ease_out(min(1, max(0, (c.lt - click) / 0.5)))
+        vis = appear * (1 - gone)
+        if vis > 0.01:
+            obj = obj.rotate(math.sin(c.lt * 1.4) * 5 - 8, expand=True, resample=Image.BICUBIC)
+            if gone > 0:
+                obj = obj.filter(ImageFilter.GaussianBlur(gone * 16))
+            ox, oy = box[0] - obj.width - 30, (box[1] + box[3]) / 2 - obj.height / 2 + math.sin(c.lt * 2) * 10 - gone * 40
+            im.alpha_composite(fade(obj, vis), (int(ox), int(oy)))
     if s.get("footnote"):
-        text(ImageDraw.Draw(im), (c.W / 2, 800), s["footnote"], F("sans", 30), (140, 140, 146), 0, "mm", max_w=c.W - 300)
+        text(ImageDraw.Draw(im), (c.W / 2, 850), s["footnote"], F("sans", 30), (140, 140, 146), 0, "mm", max_w=c.W - 300)
     return arr(im)
 
 
@@ -597,13 +635,35 @@ def shot_icons_row(c, s):
     return arr(im)
 
 
+def shot_laptop(c, s):
+    """Caption above, a laptop rising in with real product media on its keyed screen."""
+    bg = s.get("bg", "light")
+    im = Image.new("RGBA", (c.W, c.H), ground(bg) + (255,))
+    sentence(im, s["caption"], c.W / 2, s.get("caption_y", 190), F("sans_medium", s.get("size", 80)), fg(bg),
+             G.muted_d if bg == "dark" else G.muted_l, c.lt, 0.05, 0.08)
+    dev, (x0, y0, x1, y1) = keyed(s.get("device", "laptop"))
+    p = ease_out(min(1, max(0, (c.lt - 0.35) / 0.6)))
+    w = c.W * s.get("width", 0.56)
+    k = w / dev.width
+    devs = dev.resize((int(dev.width * k), int(dev.height * k)), Image.LANCZOS)
+    ox = int(c.W / 2 - devs.width / 2)
+    oy = int(c.H - devs.height - 30 + (1 - p) * 160)
+    sx0, sy0, sx1, sy1 = [int(v * k) for v in (x0, y0, x1, y1)]
+    scr = Image.open(os.path.join(G.assets, s["media"])).convert("RGB")
+    zz = lerp(1.0, s.get("zoom", 1.06), ease_in_out(c.p(0, c.dur)))
+    scr = cover(scr, sx1 - sx0 + 2, sy1 - sy0 + 2, zz, *s.get("focus", [0.5, 0.4]))
+    im.paste(scr, (ox + sx0 - 1, oy + sy0 - 1))
+    im.alpha_composite(devs, (ox, oy))
+    return arr(im)
+
+
 def shot_black(c, s):
     return np.zeros((c.H, c.W, 3), np.uint8)
 
 
 SHOTS = {"sentence": shot_sentence, "permission": shot_permission, "prompt": shot_prompt, "session": shot_session,
          "steps": shot_steps, "chart": shot_chart, "ticker": shot_ticker, "mask": shot_mask, "icons_row": shot_icons_row,
-         "black": shot_black}
+         "laptop": shot_laptop, "black": shot_black}
 
 
 def build(path):
@@ -631,13 +691,19 @@ def fetch_line_icons(names, out_dir):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["icons", "check", "still", "sheet", "render"])
+    ap.add_argument("cmd", choices=["icons", "assets", "check", "still", "sheet", "render"])
     ap.add_argument("args", nargs="*")
     ap.add_argument("--brief", default=os.path.join(HERE, "..", "examples", "prismor", "brief.json"))
     ap.add_argument("--out")
     ap.add_argument("--audio")
     a = ap.parse_intermixed_args()
     base = os.path.dirname(os.path.abspath(a.brief))
+    if a.cmd == "assets":                                # gpt-image-2 PNGs declared in brief["assets"]
+        brief = json.load(open(a.brief))
+        for m in generate_images(brief.get("assets", {}), os.path.join(base, brief.get("assets_dir", "assets")),
+                                 names=a.args or None):
+            print(m)
+        return
     if a.cmd == "icons":
         brief = json.load(open(a.brief))
         blob = json.dumps(brief["shots"])

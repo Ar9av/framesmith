@@ -12,6 +12,9 @@
 - ImageMagick's SVG parser fails on compact arc syntax, `em` sizes and `currentColor`. Rasterise with headless Chromium (`media.rasterize_svg`).
 - **Snap-packaged Chromium can't see `/tmp` or hidden folders**; it has a private `/tmp`. Stage files under a normal folder in `$HOME` (the engine does this).
 
+## Layout
+- The width-budget check (`text(max_w=…)`) can't see text escaping its **container**: a caption hanging out of a bar, a label running past a short bar, or translucent stacked cards showing each other's text. Size containers from the measured content, keep labels in their own column, draw back cards opaque with no content, and review a full-resolution still of every UI shot.
+
 ## Type
 - Geist Mono has programming ligatures (`<!--`, `-->` become arrows). Render code with `ui.CODE_FEATURES`.
 - Check glyph coverage before choosing a face (Fraunces and Departure Mono lack `●`; Go Mono lacks `✓`). Keep bullets in a face that has them.

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.1 (2026-09-27)
+- keynote-product-film: container-overflow fixes (the bar sizes to the whole text block, stacked permission cards are opaque edges only, chart labels in their own column); `assets` verb for gpt-image-2 PNGs; `laptop` shot (keyed green-screen device showing a real screenshot); a floating generated object in `mask`.
+
 ## 0.6.0 (2026-09-27)
 - Skill `keynote-product-film` (built with `video-to-template` from a keynote-style reference): kinetic blur-in sentences with Lucide line icons and app tiles, prompt bar, Claude Code-style session panel, permission prompts, brand-icon step list, morphing benchmark chart, ticker, masked-secret field, icon row, hero-wash logo reveal. Example: Prismor, using its site components, scenarios and OWASP benchmark.
 - Engine: `Dissolve` transition (crossfade with blur peak); transitions are duck-typed (`blend`).
