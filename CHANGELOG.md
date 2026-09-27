@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.0 (2026-09-28)
+- Skill `glass-saas-promo`: frosted-glass SaaS promo (perspective UI, screen tunnel, gradient stream into a progress bar, confetti check, card scatter, carousel, glass heroes). Example: Prismor Enterprise with gpt-image-2 glass objects.
+- Skill `blue-story-film`: blue-light story film (typewriter captions with selection, "Meet" collapse, split UI-to-terminal, bracket and wide words, form fly-over, black CTA). Example: Prismor Enterprise with gpt-image-2 backdrops.
+
 ## 0.9.0 (2026-09-28)
 - keynote-product-film: `checklist` and `graph` shot types; `examples/enterprise-onboarding/` (Prismor Enterprise onboarding film built from prismor-web-preview's onboarding checklist, enroll drawer, prompt guardrails, agent instances and the org-context graph).
 

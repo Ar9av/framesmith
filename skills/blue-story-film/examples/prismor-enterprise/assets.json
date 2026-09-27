@@ -1,0 +1,6 @@
+{
+ "bg_sky": {"size":"1536x1024","quality":"medium","prompt":"Abstract full-frame background: a vivid luminous gradient from bright cyan at the top to saturated royal blue at the bottom, with a soft white bloom of light across the upper middle and gentle glassy light refractions, smooth, no objects, no text, no shapes, modern tech product launch backdrop."},
+ "bg_navy": {"size":"1536x1024","quality":"medium","prompt":"Abstract full-frame background: deep navy blue fading to near-black at the corners, with large soft glowing clouds of electric blue light drifting through the middle, subtle film grain, smooth, no objects, no text, cinematic tech product launch backdrop."},
+ "bg_wash": {"size":"1536x1024","quality":"medium","prompt":"Abstract full-frame background: almost entirely pure white, with soft out-of-focus glows of bright sky blue bleeding in from the corners and edges, airy and clean, no objects, no text, modern software launch backdrop."},
+ "bg_glow": {"size":"1536x1024","quality":"low","prompt":"Abstract full-frame background: pure black with a single soft glow of deep electric blue light rising from the bottom edge and a faint blue haze in one corner, cinematic, no objects, no text."}
+}

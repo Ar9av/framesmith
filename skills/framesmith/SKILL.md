@@ -23,6 +23,8 @@ framesmith templates are **skills**: a `SKILL.md`, a brief schema, an example br
 | [`brand-icons`](../brand-icons/SKILL.md) | SVG + PNG brand marks with a licence and attribution table | Any design needs real company/tool logos ("works with" rows, stack grids, partner walls); fetched from thesvg.org with the right variant for the background |
 | [`keynote-product-film`](../keynote-product-film/SKILL.md) | ~60–90 s 16:9 MP4, music-driven, no VO | Apple-event-style launch or "introducing" film: kinetic sentences with inline icons, real product UI (prompt, agent session, permission prompts, steps, benchmark chart, ticker, masked field), logo reveal on a gradient wash |
 | [`no-ai-slop`](../no-ai-slop/SKILL.md) | edited copy + what changed (or a findings report) | Before rendering any template: run scripts, captions and on-screen lines through it. Also for any draft that reads as AI-written (by Peter Yang, MIT) |
+| [`glass-saas-promo`](../glass-saas-promo/SKILL.md) | 16:9 MP4, music-driven | Render a bright, music-driven SaaS promo (about 30–40 s, 16:9) in the frosted-glass style: a lavender-white field, blue-to-violet gradients, gpt-image-2 glass 3D objects (shield, folder, check, sparkle, laptop), real product UI in |
+| [`blue-story-film`](../blue-story-film/SKILL.md) | 16:9 MP4, music-driven | Render a music-driven SaaS story film (about 60–90 s, 16:9) in the blue-light style. It opens with typewriter captions, a caret and a selection highlight over ghosted UI, then a huge 'Meet' word that collapses into the brand line. |
 <!-- catalog:end -->
 
 If nothing fits, say so and offer to build a new template (section 3) rather than forcing the wrong one.

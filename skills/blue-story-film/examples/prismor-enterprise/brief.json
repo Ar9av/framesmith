@@ -1,0 +1,305 @@
+{
+  "size": [
+    1920,
+    1080
+  ],
+  "fps": 30,
+  "theme": {
+    "ink": "#0E1018",
+    "blue": "#186EFF",
+    "sky": "#78C8FF",
+    "muted": "#969CAF"
+  },
+  "shots": [
+    {
+      "type": "type",
+      "dur": 4.2,
+      "bg": "white",
+      "text": "The same agent, different rules on every laptop",
+      "select": "different rules",
+      "select_at": 2.8,
+      "size": 56,
+      "ghosts": [
+        {
+          "media": "ui/devices.png",
+          "x": 0.2,
+          "y": 0.2,
+          "w": 460,
+          "rz": -3
+        },
+        {
+          "media": "ui/policy.png",
+          "x": 0.8,
+          "y": 0.22,
+          "w": 380,
+          "rz": 3
+        },
+        {
+          "media": "ui/agents.png",
+          "x": 0.24,
+          "y": 0.8,
+          "w": 440,
+          "rz": 2
+        },
+        {
+          "media": "ui/approval.png",
+          "x": 0.78,
+          "y": 0.8,
+          "w": 380,
+          "rz": -2
+        }
+      ]
+    },
+    {
+      "type": "type",
+      "dur": 3.0,
+      "bg": "white",
+      "text": "Same policy, copied by hand again",
+      "size": 64
+    },
+    {
+      "type": "line",
+      "dur": 2.0,
+      "bg": "bg_wash",
+      "size": 72,
+      "lines": [
+        "Stop copying *policies"
+      ],
+      "blur_out": true
+    },
+    {
+      "type": "meet",
+      "dur": 3.4,
+      "bg": "bg_sky",
+      "word": "Meet",
+      "name": "Prismor Enterprise",
+      "collapse_at": 1.2,
+      "tr": "blur"
+    },
+    {
+      "type": "line",
+      "dur": 3.0,
+      "bg": "bg_sky",
+      "size": 60,
+      "lines": [
+        "The control plane for every *AI *agent",
+        "in your company"
+      ]
+    },
+    {
+      "type": "tilt",
+      "dur": 3.2,
+      "bg": "bg_sky",
+      "media": "ui/dashboard.png",
+      "from": {
+        "rx": 24,
+        "ry": -30,
+        "rz": 6,
+        "scale": 0.8
+      },
+      "to": {
+        "rx": 12,
+        "ry": -10,
+        "scale": 1.08
+      },
+      "tr": "blur"
+    },
+    {
+      "type": "tilt",
+      "dur": 3.0,
+      "bg": "bg_sky",
+      "media": "ui/devices.png",
+      "from": {
+        "rx": 16,
+        "ry": 24,
+        "rz": -4,
+        "scale": 0.86
+      },
+      "to": {
+        "rx": 8,
+        "ry": 8,
+        "scale": 1.05
+      },
+      "line": "Every device, *live"
+    },
+    {
+      "type": "split",
+      "dur": 5.0,
+      "bg": "bg_wash",
+      "media": "ui/devices.png",
+      "row": 0.33,
+      "step": 0.75,
+      "lines": [
+        {
+          "t": "Enrolled  dev-4a1e  alice-mbp",
+          "check": true
+        },
+        {
+          "t": "Pulling signed policy v15",
+          "bar": true
+        },
+        {
+          "t": "Signature verified  Ed25519",
+          "check": true
+        },
+        {
+          "t": "Hooks  claude-code  cursor  codex",
+          "check": true
+        }
+      ]
+    },
+    {
+      "type": "line",
+      "dur": 2.4,
+      "bg": "bg_navy",
+      "size": 64,
+      "lines": [
+        "Prismor keeps a live model of your org"
+      ],
+      "tr": "blur"
+    },
+    {
+      "type": "brackets",
+      "dur": 3.0,
+      "bg": "bg_navy",
+      "word": "Org context",
+      "above": "who, which data, which tool, where it goes"
+    },
+    {
+      "type": "line",
+      "dur": 2.6,
+      "bg": "bg_navy",
+      "size": 60,
+      "lines": [
+        "The same call can be routine at a startup",
+        "and *reportable at an insurer"
+      ]
+    },
+    {
+      "type": "wide",
+      "dur": 2.0,
+      "bg": "bg_navy",
+      "word": "Auto-enforced",
+      "size": 150
+    },
+    {
+      "type": "line",
+      "dur": 2.6,
+      "bg": "bg_navy",
+      "size": 60,
+      "lines": [
+        "Change a policy once",
+        "every device picks it up in *seconds"
+      ],
+      "tr": "blur"
+    },
+    {
+      "type": "tilt",
+      "dur": 3.0,
+      "bg": "bg_sky",
+      "media": "ui/policy.png",
+      "from": {
+        "rx": -18,
+        "ry": -24,
+        "rz": 4,
+        "scale": 0.86
+      },
+      "to": {
+        "rx": 8,
+        "ry": -6,
+        "scale": 1.0
+      },
+      "tr": "blur"
+    },
+    {
+      "type": "form",
+      "dur": 4.6,
+      "bg": "bg_wash",
+      "fields": [
+        {
+          "label": "Agent instance",
+          "value": "release-bot",
+          "t": 0.4
+        },
+        {
+          "label": "Guardrail",
+          "value": "Never push to main",
+          "t": 1.3
+        },
+        {
+          "label": "Scope",
+          "value": "every session, every device",
+          "t": 2.3
+        }
+      ],
+      "tr": "blur"
+    },
+    {
+      "type": "tilt",
+      "dur": 3.0,
+      "bg": "bg_sky",
+      "media": "ui/agents.png",
+      "from": {
+        "rx": 20,
+        "ry": 20,
+        "rz": -3,
+        "scale": 0.9
+      },
+      "to": {
+        "rx": 10,
+        "ry": 6,
+        "scale": 1.05
+      },
+      "line": "Every agent gets *its *own *controls"
+    },
+    {
+      "type": "tilt",
+      "dur": 3.0,
+      "bg": "bg_sky",
+      "media": "ui/approval.png",
+      "from": {
+        "rx": -14,
+        "ry": -18,
+        "rz": 3,
+        "scale": 0.9
+      },
+      "to": {
+        "rx": 6,
+        "ry": -4,
+        "scale": 1.0
+      },
+      "line": "Risky actions wait for *a *human"
+    },
+    {
+      "type": "line",
+      "dur": 2.6,
+      "bg": "bg_wash",
+      "size": 72,
+      "lines": [
+        "Your agents follow *your *rules"
+      ],
+      "tr": "blur"
+    },
+    {
+      "type": "logo",
+      "dur": 3.0,
+      "bg": "bg_wash",
+      "name": "Prismor Enterprise"
+    },
+    {
+      "type": "type",
+      "dur": 3.4,
+      "bg": "bg_glow",
+      "text": "Runtime security for every agent in your company",
+      "size": 52,
+      "tr": "blur"
+    },
+    {
+      "type": "type",
+      "dur": 3.6,
+      "bg": "bg_glow",
+      "text": "Book a demo at prismor.dev",
+      "size": 56
+    }
+  ]
+}

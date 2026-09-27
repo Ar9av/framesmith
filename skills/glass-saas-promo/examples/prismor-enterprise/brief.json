@@ -1,0 +1,219 @@
+{
+  "size": [
+    1920,
+    1080
+  ],
+  "fps": 30,
+  "theme": {
+    "bg": "#F8F7FE",
+    "ink": "#111118",
+    "blue": "#2F6BFF",
+    "violet": "#7C6CFF",
+    "muted": "#9696A8"
+  },
+  "shots": [
+    {
+      "type": "words",
+      "dur": 3.0,
+      "size": 84,
+      "seq": [
+        {
+          "line": "Govern *agents",
+          "t": 0
+        },
+        {
+          "line": "*Devices",
+          "t": 1.0
+        },
+        {
+          "line": "*Teams",
+          "t": 2.0
+        }
+      ]
+    },
+    {
+      "type": "words",
+      "dur": 2.4,
+      "size": 72,
+      "seq": [
+        {
+          "line": "Every device {obj:glass_laptop} *One console",
+          "t": 0
+        }
+      ]
+    },
+    {
+      "type": "tilt",
+      "dur": 2.0,
+      "media": "ui/dashboard.png",
+      "from": {
+        "rx": 40,
+        "ry": -30,
+        "rz": 8,
+        "scale": 0.55,
+        "cy": 0.66
+      },
+      "to": {
+        "rx": 10,
+        "ry": -8,
+        "scale": 1.0
+      },
+      "tr": "blur"
+    },
+    {
+      "type": "words",
+      "dur": 1.2,
+      "size": 72,
+      "seq": [
+        {
+          "line": "Just *enroll and",
+          "t": 0
+        }
+      ],
+      "tr": "blur"
+    },
+    {
+      "type": "tunnel",
+      "dur": 3.2,
+      "media": [
+        "ui/devices.png",
+        "ui/policy.png",
+        "ui/agents.png",
+        "ui/approval.png"
+      ],
+      "size": 56,
+      "seq": [
+        {
+          "line": "*Devices",
+          "t": 0
+        },
+        {
+          "line": "*Devices *Policies",
+          "t": 0.9
+        },
+        {
+          "line": "*Devices *Policies *Agents",
+          "t": 1.6
+        },
+        {
+          "line": "One *control *plane",
+          "t": 2.4
+        }
+      ]
+    },
+    {
+      "type": "stream",
+      "dur": 3.4,
+      "under": "ui/devices.png",
+      "morph": 1.3,
+      "from": 82,
+      "to": 99,
+      "label": "devices enrolled"
+    },
+    {
+      "type": "done",
+      "dur": 1.6,
+      "word": "*Protected"
+    },
+    {
+      "type": "hero",
+      "dur": 1.2,
+      "object": "logo",
+      "object_size": 220,
+      "tr": "blur"
+    },
+    {
+      "type": "carousel",
+      "dur": 2.4,
+      "media": [
+        "ui/members.png",
+        "ui/agents.png",
+        "ui/guardrails.png",
+        "ui/enroll.png"
+      ],
+      "speed": 420,
+      "words": "Your whole org *onboarded"
+    },
+    {
+      "type": "tilt",
+      "dur": 2.2,
+      "media": "ui/devices.png",
+      "from": {
+        "rx": 22,
+        "ry": 26,
+        "rz": -4,
+        "scale": 0.8
+      },
+      "to": {
+        "rx": 12,
+        "ry": 10,
+        "scale": 1.05,
+        "cy": 0.56
+      },
+      "words": "See every device *live",
+      "click": {
+        "at": [
+          0.55,
+          0.62
+        ],
+        "t": 1.6
+      },
+      "tr": "blur"
+    },
+    {
+      "type": "scatter",
+      "dur": 2.4,
+      "media": [
+        "ui/approval.png",
+        "ui/guardrails.png",
+        "ui/policy.png",
+        "ui/enroll.png"
+      ],
+      "words": "Every action *signed",
+      "size": 64
+    },
+    {
+      "type": "tilt",
+      "dur": 2.2,
+      "media": "ui/policy.png",
+      "from": {
+        "rx": -20,
+        "ry": -26,
+        "rz": 5,
+        "scale": 0.8
+      },
+      "to": {
+        "rx": 6,
+        "ry": -6,
+        "scale": 1.0,
+        "cy": 0.56
+      },
+      "words": "Publish policy *once",
+      "tr": "blur"
+    },
+    {
+      "type": "hero",
+      "dur": 2.2,
+      "object": "glass_shield",
+      "object_size": 300,
+      "spin": 1,
+      "left": "Tighten *anytime",
+      "right": "The floor *stays",
+      "size": 60
+    },
+    {
+      "type": "sparkle",
+      "dur": 3.0,
+      "words": "Observe  *Enforce  Govern",
+      "words_at": 0.8,
+      "size": 72
+    },
+    {
+      "type": "logo",
+      "dur": 3.2,
+      "name": "Prismor Enterprise",
+      "url": "prismor.dev",
+      "tr": "blur"
+    }
+  ]
+}

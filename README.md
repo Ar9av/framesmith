@@ -22,9 +22,11 @@ The skills share a tiny engine (`core/framesmith`) with a seekable timeline, exa
 <!-- catalog:start -->
 | Skill | What it makes | Preview |
 |---|---|---|
+| [`blue-story-film`](skills/blue-story-film/SKILL.md) | Render a music-driven SaaS story film (about 60–90 s, 16:9) in the blue-light style. | <img src="docs/media/blue-story-film.gif" width="120"> |
 | [`brand-icons`](skills/brand-icons/SKILL.md) | Find, fetch, preview and credit real brand/logo SVG icons from thesvg.org (7,400+ marks, e.g. | — |
 | [`brutalist-product-promo`](skills/brutalist-product-promo/SKILL.md) | Render a 22-second brutalist / industrial product promo video (spec-sheet motion graphics) for any hardware, device, robot, drone, vehicle or tech product. | <img src="docs/media/brutalist-product-promo.gif" width="120"> |
 | [`devtool-launch-video`](skills/devtool-launch-video/SKILL.md) | Render a 34-second 16:9 launch film for a developer tool, CLI, AI agent product or security product. | <img src="docs/media/devtool-launch-video.gif" width="120"> |
+| [`glass-saas-promo`](skills/glass-saas-promo/SKILL.md) | Render a bright, music-driven SaaS promo (about 30–40 s, 16:9) in the frosted-glass style: a lavender-white field, blue-to-violet gradients, gpt-image-2 glass 3D objects (shield, folder, check, sparkle, laptop), real pro | <img src="docs/media/glass-saas-promo.gif" width="120"> |
 | [`keynote-product-film`](skills/keynote-product-film/SKILL.md) | Render a 16:9 keynote-style product film (about 60–90 s, music-driven, no voiceover) in the clean Apple-event look. | <img src="docs/media/keynote-product-film.gif" width="120"> |
 | [`narrated-collage-explainer`](skills/narrated-collage-explainer/SKILL.md) | Render a square (1080×1080), voiceover-driven explainer or founder-story video in a warm paper-white collage style. | <img src="docs/media/narrated-collage-explainer.gif" width="120"> |
 | [`no-ai-slop`](skills/no-ai-slop/SKILL.md) | Edit drafts into sharper, more human writing while preserving the writer's personal voice, or detect AI-slop patterns without rewriting. | — |
