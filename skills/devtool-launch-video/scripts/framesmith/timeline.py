@@ -139,7 +139,8 @@ class Timeline:
         cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24",
                "-s", f"{self.width}x{self.height}", "-r", str(self.fps), "-i", "-"]
         if audio:
-            cmd += ["-i", audio, "-map", "0:v", "-map", "1:a", "-c:a", "aac", "-b:a", "160k", "-shortest"]
+            # pad the audio with silence so the video's own length (tails, black ends) is kept
+            cmd += ["-i", audio, "-map", "0:v", "-map", "1:a", "-af", "apad", "-c:a", "aac", "-b:a", "160k", "-shortest"]
         cmd += ["-c:v", "libx264", "-preset", "slow", "-crf", str(crf), "-pix_fmt", "yuv420p",
                 "-movflags", "+faststart", out]
         ff = subprocess.Popen(cmd, stdin=subprocess.PIPE)

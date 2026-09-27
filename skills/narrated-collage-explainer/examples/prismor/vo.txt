@@ -1,0 +1,10 @@
+Your AI agent writes code, runs commands, and reads your files. All on its own.
+But one poisoned README, and it leaks your keys, installs a fake package, or wipes your work.
+Your firewall and endpoint tools don't have the context to stop it.
+So we built Prismor.
+It sits between your agent and every tool call, and checks each one against your policy, before it runs.
+Secrets stay placeholders. Dangerous commands get blocked. Every action is signed.
+It works with Claude Code, Codex, Cursor, and twenty more.
+It's open source, and it runs on your machine.
+pip install prismor. Thirty seconds.
+Stop your agents from going rogue.

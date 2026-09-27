@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0 (2026-09-27)
+- Skill `narrated-collage-explainer`: square, voiceover-driven collage explainer (TTS + Whisper-timed beats, CRT TV / XP window / cards / starburst / collage, pixel dissolves). Example: Prismor, built from its real README GIFs and screenshots.
+- Engine: `framesmith.narration` (TTS, word timestamps, script alignment, cue lookup, subtitle chunking).
+
 ## 0.2.1 (2026-09-27)
 - Fonts: Go Mono replaced by Geist Mono; added Departure Mono (`pixel` role, grid-snapped). No italics anywhere. Code renders with ligatures off.
 - Engine: `ui.rise` (masked kinetic type), `ui.fill_text` (texture-filled glyphs), `ui.marker` (highlighter swipe), terminal per-span font roles + marked lines; text fitting (`max_w`, `fit_to`) with overflow/shrink reports; word-wrapping terminal; `ui.chip` removed.

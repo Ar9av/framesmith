@@ -75,3 +75,10 @@ For software and dev-tool videos:
 - `marker(draw, box, col, p)` is a highlighter swipe, for inverse-video emphasis.
 - Terminal spans take an optional font role, `(text, rgb, "pixel")`, so an agent's narration can be set in pixel type next to mono commands. `"mark": rgb` on a line sweeps a highlighter behind it. Code renders with ligatures off (`CODE_FEATURES`), so `<!--` and `-->` stay literal.
 - `holo_field(w, h, t, palette)` produces animated iridescent interference light in any palette. Render it small and upscale for speed.
+
+## Narration (`fs.narration`)
+
+- `tts(text, out_wav, voice, instructions)` uses OpenAI TTS. `transcribe_words(wav, prompt=script)` returns Whisper word timestamps.
+- `align(script, words)` gives every script token a start and end. The script's spelling wins, and gaps are interpolated.
+- `find(toks, "cue phrase", after)` returns the token index where a phrase is spoken, which is how beats and overlays are timed.
+- `chunks(toks, max_words=3)` splits subtitles into clauses, balanced with no orphaned single words.
