@@ -54,5 +54,12 @@
   "source": "https://thesvg.org/icons/zendesk/default.svg",
   "license": "CC0-1.0",
   "brand_url": "https://brandland.zendesk.com"
+ },
+ "langchain": {
+  "title": "LangChain",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/langchain/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.langchain.com"
  }
 }

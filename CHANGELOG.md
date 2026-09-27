@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0 (2026-09-27)
+- keynote-product-film: shot types `fleet_grid` (device fleet with enrol / flag / policy-push wave), `table` (console table with live cell updates), `feed` (streaming receipts), `card` (approval / exemption / enrolment / attestation detail with typeset actions); `brand_icons` in briefs.
+- New example `examples/fleet/`: Prismor Control Plane feature film (enrol, devices live, signed org policy push, redacted live receipts, human approvals, expiring exemptions, shadow-AI discovery, attestation).
+
 ## 0.6.1 (2026-09-27)
 - keynote-product-film: container-overflow fixes (the bar sizes to the whole text block, stacked permission cards are opaque edges only, chart labels in their own column); `assets` verb for gpt-image-2 PNGs; `laptop` shot (keyed green-screen device showing a real screenshot); a floating generated object in `mask`.
 

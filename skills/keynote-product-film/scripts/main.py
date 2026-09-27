@@ -657,13 +657,216 @@ def shot_laptop(c, s):
     return arr(im)
 
 
+STATUS = {"online": (46, 160, 90), "idle": (161, 161, 170), "stale": (200, 140, 40), "paused": (107, 79, 160),
+          "blocked": (107, 79, 160), "allowed": (46, 125, 79), "warned": (168, 106, 30), "held": (168, 106, 30),
+          "revoked": (190, 60, 60), "signed": (46, 125, 79), "granted": (46, 125, 79), "verified": (46, 125, 79)}
+
+
+def shot_fleet_grid(c, s):
+    """A fleet of devices: icons light up (enrolled), some get flagged, and a policy push ripples across."""
+    bg = s.get("bg", "dark")
+    im = Image.new("RGBA", (c.W, c.H), ground(bg) + (255,))
+    if s.get("caption"):
+        sentence(im, s["caption"], c.W / 2, s.get("caption_y", 150), F("sans_medium", s.get("size", 72)), fg(bg),
+                 G.muted_d if bg == "dark" else G.muted_l, c.lt, 0.05, 0.08)
+    cols, rows = s.get("cols", 14), s.get("rows", 5)
+    cell = s.get("cell", 104)
+    gx0 = (c.W - cols * cell) / 2
+    gy0 = s.get("grid_y", 330)
+    base = (78, 78, 84) if bg == "dark" else (212, 212, 216)
+    on_col = G.light if bg == "dark" else G.ink
+    push_t = s.get("push_at")
+    flagged = set(s.get("flag", []))
+    for r in range(rows):
+        for q in range(cols):
+            k = r * cols + q
+            ap = ease_out(min(1, max(0, (c.lt - 0.3 - (q + r) * s.get("appear", 0.025)) / 0.3)))
+            if ap <= 0:
+                continue
+            col = base
+            if c.lt > s.get("online_at", 0.9) + ((k * 7919) % 97) / 97 * 0.8:
+                col = on_col
+            if k in flagged and c.lt > s.get("flag_at", 99):
+                col = STATUS[s.get("flag_color", "blocked")]
+            if push_t is not None:                               # wave from the left: policy applied
+                wave = push_t + q * s.get("wave", 0.06) + r * 0.02
+                if c.lt > wave:
+                    col = G.accent
+                    if c.lt < wave + 0.25:
+                        col = tuple(int(lerp(255, v, (c.lt - wave) / 0.25)) for v in G.accent)
+            ic = icon_img("lucide:" + s.get("icon", "laptop"), cell * 0.52, col)
+            im.alpha_composite(fade(ic, ap), (int(gx0 + q * cell + cell * 0.24), int(gy0 + r * cell + cell * 0.24 + (1 - ap) * 12)))
+    if s.get("note") and c.lt > s.get("note_at", 1.5):
+        p = ease_out(min(1, (c.lt - s.get("note_at", 1.5)) / 0.35))
+        ui.rise(im, (c.W / 2, gy0 + rows * cell + 70), s["note"], F("sans", 34), G.muted_d if bg == "dark" else G.muted_l, p, 0,
+                "mm", max_w=c.W - 300)
+    return arr(im)
+
+
+def cell_draw(im, d, x, y, w, kind, val, fsz, col, bg_dark):
+    """One table cell. kinds: text, mono, strong, status (● word, typeset), icons (brand marks), muted."""
+    if kind == "status":
+        sc = STATUS.get(val.split(" ")[0], (150, 150, 156))
+        d.text((x, y), "●", font=F("sans", fsz * 0.7), fill=sc, anchor="lm")
+        text(d, (x + fsz * 0.9, y), val, F("sans_medium", fsz), sc, 0, "lm", max_w=w - fsz)
+    elif kind == "icons":
+        ix = x
+        for slug in val.split(","):
+            ic = icon_img("brand:" + slug, fsz * 1.15, G.light if bg_dark else None)
+            im.alpha_composite(ic, (int(ix), int(y - ic.height / 2)))
+            ix += ic.width + 12
+    else:
+        f = {"mono": F("mono", fsz * 0.92), "strong": F("sans_medium", fsz)}.get(kind, F("sans", fsz))
+        text(d, (x, y), val, f, col, 0, "lm", max_w=w - 20)
+
+
+def shot_table(c, s):
+    """A console table (devices, members…): header, then rows sliding in; optional row updates at a time."""
+    bg = s.get("bg", "light")
+    dark = bg == "dark"
+    im = Image.new("RGBA", (c.W, c.H), ground(bg) + (255,))
+    if s.get("caption"):
+        sentence(im, s["caption"], c.W / 2, 130, F("sans_medium", 64), fg(bg), G.muted_d if dark else G.muted_l, c.lt, 0.05, 0.07)
+    cols = s["columns"]                                   # [{title, w (fraction), kind}]
+    x0, x1 = 170, c.W - 170
+    top = s.get("top", 270)
+    rh = s.get("row_h", 86)
+    fsz = s.get("font", 28)
+    card = (x0 - 30, top - 30, x1 + 30, top + 70 + rh * len(s["rows"]) + 20)
+    p0 = ease_out(min(1, c.lt / 0.35))
+    shadowed_box(im, (card[0], card[1] + (1 - p0) * 30, card[2], card[3] + (1 - p0) * 30), 18,
+                 (34, 34, 36) if dark else (255, 255, 255), (60, 60, 64) if dark else (232, 232, 235), 50)
+    d = ImageDraw.Draw(im)
+    txt = G.light if dark else G.ink
+    mut = G.muted_d if dark else (113, 113, 122)
+    xs, x = [], x0
+    for col in cols:
+        xs.append(x)
+        x += col["w"] * (x1 - x0)
+    for k, col in enumerate(cols):
+        text(d, (xs[k], top + 20), col["title"].upper(), F("sans_medium", 18), mut, 1.5, "lm", max_w=cols[k]["w"] * (x1 - x0) - 20)
+    d.line((x0, top + 48, x1, top + 48), fill=(56, 56, 60) if dark else (236, 236, 239), width=2)
+    for r, row in enumerate(s["rows"]):
+        t0 = row.get("t", 0.5 + r * 0.18)
+        if c.lt < t0:
+            continue
+        p = ease_out(min(1, (c.lt - t0) / 0.3))
+        vals = row["cells"]
+        for u in row.get("updates", []):                   # a cell changes at time u.t (e.g. status flips)
+            if c.lt >= u["t"]:
+                vals = list(vals)
+                vals[u["col"]] = u["value"]
+        y = top + 70 + r * rh + rh / 2 + (1 - p) * 16
+        if row.get("highlight") and c.lt >= row.get("highlight_at", 0):
+            hp = ease_out(min(1, (c.lt - row.get("highlight_at", 0)) / 0.3))
+            d.rectangle((x0 - 30, y - rh / 2 + 4, x1 + 30, y + rh / 2 - 4), fill=tuple(int(lerp(v, w, hp * 0.12)) for v, w in
+                        zip((34, 34, 36) if dark else (255, 255, 255), G.accent)))
+        for k, col in enumerate(cols):
+            ccol = tuple(int(lerp(v, w, p)) for v, w in zip((34, 34, 36) if dark else (255, 255, 255), txt if col.get("kind") != "muted" else mut))
+            cell_draw(im, d, xs[k] + (1 - p) * 20, y, col["w"] * (x1 - x0), col.get("kind", "text"), vals[k], fsz, ccol, dark)
+            d = ImageDraw.Draw(im)
+        if r < len(s["rows"]) - 1:
+            d.line((x0, y + rh / 2, x1, y + rh / 2), fill=(48, 48, 52) if dark else (242, 242, 244), width=1)
+    return arr(im)
+
+
+def shot_feed(c, s):
+    """Live receipts streaming in at the top of a list; older rows slide down and fade."""
+    bg = s.get("bg", "dark")
+    dark = bg == "dark"
+    im = Image.new("RGBA", (c.W, c.H), ground(bg) + (255,))
+    if s.get("caption"):
+        sentence(im, s["caption"], c.W / 2, 130, F("sans_medium", 64), fg(bg), G.muted_d if dark else G.muted_l, c.lt, 0.05, 0.07)
+    d = ImageDraw.Draw(im)
+    items = s["items"]
+    every = s.get("every", 0.45)
+    shown = [it for k, it in enumerate(items) if c.lt >= 0.4 + k * every]
+    x0, x1, top, rh = 260, c.W - 260, s.get("top", 290), 96
+    for j, it in enumerate(reversed(shown)):
+        k = len(shown) - 1 - j
+        age = c.lt - (0.4 + k * every)
+        p = ease_out(min(1, age / 0.3))
+        y = top + (j - 1 + p) * rh + rh / 2
+        if y > c.H - 80:
+            continue
+        a = max(0.25, 1 - j * 0.14) * p
+        base = (38, 38, 38) if dark else (255, 255, 255)
+        mix = lambda col: tuple(int(lerp(bv, cv, a)) for bv, cv in zip(base, col))
+        vc = STATUS.get(it["verdict"], (150, 150, 156))
+        text(d, (x0, y), it["verdict"].upper(), F("sans_medium", 26), mix(vc), 2, "lm", max_w=170)
+        text(d, (x0 + 190, y - 14), it["rule"], F("mono", 26), mix(G.light if dark else G.ink), 0, "lm", max_w=520)
+        text(d, (x0 + 190, y + 20), it.get("detail", ""), F("sans", 22), mix(G.muted_d if dark else G.muted_l), 0, "lm", max_w=560)
+        ix = x0 + 760
+        if it.get("agent"):
+            ic = icon_img("brand:" + it["agent"], 34, mix(G.light) if dark else None)
+            im.alpha_composite(fade(ic, a), (int(ix), int(y - 17)))
+        text(d, (ix + 50, y), it.get("who", ""), F("sans", 26), mix(G.light if dark else G.ink), 0, "lm", max_w=420)
+        text(d, (x1, y), it.get("hash", ""), F("mono", 22), mix(G.muted_d), 0, "rm", max_w=300)
+        d.line((x0, y + rh / 2, x1, y + rh / 2), fill=mix((56, 56, 60) if dark else (236, 236, 239)), width=1)
+    if s.get("note"):
+        text(d, (c.W / 2, c.H - 70), s["note"], F("sans", 28), G.muted_d if dark else G.muted_l, 0, "mm", max_w=c.W - 300)
+    return arr(im)
+
+
+def shot_card(c, s):
+    """A console detail card (approval, exemption…): title, key/value rows, optional code, typeset actions."""
+    bg = s.get("bg", "light")
+    dark = bg == "dark"
+    im = Image.new("RGBA", (c.W, c.H), ground(bg) + (255,))
+    if s.get("caption"):
+        sentence(im, s["caption"], c.W / 2, 150, F("sans_medium", 70), fg(bg), G.muted_d if dark else G.muted_l, c.lt, 0.05, 0.08)
+    w = s.get("width", 1180)
+    rows = s.get("rows", [])
+    code = s.get("code", [])
+    hgt = 150 + len(rows) * 62 + (len(code) * 44 + 50 if code else 0) + (110 if s.get("actions") else 30)
+    p = ease_out(min(1, max(0, (c.lt - 0.2) / 0.4)))
+    x0, y0 = c.W / 2 - w / 2, s.get("top", 300) + (1 - p) * 40
+    shadowed_box(im, (x0, y0, x0 + w, y0 + hgt), 20, (34, 34, 36) if dark else (255, 255, 255), (60, 60, 64) if dark else (232, 232, 235), 55)
+    d = ImageDraw.Draw(im)
+    txt, mut = (G.light, G.muted_d) if dark else (G.ink, (113, 113, 122))
+    sc = STATUS.get(s.get("state", ""), mut)
+    if s.get("state"):
+        text(d, (x0 + 50, y0 + 58), s["state"].upper(), F("sans_medium", 22), sc, 2, "lm", max_w=300)
+    text(d, (x0 + 50, y0 + 104), s["title"], F("sans_medium", 40), txt, -0.5, "lm", max_w=w - 100)
+    y = y0 + 170
+    for k, (lab, val) in enumerate(rows):
+        rp = ease_out(min(1, max(0, (c.lt - 0.5 - k * 0.12) / 0.3)))
+        text(d, (x0 + 50, y), lab, F("sans", 26), tuple(int(lerp(255 if not dark else 34, v, rp)) for v in mut), 0, "lm", max_w=260)
+        mono = lab.lower() in s.get("mono_keys", ["rule", "what runs", "repo", "rules"])
+        text(d, (x0 + 330, y), val, F("mono", 26) if mono else F("sans_medium", 28), tuple(int(lerp(255 if not dark else 34, v, rp)) for v in txt),
+             0, "lm", max_w=w - 390)
+        y += 62
+    if code:
+        cy0 = y - 10
+        d.rounded_rectangle((x0 + 40, cy0, x0 + w - 40, cy0 + len(code) * 44 + 30), 12, fill=(24, 24, 26) if dark else (246, 246, 248))
+        for k, ln in enumerate(code):
+            text(d, (x0 + 70, cy0 + 36 + k * 44), ln, F("mono", 26), (190, 190, 196) if dark else (63, 63, 70), 0, "lm", max_w=w - 140)
+        y = cy0 + len(code) * 44 + 70
+    if s.get("actions"):
+        ax = x0 + 50
+        chosen = s.get("choose")
+        for k, act in enumerate(s["actions"]):
+            on = chosen is not None and k == chosen and c.lt >= s.get("choose_at", 99)
+            f = F("sans_medium", 30)
+            col = sc if on else txt
+            if on:
+                chevron(d, ax, y + 10, col, 28)
+            text(d, (ax + 30, y + 10), act, f, col, 0, "lm", max_w=400)
+            ax += f.getlength(act) + 90
+    if s.get("footnote"):
+        text(d, (c.W / 2, min(c.H - 60, y0 + hgt + 70)), s["footnote"], F("sans", 28), G.muted_d if dark else G.muted_l, 0, "mm",
+             max_w=c.W - 300)
+    return arr(im)
+
+
 def shot_black(c, s):
     return np.zeros((c.H, c.W, 3), np.uint8)
 
 
 SHOTS = {"sentence": shot_sentence, "permission": shot_permission, "prompt": shot_prompt, "session": shot_session,
          "steps": shot_steps, "chart": shot_chart, "ticker": shot_ticker, "mask": shot_mask, "icons_row": shot_icons_row,
-         "laptop": shot_laptop, "black": shot_black}
+         "laptop": shot_laptop, "fleet_grid": shot_fleet_grid, "table": shot_table, "feed": shot_feed,
+         "card": shot_card, "black": shot_black}
 
 
 def build(path):
@@ -709,7 +912,7 @@ def main():
         blob = json.dumps(brief["shots"])
         lucide = sorted(set(re.findall(r"lucide:([a-z0-9-]+)", blob)) | set(re.findall(r"\{icon:([a-z0-9-]+)\}", blob))
                         | set(re.findall(r'"icon": "([a-z0-9-]+)"', blob)) | {"eye", "eye-off"})
-        brands = sorted(set(re.findall(r"brand:([a-z0-9-]+)", blob)) |
+        brands = sorted(set(re.findall(r"brand:([a-z0-9-]+)", blob)) | set(brief.get("brand_icons", [])) |
                         {x for s in brief["shots"] for x in s.get("icons", []) if x != "logo"} |
                         {x for m in re.findall(r"\{tiles:([^}]+)\}", blob) for x in m.split(",") if x != "logo"})
         assets = os.path.join(base, brief.get("assets_dir", "assets"))

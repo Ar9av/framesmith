@@ -11,7 +11,7 @@ metadata:
 
 # Keynote product film
 
-The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur`. Text carries the story, so write it like a keynote: short lines, one idea per shot, the product UI as proof. The example is `examples/prismor/`, 74.6 s in 21 shots. Its copy and UI come from Prismor's real site components and benchmark. Storyboard: `references/storyboard.md`.
+The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur`. Text carries the story, so write it like a keynote: short lines, one idea per shot, the product UI as proof. Examples: `examples/prismor/` (74.6 s product film, 21 shots) and `examples/fleet/` (66.3 s feature film for Prismor's enterprise fleet management / control plane, 18 shots, sharing the Prismor assets). Its copy and UI come from Prismor's real site components and benchmark. Storyboard: `references/storyboard.md`.
 
 ## Workflow
 
@@ -36,6 +36,10 @@ The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur
 | `mask` | an input whose secret becomes a placeholder on click; an optional generated object floats beside it and dissolves at the click | `caption`, `value`, `masked`, `click_at`, `footnote`, `object`, `object_size` |
 | `laptop` | caption above a laptop rising in, with real product media on its keyed screen | `caption`, `media` (a real screenshot), `device` (a generated PNG with a #00FF00 screen), `zoom`, `focus`, `width` |
 | `icons_row` | caption plus a row of integration marks | `caption`, `icons: ["logo", slugs…]` |
+| `fleet_grid` | a grid of device icons: they light up, get flagged, and a policy push ripples across as a wave | `caption`, `icon`, `cols`, `rows`, `online_at`, `flag: [indices]`, `flag_at`, `flag_color`, `push_at`, `wave`, `note` |
+| `table` | a console table: header, rows sliding in, cells that update mid-shot (status flips) | `caption`, `columns: [{title, w, kind: text/strong/mono/muted/status/icons}]`, `rows: [{cells, updates: [{t, col, value}], highlight, highlight_at}]` |
+| `feed` | live receipts streaming in at the top, older rows fading down | `caption`, `items: [{verdict, rule, detail, agent, who, hash}]`, `every`, `note` |
+| `card` | a console detail card (approval, exemption, enrollment, attestation) with typeset actions (no buttons) | `caption`, `state`, `title`, `rows: [[label, value]]`, `code: [lines]`, `actions`, `choose`, `choose_at`, `footnote`, `mono_keys` |
 | `black` | black frame | — |
 
 Transitions: `"tr": "dissolve"` (crossfade with a blur peak) or `"pixel"`; the default is a hard cut.

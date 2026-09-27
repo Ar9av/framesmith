@@ -1,0 +1,493 @@
+{
+  "size": [
+    1920,
+    1080
+  ],
+  "fps": 30,
+  "assets_dir": "../prismor/assets",
+  "theme": {
+    "dark": "#262626",
+    "light": "#FFFFFF",
+    "ink": "#121213",
+    "muted_dark": "#78787E",
+    "muted_light": "#A1A1AA",
+    "accent": "#A8D5BA"
+  },
+  "wash": [
+    "#FDFBF7",
+    "#FEEEDC",
+    "#DCF5FC",
+    "#FEE3DF"
+  ],
+  "brand_icons": [
+    "claude-code",
+    "cursor",
+    "openai",
+    "windsurf",
+    "langchain"
+  ],
+  "shots": [
+    {
+      "type": "sentence",
+      "dur": 3.4,
+      "bg": "dark",
+      "size": 100,
+      "lines": [
+        "One agent is easy to watch.",
+        "_A _whole _fleet _isn't."
+      ],
+      "stagger": 0.1
+    },
+    {
+      "type": "fleet_grid",
+      "dur": 4.2,
+      "bg": "dark",
+      "caption": [
+        "Every laptop. Every agent. Every tool call."
+      ],
+      "icon": "laptop",
+      "cols": 14,
+      "rows": 5,
+      "online_at": 0.9,
+      "flag": [
+        3,
+        17,
+        29,
+        44,
+        58,
+        62
+      ],
+      "flag_at": 2.4,
+      "note": "Which ones are protected? Which policy are they on?",
+      "note_at": 2.6
+    },
+    {
+      "type": "sentence",
+      "dur": 1.5,
+      "bg": "wash",
+      "size": 64,
+      "lines": [
+        "_Introducing"
+      ],
+      "tr": "dissolve"
+    },
+    {
+      "type": "sentence",
+      "dur": 2.8,
+      "bg": "wash",
+      "size": 120,
+      "lines": [
+        "Prismor Control Plane"
+      ],
+      "logo": true,
+      "logo_size": 170
+    },
+    {
+      "type": "sentence",
+      "dur": 4.6,
+      "bg": "light",
+      "size": 88,
+      "layout": "stairs",
+      "stagger": 0.11,
+      "lines": [
+        "One console",
+        "for every",
+        "{icon:laptop} device",
+        "{icon:bot} agent",
+        "{icon:user} developer"
+      ],
+      "align": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ]
+    },
+    {
+      "type": "card",
+      "dur": 4.0,
+      "bg": "light",
+      "caption": [
+        "Enroll a machine in one command."
+      ],
+      "state": "online",
+      "top": 300,
+      "title": "alice-mbp  ·  Alice Chen",
+      "code": [
+        "$ prismor enroll <org-token>",
+        "enrolled   dev-4a1e  ·  macOS  ·  alice@acme.dev",
+        "policy     acme/org v14  ·  signature ok"
+      ]
+    },
+    {
+      "type": "table",
+      "dur": 6.2,
+      "bg": "light",
+      "caption": [
+        "See every device, live."
+      ],
+      "columns": [
+        {
+          "title": "Developer",
+          "w": 0.2,
+          "kind": "strong"
+        },
+        {
+          "title": "Device",
+          "w": 0.18
+        },
+        {
+          "title": "Agents",
+          "w": 0.14,
+          "kind": "icons"
+        },
+        {
+          "title": "Mode",
+          "w": 0.14
+        },
+        {
+          "title": "Status",
+          "w": 0.2,
+          "kind": "status"
+        },
+        {
+          "title": "Last seen",
+          "w": 0.14,
+          "kind": "muted"
+        }
+      ],
+      "rows": [
+        {
+          "cells": [
+            "Alice Chen",
+            "MacBook Pro",
+            "claude-code",
+            "blocking",
+            "online",
+            "now"
+          ]
+        },
+        {
+          "cells": [
+            "Sam Ortiz",
+            "MacBook Air",
+            "cursor",
+            "blocking",
+            "online",
+            "12s ago"
+          ]
+        },
+        {
+          "cells": [
+            "Maya Iyer",
+            "CI runner",
+            "cursor",
+            "observe",
+            "idle",
+            "4m ago"
+          ]
+        },
+        {
+          "cells": [
+            "Dan Brooks",
+            "Linux desktop",
+            "openai",
+            "blocking",
+            "stale",
+            "3d ago"
+          ],
+          "updates": [
+            {
+              "t": 4.3,
+              "col": 4,
+              "value": "paused · org"
+            }
+          ],
+          "highlight": true,
+          "highlight_at": 4.3
+        },
+        {
+          "cells": [
+            "Priya Nair",
+            "MacBook Pro",
+            "windsurf",
+            "blocking",
+            "online",
+            "now"
+          ]
+        },
+        {
+          "cells": [
+            "Lena Fischer",
+            "GPU node",
+            "langchain",
+            "mixed",
+            "online",
+            "40s ago"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "card",
+      "dur": 4.6,
+      "bg": "light",
+      "caption": [
+        "Change policy once."
+      ],
+      "state": "signed",
+      "top": 290,
+      "title": ".prismor/policy.yaml  ·  org layer",
+      "rows": [
+        [
+          "Version",
+          "v14 → v15"
+        ],
+        [
+          "Signed",
+          "Ed25519  ·  priya@acme.dev"
+        ]
+      ],
+      "code": [
+        "rules:",
+        "  - id: egress-deny",
+        "    mode: enforce        # was observe"
+      ]
+    },
+    {
+      "type": "fleet_grid",
+      "dur": 3.8,
+      "bg": "dark",
+      "caption": [
+        "Every device picks it up."
+      ],
+      "icon": "laptop",
+      "cols": 14,
+      "rows": 5,
+      "online_at": 0.0,
+      "appear": 0.0,
+      "push_at": 0.8,
+      "wave": 0.07,
+      "note": "Signed bundles, layered org → project → repo, applied in about 30 seconds.",
+      "note_at": 1.4
+    },
+    {
+      "type": "feed",
+      "dur": 5.4,
+      "bg": "dark",
+      "caption": [
+        "Watch it live. Redacted by default."
+      ],
+      "every": 0.5,
+      "note": "Receipts carry an evidence hash, never the raw command or secret.",
+      "items": [
+        {
+          "verdict": "blocked",
+          "rule": "egress-deny",
+          "detail": "Bash · outbound webhook",
+          "agent": "claude-code",
+          "who": "Alice Chen · alice-mbp",
+          "hash": "a3f1…9c2e"
+        },
+        {
+          "verdict": "allowed",
+          "rule": "policy ok",
+          "detail": "Edit · src/app/page.tsx",
+          "agent": "cursor",
+          "who": "Sam Ortiz · sam-air",
+          "hash": "71b4…02aa"
+        },
+        {
+          "verdict": "warned",
+          "rule": "supply-chain",
+          "detail": "npm install · package 4h old",
+          "agent": "cursor",
+          "who": "Maya Iyer · ci-runner-2",
+          "hash": "5d08…e11f"
+        },
+        {
+          "verdict": "blocked",
+          "rule": "secret-exfiltration",
+          "detail": "Bash · curl -d @.env",
+          "agent": "windsurf",
+          "who": "Priya Nair · priya-mbp",
+          "hash": "c9e2…7b30"
+        },
+        {
+          "verdict": "allowed",
+          "rule": "policy ok",
+          "detail": "Read · analytics.signups",
+          "agent": "langchain",
+          "who": "Lena Fischer · gpu-01",
+          "hash": "0e6a…d4c1"
+        },
+        {
+          "verdict": "blocked",
+          "rule": "destructive-rm-rf",
+          "detail": "Bash · rm -rf",
+          "agent": "claude-code",
+          "who": "Omar Haddad · omar-air",
+          "hash": "88f0…1a9b"
+        },
+        {
+          "verdict": "held",
+          "rule": "protected-branch",
+          "detail": "Bash · git push --force",
+          "agent": "openai",
+          "who": "Dan Brooks · dan-linux",
+          "hash": "2c7d…90fe"
+        },
+        {
+          "verdict": "allowed",
+          "rule": "policy ok",
+          "detail": "Bash · npm test",
+          "agent": "claude-code",
+          "who": "Alice Chen · alice-mbp",
+          "hash": "4b19…c7e3"
+        }
+      ]
+    },
+    {
+      "type": "card",
+      "dur": 4.6,
+      "bg": "light",
+      "caption": [
+        "High-stakes actions wait for a human."
+      ],
+      "state": "held",
+      "top": 290,
+      "title": "git push --force origin main",
+      "mono_keys": [],
+      "rows": [
+        [
+          "Agent",
+          "codex  ·  Dan Brooks  ·  dan-linux"
+        ],
+        [
+          "Why held",
+          "Force-push to a protected branch"
+        ],
+        [
+          "Requested",
+          "8 seconds ago"
+        ]
+      ],
+      "actions": [
+        "Approve",
+        "Deny"
+      ],
+      "choose": 1,
+      "choose_at": 3.0
+    },
+    {
+      "type": "card",
+      "dur": 4.8,
+      "bg": "light",
+      "caption": [
+        "Exceptions expire."
+      ],
+      "state": "granted",
+      "top": 290,
+      "mono_keys": [
+        "repo",
+        "relaxed"
+      ],
+      "title": "Exemption  ·  acme/deploy-scripts",
+      "rows": [
+        [
+          "Relaxed",
+          "curl-pipe-shell"
+        ],
+        [
+          "Requested by",
+          "Maya Iyer"
+        ],
+        [
+          "Granted by",
+          "Priya Nair"
+        ],
+        [
+          "Expires in",
+          "7 days"
+        ]
+      ],
+      "footnote": "The floor always wins: rm -rf / and secret exfiltration can never be exempted."
+    },
+    {
+      "type": "fleet_grid",
+      "dur": 4.0,
+      "bg": "dark",
+      "caption": [
+        "And find the agents nobody enrolled."
+      ],
+      "icon": "laptop",
+      "cols": 14,
+      "rows": 5,
+      "online_at": 0.0,
+      "appear": 0.0,
+      "flag": [
+        6,
+        21,
+        33,
+        47,
+        60
+      ],
+      "flag_at": 1.2,
+      "note": "prismor discover  ·  shadow agents, shadow MCP servers, exposed keys",
+      "note_at": 1.6,
+      "flag_color": "stale"
+    },
+    {
+      "type": "card",
+      "dur": 4.2,
+      "bg": "dark",
+      "caption": [
+        "Hand auditors proof, not screenshots."
+      ],
+      "state": "verified",
+      "top": 300,
+      "title": "prismor attest verify evidence.json",
+      "code": [
+        "content hash   ok   (SHA-256, RFC 8785 canonical)",
+        "signature      ok   (Ed25519)",
+        "trail anchor   ok"
+      ]
+    },
+    {
+      "type": "sentence",
+      "dur": 2.6,
+      "bg": "dark",
+      "size": 110,
+      "lines": [
+        "Prismor Control Plane"
+      ],
+      "logo": true,
+      "logo_size": 150,
+      "tr": "dissolve"
+    },
+    {
+      "type": "sentence",
+      "dur": 2.8,
+      "bg": "dark",
+      "size": 92,
+      "lines": [
+        "Every agent in your fleet,",
+        "governed."
+      ]
+    },
+    {
+      "type": "sentence",
+      "dur": 2.2,
+      "bg": "dark",
+      "size": 80,
+      "lines": [
+        "prismor.dev"
+      ]
+    },
+    {
+      "type": "black",
+      "dur": 0.6
+    }
+  ]
+}
