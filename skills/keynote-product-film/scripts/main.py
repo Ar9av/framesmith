@@ -685,7 +685,8 @@ def shot_laptop(c, s):
 
 STATUS = {"online": (46, 160, 90), "idle": (161, 161, 170), "stale": (200, 140, 40), "paused": (107, 79, 160),
           "blocked": (107, 79, 160), "allowed": (46, 125, 79), "warned": (168, 106, 30), "held": (168, 106, 30),
-          "revoked": (190, 60, 60), "signed": (46, 125, 79), "granted": (46, 125, 79), "verified": (46, 125, 79)}
+          "revoked": (190, 60, 60), "signed": (46, 125, 79), "granted": (46, 125, 79), "verified": (46, 125, 79),
+          "joined": (46, 160, 90), "invited": (161, 161, 170), "active": (46, 160, 90)}
 
 
 def shot_fleet_grid(c, s):
@@ -885,6 +886,108 @@ def shot_card(c, s):
     return arr(im)
 
 
+def shot_checklist(c, s):
+    """Onboarding checklist card: steps tick off in turn, the active step shows its detail line."""
+    bg = s.get("bg", "light")
+    dark = is_dark(bg)
+    im = Image.new("RGBA", (c.W, c.H), ground(bg) + (255,))
+    if s.get("caption"):
+        sentence(im, s["caption"], c.W / 2, 140, F("sans_medium", 68), fg(bg), G.muted_d if dark else G.muted_l, c.lt, 0.05, 0.08)
+    steps = s["steps"]
+    w, rh = 1120, 118
+    hgt = 150 + rh * len(steps) + 30
+    p = ease_out(min(1, max(0, (c.lt - 0.2) / 0.4)))
+    x0, y0 = c.W / 2 - w / 2, s.get("top", 280) + (1 - p) * 40
+    card_bg = (34, 34, 36) if dark else (255, 255, 255)
+    shadowed_box(im, (x0, y0, x0 + w, y0 + hgt), 22, card_bg, (60, 60, 64) if dark else (232, 232, 235), 55)
+    d = ImageDraw.Draw(im)
+    txt, mut = (G.light, G.muted_d) if dark else (G.ink, (113, 113, 122))
+    done = sum(1 for st in steps if c.lt >= st.get("done_at", 99))
+    text(d, (x0 + 56, y0 + 70), s["title"], F("sans_medium", 42), txt, -0.5, "lm", max_w=w - 320)
+    text(d, (x0 + w - 56, y0 + 70), f"{done} of {len(steps)}", F("sans", 30), mut, 0, "rm")
+    bar_w = w - 112
+    d.rounded_rectangle((x0 + 56, y0 + 112, x0 + 56 + bar_w, y0 + 118), 3, fill=(52, 52, 56) if dark else (238, 238, 241))
+    prog_now = done / len(steps)
+    prev = max(0, done - 1) / len(steps)
+    last_t = max([st.get("done_at", 0) for st in steps if c.lt >= st.get("done_at", 99)] or [0])
+    pv = lerp(prev, prog_now, ease_out(min(1, (c.lt - last_t) / 0.4))) if done else 0
+    if pv > 0:
+        d.rounded_rectangle((x0 + 56, y0 + 112, x0 + 56 + bar_w * pv, y0 + 118), 3, fill=G.accent)
+    active = next((k for k, st in enumerate(steps) if c.lt < st.get("done_at", 99)), None)
+    for k, st in enumerate(steps):
+        y = y0 + 170 + k * rh + rh / 2 - 20
+        is_done = c.lt >= st.get("done_at", 99)
+        cx, cy, r = x0 + 80, y, 20
+        if is_done:
+            tp = ease_out(min(1, (c.lt - st["done_at"]) / 0.3))
+            d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=G.accent)
+            d.line((cx - 9, cy, cx - 2, cy + 7, cx + 10 * tp, cy - 8 * tp), fill=G.ink, width=4, joint="curve")
+        else:
+            d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=txt if k == active else mut, width=3)
+        col = mut if is_done else txt
+        text(d, (x0 + 130, y), st["text"], F("sans_medium", 36), col, -0.3, "lm", max_w=w - 200)
+        if st.get("sub") and (k == active or is_done):
+            text(d, (x0 + 130, y + 42), st["sub"], F("mono", 24) if st.get("mono") else F("sans", 26), mut, 0, "lm", max_w=w - 200)
+    return arr(im)
+
+
+def shot_graph(c, s):
+    """The org graph: entities appear, edges draw, then a tagged path lights up and ends in a verdict."""
+    bg = s.get("bg", "dark")
+    dark = is_dark(bg)
+    im = Image.new("RGBA", (c.W, c.H), ground(bg) + (255,))
+    if s.get("caption"):
+        sentence(im, s["caption"], c.W / 2, 120, F("sans_medium", 64), fg(bg), G.muted_d if dark else G.muted_l, c.lt, 0.05, 0.07)
+    d = ImageDraw.Draw(im)
+    nodes = {n["id"]: n for n in s["nodes"]}
+    pos = {k: (n["x"] * c.W, n["y"] * c.H) for k, n in nodes.items()}
+    edge_col = (70, 70, 76) if dark else (220, 220, 224)
+    txt, mut = (G.light, G.muted_d) if dark else (G.ink, G.muted_l)
+    path = s.get("path", [])
+    path_edges = {(path[i]["id"], path[i + 1]["id"]): (path[i + 1].get("at", 0), path[i + 1].get("tag", "")) for i in range(len(path) - 1)}
+    for e in s.get("edges", []):
+        t0 = (e[2] if len(e) > 2 else {}).get("at", 0.6)
+        if c.lt < t0:
+            continue
+        p = ease_out(min(1, (c.lt - t0) / 0.4))
+        (xa, ya), (xb, yb) = pos[e[0]], pos[e[1]]
+        d.line((xa, ya, lerp(xa, xb, p), lerp(ya, yb, p)), fill=edge_col, width=2)
+    for (a, b2), (t0, tag) in path_edges.items():         # the ordered path, drawn in accent
+        if c.lt < t0:
+            continue
+        p = ease_out(min(1, (c.lt - t0) / 0.45))
+        (xa, ya), (xb, yb) = pos[a], pos[b2]
+        d.line((xa, ya, lerp(xa, xb, p), lerp(ya, yb, p)), fill=G.accent, width=5)
+        if tag and p > 0.5:
+            mx, my = (xa + xb) / 2, (ya + yb) / 2
+            text(d, (mx, my - 28), tag, F("mono", 24), G.accent, 0, "mm", max_w=420)
+    lit = {path[0]["id"]} if path and c.lt >= path[0].get("at", 0) else set()
+    lit |= {b2 for (a, b2), (t0, _) in path_edges.items() if c.lt >= t0 + 0.4}
+    for k, n in nodes.items():
+        t0 = n.get("at", 0.3)
+        if c.lt < t0:
+            continue
+        p = ease_out(min(1, (c.lt - t0) / 0.35))
+        x, y = pos[k]
+        r = 46
+        on = k in lit
+        ring = G.accent if on else (90, 90, 96) if dark else (200, 200, 206)
+        d.ellipse((x - r, y - r, x + r, y + r), fill=ground(bg), outline=ring, width=4 if on else 2)
+        ic = icon_img(n["icon"] if ":" in n["icon"] else "lucide:" + n["icon"], 44, G.accent if on else txt)
+        im.alpha_composite(fade(ic, p), (int(x - 22), int(y - 22)))
+        d = ImageDraw.Draw(im)
+        lw = max(F("sans_medium", 28).getlength(n["label"]), F("pixel", 22).getlength(n.get("kind", "")))
+        d.rectangle((x - lw / 2 - 10, y + r + 10, x + lw / 2 + 10, y + r + (84 if n.get("kind") else 50)), fill=ground(bg))  # edges pass behind labels
+        text(d, (x, y + r + 30), n["label"], F("sans_medium", 28), tuple(int(lerp(v, w2, p)) for v, w2 in zip(ground(bg), txt)), 0, "mm", max_w=360)
+        if n.get("kind"):
+            text(d, (x, y + r + 64), n["kind"], F("pixel", 22), mut, 0, "mm", max_w=360)
+    if s.get("verdict") and c.lt >= s.get("verdict_at", 99):
+        p = ease_out(min(1, (c.lt - s["verdict_at"]) / 0.3))
+        col = STATUS.get(s.get("verdict_tone", "blocked"), G.accent)
+        ui.rise(im, (c.W / 2, c.H - 110), s["verdict"], F("sans_medium", 44), col, p, 1, "mm", max_w=c.W - 300)
+    return arr(im)
+
+
 def shot_black(c, s):
     return np.zeros((c.H, c.W, 3), np.uint8)
 
@@ -892,7 +995,7 @@ def shot_black(c, s):
 SHOTS = {"sentence": shot_sentence, "permission": shot_permission, "prompt": shot_prompt, "session": shot_session,
          "steps": shot_steps, "chart": shot_chart, "ticker": shot_ticker, "mask": shot_mask, "icons_row": shot_icons_row,
          "laptop": shot_laptop, "fleet_grid": shot_fleet_grid, "table": shot_table, "feed": shot_feed,
-         "card": shot_card, "black": shot_black}
+         "card": shot_card, "checklist": shot_checklist, "graph": shot_graph, "black": shot_black}
 
 
 def build(path):

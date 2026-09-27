@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.0 (2026-09-28)
+- keynote-product-film: `checklist` and `graph` shot types; `examples/enterprise-onboarding/` (Prismor Enterprise onboarding film built from prismor-web-preview's onboarding checklist, enroll drawer, prompt guardrails, agent instances and the org-context graph).
+
 ## 0.8.0 (2026-09-27)
 - Skill `no-ai-slop` (Peter Yang, MIT) added to the catalog; required pass for all video copy.
 - keynote-product-film: `examples/starter/` fill-in template (the Prismor keynote arc with [placeholders]) and `init` verb; `check` warns on unfilled placeholders and trailing periods.

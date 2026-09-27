@@ -11,7 +11,7 @@ metadata:
 
 # Keynote product film
 
-The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur`. Text carries the story, so write it like a keynote: short lines, one idea per shot, the product UI as proof. Examples: `examples/starter/` (fill-in template), `examples/prismor/` (74.6 s product film, 21 shots) and `examples/fleet/` (66.3 s feature film for Prismor's enterprise fleet management / control plane, 18 shots, sharing the Prismor assets). Its copy and UI come from Prismor's real site components and benchmark. Storyboard: `references/storyboard.md`.
+The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur`. Text carries the story, so write it like a keynote: short lines, one idea per shot, the product UI as proof. Examples: `examples/starter/` (fill-in template), `examples/prismor/` (74.6 s product film, 21 shots) `examples/enterprise-onboarding/` (80.5 s Prismor Enterprise onboarding: checklist, invites, enrolment, observe → enforce, org-context graph, agent instances, prompt guardrails) and `examples/fleet/` (66.3 s feature film for Prismor's enterprise fleet management / control plane, 18 shots, sharing the Prismor assets). Its copy and UI come from Prismor's real site components and benchmark. Storyboard: `references/storyboard.md`.
 
 ## Start a new film
 
@@ -44,6 +44,8 @@ The film is a sequence of `shots` in `brief.json`, each with a `type` and a `dur
 | `table` | a console table: header, rows sliding in, cells that update mid-shot (status flips) | `caption`, `columns: [{title, w, kind: text/strong/mono/muted/status/icons}]`, `rows: [{cells, updates: [{t, col, value}], highlight, highlight_at}]` |
 | `feed` | live receipts streaming in at the top, older rows fading down | `caption`, `items: [{verdict, rule, detail, agent, who, hash}]`, `every`, `note` |
 | `card` | a console detail card (approval, exemption, enrollment, attestation) with typeset actions (no buttons) | `caption`, `state`, `title`, `rows: [[label, value]]`, `code: [lines]`, `actions`, `choose`, `choose_at`, `footnote`, `mono_keys` |
+| `checklist` | onboarding checklist card: steps tick off with a progress bar, the active step shows its detail | `caption`, `title`, `steps: [{text, sub, mono, done_at}]` |
+| `graph` | an org graph: entities appear, edges draw, a tagged path lights up in order and ends in a verdict | `caption`, `nodes: [{id, label, kind, icon, x, y, at}]`, `edges: [[a, b, {at}]]`, `path: [{id, at, tag}]`, `verdict`, `verdict_at`, `verdict_tone` |
 | `black` | black frame | — |
 
 Transitions: `"tr": "dissolve"` (crossfade with a blur peak) or `"pixel"`; the default is a hard cut.
