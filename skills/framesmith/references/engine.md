@@ -27,7 +27,7 @@ tl.still(3.2, "f.png"); tl.contact_sheet("sheet.png"); tl.render("out.mp4", audi
 
 Font roles (bundled): `sans` (Inter Display), `sans_medium`, `mono` (Go Mono), `mono_bold`. Get a font with `F(role, px)`.
 
-- `text(draw, xy, s, font, fill, track=0, anchor="la")`: tracking in px; anchors as in PIL (`mm`, `rm`…).
+- `text(draw, xy, s, font, fill, track=0, anchor="la", max_w=None, fit_to=None)`: tracking in px; anchors as in PIL (`mm`, `rm`…). **Always pass `max_w`.** The type shrinks to fit (down to 55%). Unfittable text is logged in `OVERFLOWS`, and heavy shrinks in `SHRINKS`; `overflow_report()` / `overflow_report(warn=True)` summarise them. Pass `fit_to=final_copy` during reveals so the size stays stable.
 - `scramble(s, p, seed, fi, tail=5)`: decode reveal. `typed(s, p)`: typewriter. `decay(s, p, keep)`: random dropout.
 - `rot_text(img, xy, s, font, fill, angle=-90)`: rotated labels.
 
@@ -68,6 +68,6 @@ Font roles (bundled): `sans` (Inter Display), `sans_medium`, `mono` (Go Mono), `
 
 For software and dev-tool videos:
 - `window(img, box, bg, bar, title)` draws macOS-style chrome and returns the content box.
-- `terminal(img, origin, lines, t, size)` renders a time-scheduled transcript. Each line is `{"spans": [(text, rgb)], "t": start, "type": secs, "bg": rgb?}` and it scrolls with `max_lines`. It returns line positions for overlays.
-- `chip(img, xy, label, fg, bg)` draws a pill. `stat_card(...)` and `rrect(...)` are basic panels.
+- `terminal(img, origin, lines, t, size, max_width=…)` renders a time-scheduled transcript. Each line is `{"spans": [(text, rgb)], "t": start, "type": secs, "bg": rgb?}`. Lines word-wrap at `max_width` and it scrolls with `max_lines`. It returns `{line: [(x0, y, x_end) per row]}` for overlays such as leader lines and strike-throughs.
+- `stat_card(...)` and `rrect(...)` are basic panels. There is deliberately no pill/chip/badge primitive.
 - `holo_field(w, h, t, palette)` produces animated iridescent interference light in any palette. Render it small and upscale for speed.

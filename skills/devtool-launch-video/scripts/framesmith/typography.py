@@ -27,8 +27,43 @@ def text_width(s, font, track=0):
     return sum(font.getlength(c) + track for c in s) - (track if s else 0)
 
 
-def text(d, xy, s, font, fill, track=0, anchor="la"):
-    """Draw text with tracking (letter-spacing, px). Anchors as in PIL, e.g. 'mm', 'rm'."""
+OVERFLOWS = []          # (text, needed_px, max_px) for text that could not be fitted; check with overflow_report()
+SHRINKS = []            # (text, scale) for text shrunk below WARN_SCALE to fit its budget
+WARN_SCALE = 0.8
+MIN_SCALE = 0.55        # never shrink below 55% of the requested size
+
+
+def fit(s, font, max_w, track=0):
+    """Largest version of `font` (down to MIN_SCALE) whose rendering of `s` fits max_w px."""
+    w = text_width(s, font, track)
+    if max_w is None or w <= max_w:
+        return font
+    size = max(int(font.size * MIN_SCALE), int(font.size * max_w / max(w, 1)))
+    f = ImageFont.truetype(font.path, size)
+    while size > font.size * MIN_SCALE and text_width(s, f, track * size / font.size) > max_w:
+        size -= 1
+        f = ImageFont.truetype(font.path, size)
+    return f
+
+
+def text(d, xy, s, font, fill, track=0, anchor="la", max_w=None, fit_to=None):
+    """Draw text with tracking (letter-spacing, px). Anchors as in PIL, e.g. 'mm', 'rm'.
+
+    max_w: hard width budget. The font shrinks to fit (down to MIN_SCALE); anything still too wide
+    is recorded in OVERFLOWS so templates can fail `check` instead of shipping clipped text.
+    fit_to: size against this string instead (pass the final copy when `s` is mid-scramble/typing,
+    so the size doesn't flicker frame to frame).
+    """
+    if max_w is not None:
+        ref = fit_to if fit_to is not None else s
+        f2 = fit(ref, font, max_w, track)
+        if f2 is not font:
+            if f2.size < font.size * WARN_SCALE:
+                SHRINKS.append((ref, f2.size / font.size))
+            track = track * f2.size / font.size
+            font = f2
+        if text_width(ref, font, track) > max_w + 1:
+            OVERFLOWS.append((ref, int(text_width(ref, font, track)), int(max_w)))
     if not track:
         d.text(xy, s, font=font, fill=fill, anchor=anchor)
         return
@@ -41,6 +76,22 @@ def text(d, xy, s, font, fill, track=0, anchor="la"):
     for c in s:
         d.text((x, y), c, font=font, fill=fill, anchor="l" + anchor[1])
         x += font.getlength(c) + track
+
+
+def overflow_report(warn=False):
+    """Overflow errors, or with warn=True the strings shrunk below WARN_SCALE (copy too long for its slot)."""
+    seen, out = set(), []
+    if warn:
+        for s, k in SHRINKS:
+            if s.strip() and s not in seen:
+                seen.add(s)
+                out.append(f"'{s}' shrunk to {k:.0%} of its designed size; shorten it")
+        return out
+    for s, need, mx in OVERFLOWS:
+        if s.strip() and s not in seen:
+            seen.add(s)
+            out.append(f"'{s}' needs {need}px, budget {mx}px")
+    return out
 
 
 def scramble(s, p, seed, fi, tail=5):
