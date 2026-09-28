@@ -1,0 +1,28 @@
+{
+  "size": [1920, 1080],
+  "fps": 30,
+  "theme": {"bg": "#DEE8F8", "ink": "#1F3A5F", "mid": "#5C80A3", "accent": "#39B8B0", "warm": "#F4C542"},
+  "vo": {"script": "vo.txt", "audio": "vo.m4a", "words": "words.json", "voice": "onyx",
+         "instructions": "Warm, confident corporate explainer narrator. Clear, measured pace, friendly authority, slight pauses between sentences."},
+  "lead": 0.1, "tail": 1.6,
+  "beats": [
+    {"at": "Your developers now", "type": "scene", "image": "office_agents", "caption": "Your developers now work\nalongside AI agents", "move": [1.14, 1.04, 0.35, 0.55, 0.5, 0.52]},
+    {"at": "Do you know", "type": "scene", "image": "security_alerts", "caption": "Do you know what your agents\ndid today", "move": [1.04, 1.18, 0.5, 0.62, 0.55, 0.48]},
+    {"at": "Leaked keys", "type": "bullets", "image": "security_alerts", "caption": "What goes wrong", "items": [
+       {"text": "Leaked API keys", "at": "Leaked keys"}, {"text": "Poisoned files", "at": "poisoned files"},
+       {"text": "Deleted work", "at": "deleted work"}, {"text": "No record of any of it", "at": "no record"}]},
+    {"at": "You are not alone", "type": "split", "left": "frustrated_a", "right": "frustrated_b", "caption": "You are not alone"},
+    {"at": "Here comes", "type": "logo", "tr": "whoosh", "caption": "The control plane for every AI agent\nin your company", "name": "Prismor Enterprise", "name_at": "Prismor Enterprise"},
+    {"at": "Prismor checks every", "type": "scene", "image": "policy_board", "caption": "Every tool call checked\nbefore it runs", "move": [1.1, 1.02, 0.4, 0.5, 0.52, 0.5]},
+    {"at": "Enroll every laptop", "type": "scene", "image": "enroll_desk", "caption": "One command per laptop\none signed policy for the fleet", "move": [1.16, 1.04, 0.62, 0.48, 0.5, 0.5]},
+    {"at": "Watch every device", "type": "map", "caption": "Every device, agent and decision\nlive, wherever your team works", "links": true,
+     "pins": ["ldn", "sf", "ny", "ber", "blr", "sgp", "tok", "sp", "dxb", "syd", "lag", "nbo"]},
+    {"at": "Find shadow AI", "type": "cards", "caption": "Governance built in", "cards": [
+       {"verdict": "blocked", "title": "shadow agent found", "detail": "aider on maya-linux, no Prismor hooks", "at": "Find shadow AI"},
+       {"verdict": "allowed", "title": "least privilege", "detail": "release-bot runs with the ci-deploy profile", "at": "give each agent"},
+       {"verdict": "held", "title": "waiting for approval", "detail": "git push --force origin main", "at": "its own permissions"},
+       {"verdict": "redacted", "title": "signed trail", "detail": "hash-chained, Ed25519-signed audit log", "at": "hand your auditors"}]},
+    {"at": "It is built on", "type": "scene", "image": "team_happy", "caption": "Built on the open source Prismor runtime\nrunning on your machines", "move": [1.04, 1.14, 0.45, 0.58, 0.5, 0.5]},
+    {"at": "Never let an agent", "type": "cta", "image": "cta_office", "name": "Prismor Enterprise", "line": "Never let an agent go rogue again", "url": "prismor.dev", "url_at": "Book a demo"}
+  ]
+}

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.13.0 (2026-09-28)
+- Skill `illustrated-explainer`: narrated flat-vector explainer (cue-timed beats, house-style gpt-image-2 illustrations via a STYLE prompt prefix, scene/bullets/split/logo/map/cards/cta beats, zoom-blur whoosh). Example: Prismor Enterprise, 62.8 s with voiceover.
+
 ## 0.12.0 (2026-09-28)
 - Engine `framesmith.console`: 10 animatable enterprise-console components rebuilt from Prismor's admin console: posture, KPI strip, guard pipeline, agent trust card, coverage/devices table, shadow AI, network egress, security proof pack, live activity, MCP gateway.
 - glass-saas-promo / blue-story-film: `tilt` shots can show a live console component (`component`, `data`, `console_data`).

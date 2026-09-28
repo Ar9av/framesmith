@@ -25,6 +25,7 @@ framesmith templates are **skills**: a `SKILL.md`, a brief schema, an example br
 | [`no-ai-slop`](../no-ai-slop/SKILL.md) | edited copy + what changed (or a findings report) | Before rendering any template: run scripts, captions and on-screen lines through it. Also for any draft that reads as AI-written (by Peter Yang, MIT) |
 | [`glass-saas-promo`](../glass-saas-promo/SKILL.md) | 16:9 MP4, music-driven | Render a bright, music-driven SaaS promo (about 30–40 s, 16:9) in the frosted-glass style: a lavender-white field, blue-to-violet gradients, gpt-image-2 glass 3D objects (shield, folder, check, sparkle, laptop), real product UI in |
 | [`blue-story-film`](../blue-story-film/SKILL.md) | 16:9 MP4, music-driven | Render a music-driven SaaS story film (about 60–90 s, 16:9) in the blue-light style. It opens with typewriter captions, a caret and a selection highlight over ghosted UI, then a huge 'Meet' word that collapses into the brand line. |
+| [`illustrated-explainer`](../illustrated-explainer/SKILL.md) | ~60–100 s 16:9 MP4 with voiceover | Narrated flat-vector corporate explainer: gpt-image-2 illustrations in one house style, pans with small-caps captions, bullets, split screen, whoosh to logo, world map, product cards, CTA |
 <!-- catalog:end -->
 
 If nothing fits, say so and offer to build a new template (section 3) rather than forcing the wrong one.

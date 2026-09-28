@@ -1,0 +1,53 @@
+{
+ "office_agents": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Flat vector corporate explainer illustration in a soft blue palette: pale blue background (#DEE8F8), mid blues (#5C80A3, #A6CDF5), navy (#1F3A5F) with small accents of teal (#39B8B0) and warm yellow (#F4C542); clean geometric shapes, gentle shadows, friendly modern characters with simple faces, office furniture and plants, no text, no letters, no numbers, no logos, wide composition with calm empty space along the top edge for a caption. Scene: a bright open-plan software office with four developers at desks, each monitor shows a small friendly robot assistant icon next to code lines, one developer leans back while the robot on her screen works, plants, shelves, big window."
+ },
+ "security_alerts": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Flat vector corporate explainer illustration in a soft blue palette: pale blue background (#DEE8F8), mid blues (#5C80A3, #A6CDF5), navy (#1F3A5F) with small accents of teal (#39B8B0) and warm yellow (#F4C542); clean geometric shapes, gentle shadows, friendly modern characters with simple faces, office furniture and plants, no text, no letters, no numbers, no logos, wide composition with calm empty space along the top edge for a caption. Scene: a stressed security lead in a navy blazer at a desk, hand on forehead, looking at a large monitor covered in red warning triangles and alert cards, papers piling up, a coffee cup, a plant."
+ },
+ "frustrated_a": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "prompt": "Flat vector corporate explainer illustration in a soft blue palette: pale blue background (#DEE8F8), mid blues (#5C80A3, #A6CDF5), navy (#1F3A5F) with small accents of teal (#39B8B0) and warm yellow (#F4C542); clean geometric shapes, gentle shadows, friendly modern characters with simple faces, office furniture and plants, no text, no letters, no numbers, no logos, wide composition with calm empty space along the top edge for a caption. Scene: a worried engineering manager standing at a whiteboard with a tangled diagram and red crosses, arms folded, a laptop on a table beside him."
+ },
+ "frustrated_b": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "prompt": "Flat vector corporate explainer illustration in a soft blue palette: pale blue background (#DEE8F8), mid blues (#5C80A3, #A6CDF5), navy (#1F3A5F) with small accents of teal (#39B8B0) and warm yellow (#F4C542); clean geometric shapes, gentle shadows, friendly modern characters with simple faces, office furniture and plants, no text, no letters, no numbers, no logos, wide composition with calm empty space along the top edge for a caption. Scene: a frustrated woman developer at a laptop, a small robot icon on the screen next to a red warning symbol, her hand raised in confusion, a desk lamp and plant."
+ },
+ "network_ring": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Flat vector illustration of a circular hub: a thick ring made of six curved pale blue segments with small gaps, around an empty white circle in the centre, with thin connector lines and small dots radiating outward to little laptop, cloud, server and robot icons in navy and teal, soft blue palette, isolated on a transparent background, no text, no letters, no logos."
+ },
+ "policy_board": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Flat vector corporate explainer illustration in a soft blue palette: pale blue background (#DEE8F8), mid blues (#5C80A3, #A6CDF5), navy (#1F3A5F) with small accents of teal (#39B8B0) and warm yellow (#F4C542); clean geometric shapes, gentle shadows, friendly modern characters with simple faces, office furniture and plants, no text, no letters, no numbers, no logos, wide composition with calm empty space along the top edge for a caption. Scene: two colleagues at a large wall screen showing a flowchart where arrows pass through a big shield symbol, green check marks on the approved paths and one red stop sign, the woman points at the shield, the man holds a tablet."
+ },
+ "enroll_desk": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Flat vector corporate explainer illustration in a soft blue palette: pale blue background (#DEE8F8), mid blues (#5C80A3, #A6CDF5), navy (#1F3A5F) with small accents of teal (#39B8B0) and warm yellow (#F4C542); clean geometric shapes, gentle shadows, friendly modern characters with simple faces, office furniture and plants, no text, no letters, no numbers, no logos, wide composition with calm empty space along the top edge for a caption. Scene: a row of five laptops on long desks, each laptop screen shows a small shield with a check mark, thin glowing lines connect every laptop to one central cloud with a shield in it above them, a developer plugs in the last laptop."
+ },
+ "world_map": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Flat vector world map made of soft light-blue continents (#A6CDF5) on a very pale blue background (#EAF2FC), simple rounded shapes, no borders, no labels, no pins, no text, clean minimal infographic style, generous margins."
+ },
+ "team_happy": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Flat vector corporate explainer illustration in a soft blue palette: pale blue background (#DEE8F8), mid blues (#5C80A3, #A6CDF5), navy (#1F3A5F) with small accents of teal (#39B8B0) and warm yellow (#F4C542); clean geometric shapes, gentle shadows, friendly modern characters with simple faces, office furniture and plants, no text, no letters, no numbers, no logos, wide composition with calm empty space along the top edge for a caption. Scene: a relaxed team of four around a meeting table with laptops, one person presents a dashboard with green check marks on a wall screen, the others smile and nod, an auditor in a grey suit shakes hands with a team lead."
+ },
+ "cta_office": {
+  "size": "1536x1024",
+  "quality": "low",
+  "prompt": "Flat vector corporate explainer illustration in a soft blue palette: pale blue background (#DEE8F8), mid blues (#5C80A3, #A6CDF5), navy (#1F3A5F) with small accents of teal (#39B8B0) and warm yellow (#F4C542); clean geometric shapes, gentle shadows, friendly modern characters with simple faces, office furniture and plants, no text, no letters, no numbers, no logos, wide composition with calm empty space along the top edge for a caption. Scene: an empty calm modern office corner at the end of the day, a laptop on a desk showing a large shield with a check mark, a plant and a window with evening light, lots of empty pale blue space on the left."
+ }
+}
