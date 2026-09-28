@@ -242,10 +242,20 @@ def shot_meet(c, s):
     return arr(im)
 
 
+def console_img(c, s):
+    """Live enterprise-console component (framesmith.console) animated by the shot's local time."""
+    from framesmith import console as _console
+    data = s.get("data")
+    if isinstance(data, str) or data is None:
+        pool = G.cache("console_data", lambda: json.load(open(os.path.join(G.base, G.b.get("console_data", "console.json")))))
+        data = pool[data or s["component"]]
+    return _console.render(s["component"], data, c.lt - s.get("delay", 0.3))
+
+
 def shot_tilt(c, s):
     """UI panel in perspective over a backdrop, swinging between two poses; optional line above."""
     im = backdrop(s.get("bg", "bg_sky"), c.lt)
-    img = panel(s["media"])
+    img = console_img(c, s) if s.get("component") else panel(s["media"])
     p = ease_in_out(c.p(0, c.dur))
     a = dict(rx=18, ry=-22, rz=4, scale=0.9, cx=0.52, cy=0.56)
     a.update(s.get("from", {}))

@@ -85,3 +85,24 @@ For software and dev-tool videos:
 - `align(script, words)` gives every script token a start and end. The script's spelling wins, and gaps are interpolated.
 - `find(toks, "cue phrase", after)` returns the token index where a phrase is spoken, which is how beats and overlays are timed.
 - `chunks(toks, max_words=3)` splits subtitles into clauses, balanced with no orphaned single words.
+
+## Console components (`fs.console`)
+
+These are native, animatable panels rebuilt from Prismor's enterprise console (prismor-web-preview admin and control-plane views). They use the console's `--pc-*` palette: green allowed, amber warned, red blocked, violet redacted. Status is typeset as a dot and a word.
+
+`console.render(name, data, lt)` returns an RGBA panel. `lt` is seconds since the panel appeared: numbers count up, rows stream in, and stages light up in order.
+
+| name | rebuilt from | data |
+|---|---|---|
+| `posture` | PostureBar | `score`, `pillars[{icon,label,value,sub}]`, `gaps` |
+| `kpis` | KpiStrip | `items[{icon,label,value,sub,tone}]` |
+| `guard` | GuardPipeline | `kind`, `call`, `stages`, `trip`, `verdict`, `why` |
+| `trust` | AgentTrustCard | `agent`, `sub`, `state`, `facts[{icon,label,value,detail,danger}]` |
+| `table` | CoverageView / Devices / findings | `title`, `sub`, `columns[{title,w}]`, `rows[{cells, hl}]`. Cells can be `status:`, `icon:name\|text`, `mono:` or `muted:` |
+| `shadow` | ShadowAiView | `coverage`, `stats[{icon,label,value,hint,warn}]`, and optional `columns`/`rows` |
+| `egress` | EgressView | `modes`, `active`, `lists[{title,tone,hosts}]` |
+| `proof` | SecurityProofPackView | `metrics[{label,value}]`, `controls[{name,ref,state}]` |
+| `feed` | LiveActivityFeed | `items[{icon,title,detail,who,verdict}]`, `every` |
+| `mcp` | McpHub (gateway) | `agents`, `servers`, `block_agent`, `note` |
+
+In `glass-saas-promo` and `blue-story-film`, a `tilt` shot with `"component": "<name>"` (and `"data"`, which is inline or a key into `console_data`) shows the component live in 3D. Icons are Lucide, cached in `~/.cache/framesmith/lucide`.

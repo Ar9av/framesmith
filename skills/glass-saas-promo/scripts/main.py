@@ -211,19 +211,29 @@ def cursor(im, x, y, click=0.0, s=2.2):
     d.line(P + [P[0]], fill=(20, 20, 30), width=2)
 
 
+def console_img(c, s):
+    """Live enterprise-console component (framesmith.console) animated by the shot's local time."""
+    from framesmith import console as _console
+    data = s.get("data")
+    if isinstance(data, str) or data is None:
+        pool = G.cache("console_data", lambda: json.load(open(os.path.join(G.base, G.b.get("console_data", "console.json")))))
+        data = pool[data or s["component"]]
+    return _console.render(s["component"], data, c.lt - s.get("delay", 0.3))
+
+
 def shot_tilt(c, s):
     """A UI panel swinging from a steep 3D tilt to its resting pose; optional caption and cursor click."""
     im = canvas()
-    img = panel(s["media"])
+    img = console_img(c, s) if s.get("component") else panel(s["media"])
     p = ease_in_out(c.p(0, s.get("move", c.dur * 0.8)))
     a = dict(rx=30, ry=-24, rz=6, scale=0.7, cx=0.5, cy=0.6)
     a.update(s.get("from", {}))
     b = dict(rx=8, ry=-6, rz=0, scale=1.0, cx=0.5, cy=0.52)
     b.update(s.get("to", {}))
     q = interp(a, b, p)
-    base = min(c.W * s.get("width", 0.72) / img.width, c.H * 0.7 / img.height)
+    base = min(c.W * s.get("width", 0.72) / img.width, c.H * s.get("max_h", 0.72) / img.height)
     quad = project(img.width * base, img.height * base, q["rx"], q["ry"], q["rz"], q["scale"], q["cx"] * c.W, q["cy"] * c.H)
-    im.alpha_composite(warp(img, quad, im.size, glow=s.get("glow", 1.0)))
+    im.alpha_composite(warp(img, quad, im.size, glow=s.get("glow", 0.0 if s.get("component") else 1.0)))
     if s.get("words"):
         draw_line(im, s["words"], c.lt - s.get("words_at", 0.3), F("sans_medium", s.get("size", 56)), c.H * 0.12)
     if s.get("click"):                                     # cursor lands on a point given in panel fractions

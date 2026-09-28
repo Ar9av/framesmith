@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.12.0 (2026-09-28)
+- Engine `framesmith.console`: 10 animatable enterprise-console components rebuilt from Prismor's admin console: posture, KPI strip, guard pipeline, agent trust card, coverage/devices table, shadow AI, network egress, security proof pack, live activity, MCP gateway.
+- glass-saas-promo / blue-story-film: `tilt` shots can show a live console component (`component`, `data`, `console_data`).
+- Prismor Enterprise glass film v3 built on the new components.
+
 ## 0.11.0 (2026-09-28)
 - glass-saas-promo + blue-story-film: `pillars`, `flow`, `orbit` icon shots and an `icons` verb; Prismor Enterprise examples rebuilt on real prismor.dev dashboard components (overview, permission profiles, runtime monitor, agent stack, closed-loop, routing diagram, session), with AI agent governance pillars, the runtime pipeline and a platform orbit of 19 brand marks.
 - video-to-template: `grab.mjs`/`lib.mjs` (CDP capture of real product UI from a live site).

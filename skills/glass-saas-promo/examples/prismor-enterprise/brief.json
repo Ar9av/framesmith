@@ -33,54 +33,53 @@
     },
     {
       "type": "tilt",
-      "dur": 2.8,
-      "media": "web/routing.png",
+      "dur": 3.2,
+      "component": "posture",
+      "data": "posture",
+      "words": "Know your posture *at *a *glance",
       "from": {
-        "rx": 26,
-        "ry": -20,
-        "rz": 4,
-        "scale": 0.7,
-        "cy": 0.62
+        "rx": 34,
+        "ry": -26,
+        "rz": 6,
+        "scale": 0.62,
+        "cy": 0.64,
+        "cx": 0.5
       },
       "to": {
-        "rx": 8,
-        "ry": -4,
-        "scale": 0.95,
-        "cy": 0.56
+        "rx": 5,
+        "ry": 0,
+        "rz": 0,
+        "scale": 1.0,
+        "cx": 0.5,
+        "cy": 0.54
       },
-      "words": "One *independent layer for every agent",
-      "glow": 0.3,
-      "width": 0.56
-    },
-    {
-      "type": "words",
-      "dur": 2.2,
-      "size": 72,
-      "seq": [
-        {
-          "line": "Every device {obj:glass_laptop} *One console",
-          "t": 0
-        }
-      ],
-      "tr": "blur"
+      "width": 0.82,
+      "delay": 0.3
     },
     {
       "type": "tilt",
-      "dur": 2.6,
-      "media": "web/overview.png",
+      "dur": 3.2,
+      "component": "kpis",
+      "data": "kpis",
+      "words": "Every tool call inspected, *live",
       "from": {
-        "rx": 36,
-        "ry": -28,
-        "rz": 7,
-        "scale": 0.6,
-        "cy": 0.66
+        "rx": -24,
+        "ry": 22,
+        "rz": -4,
+        "scale": 0.7,
+        "cy": 0.62,
+        "cx": 0.5
       },
       "to": {
-        "rx": 10,
-        "ry": -8,
-        "scale": 1.05
+        "rx": 5,
+        "ry": 0,
+        "rz": 0,
+        "scale": 1.0,
+        "cx": 0.5,
+        "cy": 0.54
       },
-      "tr": "blur"
+      "width": 0.82,
+      "delay": 0.3
     },
     {
       "type": "words",
@@ -177,93 +176,173 @@
       ]
     },
     {
-      "type": "flow",
+      "type": "tilt",
       "dur": 3.6,
-      "words": "One runtime, *five *steps",
-      "size": 60,
-      "steps": [
-        {
-          "icon": "lucide:plug",
-          "label": "Connect",
-          "sub": "any agent or SDK"
-        },
-        {
-          "icon": "lucide:scan-search",
-          "label": "Intercept",
-          "sub": "before it runs"
-        },
-        {
-          "icon": "lucide:shield",
-          "label": "Enforce",
-          "sub": "your policy"
-        },
-        {
-          "icon": "lucide:scroll-text",
-          "label": "Audit",
-          "sub": "every decision"
-        },
-        {
-          "icon": "lucide:refresh-cw",
-          "label": "Improve",
-          "sub": "rules from evidence"
-        }
-      ]
-    },
-    {
-      "type": "carousel",
-      "dur": 2.6,
-      "media": [
-        "web/overview.png",
-        "web/profiles.png",
-        "web/monitor.png",
-        "web/session.png"
-      ],
-      "speed": 420,
-      "words": "One console for the whole *platform"
+      "component": "guard",
+      "data": "guard",
+      "words": "Every call walks *three *guards",
+      "from": {
+        "rx": 26,
+        "ry": -22,
+        "rz": 5,
+        "scale": 0.7,
+        "cx": 0.5
+      },
+      "to": {
+        "rx": 5,
+        "ry": 0,
+        "rz": 0,
+        "scale": 1.0,
+        "cx": 0.5,
+        "cy": 0.54
+      },
+      "width": 0.82,
+      "delay": 0.3
     },
     {
       "type": "tilt",
-      "dur": 2.4,
-      "media": "web/profiles.png",
+      "dur": 3.2,
+      "component": "trust",
+      "data": "trust",
+      "words": "Every agent gets *a *trust *card",
       "from": {
-        "rx": 22,
-        "ry": 26,
-        "rz": -4,
-        "scale": 0.8
+        "rx": -22,
+        "ry": -24,
+        "rz": -3,
+        "scale": 0.72,
+        "cx": 0.5
       },
       "to": {
-        "rx": 12,
-        "ry": 10,
-        "scale": 1.05,
-        "cy": 0.56
+        "rx": 5,
+        "ry": 0,
+        "rz": 0,
+        "scale": 1.0,
+        "cx": 0.5,
+        "cy": 0.54
       },
-      "words": "Least privilege for *every *agent",
-      "click": {
-        "at": [
-          0.72,
-          0.52
-        ],
-        "t": 1.7
+      "width": 0.82,
+      "delay": 0.3
+    },
+    {
+      "type": "tilt",
+      "dur": 3.6,
+      "component": "table",
+      "data": "coverage",
+      "words": "See the policy that reaches *everyone",
+      "from": {
+        "rx": 22,
+        "ry": 24,
+        "rz": -4,
+        "scale": 0.72,
+        "cx": 0.5
       },
+      "to": {
+        "rx": 5,
+        "ry": 0,
+        "rz": 0,
+        "scale": 1.0,
+        "cx": 0.5,
+        "cy": 0.57
+      },
+      "width": 0.76,
+      "delay": 0.3,
       "tr": "blur"
     },
     {
       "type": "tilt",
-      "dur": 2.4,
-      "media": "web/monitor.png",
+      "dur": 4.4,
+      "component": "feed",
+      "data": "feed",
+      "words": "Watch decisions *as *they *happen",
       "from": {
-        "rx": -20,
-        "ry": -26,
-        "rz": 5,
-        "scale": 0.8
+        "rx": -18,
+        "ry": -20,
+        "rz": 3,
+        "scale": 0.74,
+        "cx": 0.5
       },
       "to": {
-        "rx": 6,
-        "ry": -6,
+        "rx": 5,
+        "ry": 0,
+        "rz": 0,
         "scale": 1.0,
-        "cy": 0.56
+        "cx": 0.5,
+        "cy": 0.57
       },
-      "words": "Every action *on *the *record"
+      "width": 0.76,
+      "delay": 0.3
+    },
+    {
+      "type": "tilt",
+      "dur": 4.0,
+      "component": "mcp",
+      "data": "mcp",
+      "words": "One gateway for *every *MCP *server",
+      "from": {
+        "rx": 24,
+        "ry": 18,
+        "rz": -3,
+        "scale": 0.72,
+        "cx": 0.5
+      },
+      "to": {
+        "rx": 5,
+        "ry": 0,
+        "rz": 0,
+        "scale": 1.0,
+        "cx": 0.5,
+        "cy": 0.57
+      },
+      "width": 0.76,
+      "delay": 0.3
+    },
+    {
+      "type": "tilt",
+      "dur": 3.4,
+      "component": "egress",
+      "data": "egress",
+      "words": "Decide where agents *can *reach",
+      "from": {
+        "rx": -22,
+        "ry": 22,
+        "rz": -3,
+        "scale": 0.72,
+        "cx": 0.5
+      },
+      "to": {
+        "rx": 5,
+        "ry": 0,
+        "rz": 0,
+        "scale": 1.0,
+        "cx": 0.5,
+        "cy": 0.57
+      },
+      "width": 0.76,
+      "delay": 0.3
+    },
+    {
+      "type": "tilt",
+      "dur": 3.6,
+      "component": "shadow",
+      "data": "shadow",
+      "words": "Find the *shadow *AI",
+      "from": {
+        "rx": 22,
+        "ry": -22,
+        "rz": 4,
+        "scale": 0.72,
+        "cx": 0.5
+      },
+      "to": {
+        "rx": 5,
+        "ry": 0,
+        "rz": 0,
+        "scale": 1.0,
+        "cx": 0.5,
+        "cy": 0.57
+      },
+      "width": 0.76,
+      "delay": 0.3
     },
     {
       "type": "orbit",
@@ -303,23 +382,28 @@
     },
     {
       "type": "tilt",
-      "dur": 2.6,
-      "media": "web/feedback_loop.png",
+      "dur": 4.0,
+      "component": "proof",
+      "data": "proof",
+      "words": "Hand auditors *proof",
       "from": {
-        "rx": 18,
-        "ry": -14,
-        "rz": 3,
-        "scale": 0.8
+        "rx": 20,
+        "ry": 20,
+        "rz": -3,
+        "scale": 0.72,
+        "cx": 0.5
       },
       "to": {
-        "rx": 6,
-        "ry": -4,
+        "rx": 5,
+        "ry": 0,
+        "rz": 0,
         "scale": 1.0,
-        "cy": 0.55
+        "cx": 0.5,
+        "cy": 0.57
       },
-      "glow": 0.4,
-      "width": 0.7,
-      "words": "A human approves what *matters"
+      "width": 0.76,
+      "delay": 0.3,
+      "tr": "blur"
     },
     {
       "type": "hero",
@@ -346,5 +430,6 @@
       "url": "prismor.dev",
       "tr": "blur"
     }
-  ]
+  ],
+  "console_data": "console.json"
 }
