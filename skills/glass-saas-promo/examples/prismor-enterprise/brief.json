@@ -32,31 +32,53 @@
       ]
     },
     {
+      "type": "tilt",
+      "dur": 2.8,
+      "media": "web/routing.png",
+      "from": {
+        "rx": 26,
+        "ry": -20,
+        "rz": 4,
+        "scale": 0.7,
+        "cy": 0.62
+      },
+      "to": {
+        "rx": 8,
+        "ry": -4,
+        "scale": 0.95,
+        "cy": 0.56
+      },
+      "words": "One *independent layer for every agent",
+      "glow": 0.3,
+      "width": 0.56
+    },
+    {
       "type": "words",
-      "dur": 2.4,
+      "dur": 2.2,
       "size": 72,
       "seq": [
         {
           "line": "Every device {obj:glass_laptop} *One console",
           "t": 0
         }
-      ]
+      ],
+      "tr": "blur"
     },
     {
       "type": "tilt",
-      "dur": 2.0,
-      "media": "ui/dashboard.png",
+      "dur": 2.6,
+      "media": "web/overview.png",
       "from": {
-        "rx": 40,
-        "ry": -30,
-        "rz": 8,
-        "scale": 0.55,
+        "rx": 36,
+        "ry": -28,
+        "rz": 7,
+        "scale": 0.6,
         "cy": 0.66
       },
       "to": {
         "rx": 10,
         "ry": -8,
-        "scale": 1.0
+        "scale": 1.05
       },
       "tr": "blur"
     },
@@ -76,10 +98,10 @@
       "type": "tunnel",
       "dur": 3.2,
       "media": [
-        "ui/devices.png",
-        "ui/policy.png",
-        "ui/agents.png",
-        "ui/approval.png"
+        "web/overview.png",
+        "web/profiles.png",
+        "web/monitor.png",
+        "web/agent_stack.png"
       ],
       "size": 56,
       "seq": [
@@ -103,8 +125,8 @@
     },
     {
       "type": "stream",
-      "dur": 3.4,
-      "under": "ui/devices.png",
+      "dur": 3.2,
+      "under": "web/profiles.png",
       "morph": 1.3,
       "from": 82,
       "to": 99,
@@ -116,28 +138,93 @@
       "word": "*Protected"
     },
     {
-      "type": "hero",
-      "dur": 1.2,
-      "object": "logo",
-      "object_size": 220,
-      "tr": "blur"
+      "type": "pillars",
+      "dur": 3.8,
+      "words": "AI agent governance, *end *to *end",
+      "size": 60,
+      "tr": "blur",
+      "items": [
+        {
+          "icon": "lucide:fingerprint",
+          "label": "Identity",
+          "sub": "named agent instances"
+        },
+        {
+          "icon": "lucide:key-round",
+          "label": "Access",
+          "sub": "least-privilege profiles"
+        },
+        {
+          "icon": "lucide:shield-check",
+          "label": "Runtime",
+          "sub": "every tool call checked"
+        },
+        {
+          "icon": "lucide:user-check",
+          "label": "Approvals",
+          "sub": "humans on high stakes"
+        },
+        {
+          "icon": "lucide:scroll-text",
+          "label": "Audit",
+          "sub": "signed, tamper-evident"
+        },
+        {
+          "icon": "lucide:file-check",
+          "label": "Compliance",
+          "sub": "OWASP, NIST, EU AI Act"
+        }
+      ]
+    },
+    {
+      "type": "flow",
+      "dur": 3.6,
+      "words": "One runtime, *five *steps",
+      "size": 60,
+      "steps": [
+        {
+          "icon": "lucide:plug",
+          "label": "Connect",
+          "sub": "any agent or SDK"
+        },
+        {
+          "icon": "lucide:scan-search",
+          "label": "Intercept",
+          "sub": "before it runs"
+        },
+        {
+          "icon": "lucide:shield",
+          "label": "Enforce",
+          "sub": "your policy"
+        },
+        {
+          "icon": "lucide:scroll-text",
+          "label": "Audit",
+          "sub": "every decision"
+        },
+        {
+          "icon": "lucide:refresh-cw",
+          "label": "Improve",
+          "sub": "rules from evidence"
+        }
+      ]
     },
     {
       "type": "carousel",
-      "dur": 2.4,
+      "dur": 2.6,
       "media": [
-        "ui/members.png",
-        "ui/agents.png",
-        "ui/guardrails.png",
-        "ui/enroll.png"
+        "web/overview.png",
+        "web/profiles.png",
+        "web/monitor.png",
+        "web/session.png"
       ],
       "speed": 420,
-      "words": "Your whole org *onboarded"
+      "words": "One console for the whole *platform"
     },
     {
       "type": "tilt",
-      "dur": 2.2,
-      "media": "ui/devices.png",
+      "dur": 2.4,
+      "media": "web/profiles.png",
       "from": {
         "rx": 22,
         "ry": 26,
@@ -150,32 +237,20 @@
         "scale": 1.05,
         "cy": 0.56
       },
-      "words": "See every device *live",
+      "words": "Least privilege for *every *agent",
       "click": {
         "at": [
-          0.55,
-          0.62
+          0.72,
+          0.52
         ],
-        "t": 1.6
+        "t": 1.7
       },
       "tr": "blur"
     },
     {
-      "type": "scatter",
-      "dur": 2.4,
-      "media": [
-        "ui/approval.png",
-        "ui/guardrails.png",
-        "ui/policy.png",
-        "ui/enroll.png"
-      ],
-      "words": "Every action *signed",
-      "size": 64
-    },
-    {
       "type": "tilt",
-      "dur": 2.2,
-      "media": "ui/policy.png",
+      "dur": 2.4,
+      "media": "web/monitor.png",
       "from": {
         "rx": -20,
         "ry": -26,
@@ -188,8 +263,63 @@
         "scale": 1.0,
         "cy": 0.56
       },
-      "words": "Publish policy *once",
-      "tr": "blur"
+      "words": "Every action *on *the *record"
+    },
+    {
+      "type": "orbit",
+      "dur": 3.8,
+      "words": "Plugs into the stack you *already *run",
+      "size": 56,
+      "radii": [
+        250,
+        390
+      ],
+      "tr": "blur",
+      "rings": [
+        [
+          "claude-code",
+          "openai",
+          "cursor",
+          "github-copilot",
+          "google-gemini",
+          "windsurf",
+          "langchain"
+        ],
+        [
+          "github",
+          "aws",
+          "azure",
+          "okta",
+          "slack",
+          "datadog",
+          "splunk",
+          "grafana",
+          "new-relic",
+          "pagerduty",
+          "jira",
+          "model-context-protocol"
+        ]
+      ]
+    },
+    {
+      "type": "tilt",
+      "dur": 2.6,
+      "media": "web/feedback_loop.png",
+      "from": {
+        "rx": 18,
+        "ry": -14,
+        "rz": 3,
+        "scale": 0.8
+      },
+      "to": {
+        "rx": 6,
+        "ry": -4,
+        "scale": 1.0,
+        "cy": 0.55
+      },
+      "glow": 0.4,
+      "width": 0.7,
+      "words": "A human approves what *matters"
     },
     {
       "type": "hero",
@@ -199,7 +329,8 @@
       "spin": 1,
       "left": "Tighten *anytime",
       "right": "The floor *stays",
-      "size": 60
+      "size": 60,
+      "tr": "blur"
     },
     {
       "type": "sparkle",

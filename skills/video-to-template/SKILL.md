@@ -18,6 +18,7 @@ Tools (all in `scripts/`):
 |---|---|
 | `analyze.py <url-or-file> [--transcribe]` | downloads; format, shot cuts (scene score ∪ changed-pixel peaks), pacing, palette, audio type, optional Whisper transcript; timestamped contact sheets, a keyframe per shot, `report.md` with a storyboard skeleton |
 | `scaffold.py <name> --analysis …/analysis.json` | new template skill whose brief has one `animatic` shot per detected cut (the reference keyframe, dimmed), so timing matches from minute one |
+| `grab.mjs <url> <out> '<specs>'` (node 22) | capture real product UI from a live site: scroll so animations fire, hide fixed bars, clip by selector or rect, isolate pinned layers |
 | `compare.py ref.mp4 ours.mp4` | side-by-side video (reference audio) and paired-frame sheets at the same timestamps |
 
 ## Phase 0: Intake

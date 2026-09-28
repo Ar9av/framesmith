@@ -15,6 +15,8 @@ sys.path.insert(0, HERE)
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
+from framesmith.media import fetch_icons, icon, is_light_mark, rasterize_svg
+import urllib.request
 from framesmith import Dissolve, Scene, Timeline, ease_in_out, ease_out, generate_images, h, hex2rgb, lerp, overflow_report, text
 from framesmith.typography import F, OVERFLOWS, SHRINKS, text_width
 from framesmith import ui
@@ -498,8 +500,128 @@ def shot_logo(c, s):
     return arr(im)
 
 
+def icon_ref(ref, size, color=None):
+    """'lucide:name' (tinted line icon) or 'brand:slug' (thesvg mark, real colours)."""
+    kind, name = ref.split(":", 1)
+    if kind == "lucide":
+        return icon(os.path.join(G.assets, "lucide", name + ".svg"), int(size), tuple(color or G.ink))
+    im = icon(os.path.join(G.assets, "icons", name + ".svg"), int(size))
+    return icon(os.path.join(G.assets, "icons", name + ".svg"), int(size), G.ink) if is_light_mark(im) else im
+
+
+def glass_tile(size, inner, lift=0.0):
+    """A white rounded tile with a soft blue shadow holding an icon (app-icon style, not a pill)."""
+    pad = int(size * 0.3)
+    t = Image.new("RGBA", (size + pad * 2, size + pad * 2), (0, 0, 0, 0))
+    sh = Image.new("L", t.size, 0)
+    ImageDraw.Draw(sh).rounded_rectangle((pad, pad + size * 0.08, pad + size, pad + size * 1.08), int(size * 0.26), fill=90)
+    t.paste(G.blue + (255,), (0, 0), sh.filter(ImageFilter.GaussianBlur(size * 0.12)))
+    ImageDraw.Draw(t).rounded_rectangle((pad, pad, pad + size, pad + size), int(size * 0.26), fill=(255, 255, 255, 255),
+                                        outline=(222, 226, 246, 255), width=2)
+    t.alpha_composite(inner, (pad + (size - inner.width) // 2, pad + (size - inner.height) // 2))
+    return t
+
+
+def shot_pillars(c, s):
+    """Governance pillars: a row of icon tiles rising in with labels and a one-line detail each."""
+    im = canvas()
+    if s.get("words"):
+        draw_line(im, s["words"], c.lt - 0.1, F("sans_medium", s.get("size", 60)), c.H * 0.2)
+    items = s["items"]
+    n = len(items)
+    cell = min(280, (c.W - 200) / n)
+    x0 = c.W / 2 - cell * n / 2
+    d = ImageDraw.Draw(im)
+    for k, it in enumerate(items):
+        p = ease_out(min(1, max(0, (c.lt - 0.4 - k * 0.12) / 0.4)))
+        if p <= 0:
+            continue
+        ts = 118
+        ic = icon_ref(it["icon"], ts * 0.46, G.blue)
+        tile = glass_tile(ts, ic)
+        cx = x0 + cell * (k + 0.5)
+        y = c.H * 0.5 + (1 - p) * 40 + math.sin(c.lt * 1.6 + k) * 4
+        im.alpha_composite(fade(tile, p), (int(cx - tile.width / 2), int(y - tile.height / 2)))
+        d = ImageDraw.Draw(im)
+        text(d, (cx, y + 110), it["label"], F("sans_medium", 32), tuple(int(lerp(bg, v, p)) for bg, v in zip(G.bg, G.ink)), 0, "mm",
+             max_w=cell - 16)
+        if it.get("sub"):
+            text(d, (cx, y + 150), it["sub"], F("sans", 22), tuple(int(lerp(bg, v, p)) for bg, v in zip(G.bg, G.muted)), 0, "mm",
+                 max_w=cell - 16)
+    return arr(im)
+
+
+def shot_flow(c, s):
+    """A pipeline of icon tiles on a line; a glowing pulse travels through, lighting each step in turn."""
+    im = canvas()
+    if s.get("words"):
+        draw_line(im, s["words"], c.lt - 0.1, F("sans_medium", s.get("size", 60)), c.H * 0.2)
+    steps = s["steps"]
+    n = len(steps)
+    x0, x1, y = c.W * 0.14, c.W * 0.86, c.H * 0.52
+    d = ImageDraw.Draw(im)
+    lp = ease_out(min(1, c.lt / 0.6))
+    d.line((x0, y, lerp(x0, x1, lp), y), fill=(206, 212, 240), width=4)
+    head = (c.lt - 0.6) / max(0.1, c.dur - 1.2)
+    hx = lerp(x0, x1, max(0, min(1, head)))
+    if 0 < head < 1:
+        g = Image.new("L", im.size, 0)
+        ImageDraw.Draw(g).ellipse((hx - 40, y - 40, hx + 40, y + 40), fill=255)
+        im.paste(Image.new("RGB", im.size, G.blue), (0, 0), g.filter(ImageFilter.GaussianBlur(18)))
+        d = ImageDraw.Draw(im)
+        d.line((x0, y, hx, y), fill=G.blue, width=4)
+    elif head >= 1:
+        d.line((x0, y, x1, y), fill=G.blue, width=4)
+    for k, st in enumerate(steps):
+        cx = lerp(x0, x1, k / max(1, n - 1))
+        p = ease_out(min(1, max(0, (c.lt - 0.2 - k * 0.1) / 0.4)))
+        lit = hx >= cx - 1 and head > 0
+        ic = icon_ref(st["icon"], 50, G.blue if lit else G.muted)
+        tile = glass_tile(104, ic)
+        im.alpha_composite(fade(tile, p), (int(cx - tile.width / 2), int(y - tile.height / 2)))
+        d = ImageDraw.Draw(im)
+        text(d, (cx, y + 100), st["label"], F("sans_medium", 32), G.ink if lit else G.muted, 0, "mm", max_w=260)
+        if st.get("sub"):
+            text(d, (cx, y + 140), st["sub"], F("sans", 22), G.muted, 0, "mm", max_w=260)
+    return arr(im)
+
+
+def shot_orbit(c, s):
+    """The logo on a white tile at the centre, brand icons popping onto two slowly counter-rotating rings."""
+    im = canvas()
+    cx, cy = c.W / 2, c.H * 0.5
+    d = ImageDraw.Draw(im)
+    rings = s["rings"]
+    radii = s.get("radii", [250, 400])
+    for r in radii:
+        rp = ease_out(min(1, c.lt / 0.6))
+        rr = r * lerp(0.8, 1, rp)
+        d.ellipse((cx - rr * 1.35, cy - rr * 0.78, cx + rr * 1.35, cy + rr * 0.78), outline=(214, 220, 245), width=2)
+    for ri, ring in enumerate(rings):
+        r = radii[ri]
+        spin = c.lt * (0.18 if ri % 2 == 0 else -0.13)
+        for k, slug in enumerate(ring):
+            t0 = 0.3 + ri * 0.4 + k * 0.06
+            p = ease_out(min(1, max(0, (c.lt - t0) / 0.35)))
+            if p <= 0:
+                continue
+            a = k / len(ring) * math.tau + spin + ri * 0.4
+            x, y = cx + math.cos(a) * r * 1.35, cy + math.sin(a) * r * 0.78
+            ts = int(lerp(40, 84, p))
+            tile = glass_tile(ts, icon_ref("brand:" + slug, ts * 0.58))
+            im.alpha_composite(fade(tile, p), (int(x - tile.width / 2), int(y - tile.height / 2)))
+    lp = ease_out(min(1, c.lt / 0.5))
+    ls = int(150 * lerp(0.7, 1, lp))
+    lg = png("logo").resize((int(ls * 0.66),) * 2, Image.LANCZOS)
+    im.alpha_composite(fade(glass_tile(ls, lg), lp), (int(cx - ls * 0.8), int(cy - ls * 0.8)))
+    if s.get("words"):
+        draw_line(im, s["words"], c.lt - 0.6, F("sans_medium", s.get("size", 56)), c.H * 0.9)
+    return arr(im)
+
+
 SHOTS = {"words": shot_words, "tilt": shot_tilt, "tunnel": shot_tunnel, "stream": shot_stream, "done": shot_done,
-         "hero": shot_hero, "carousel": shot_carousel, "scatter": shot_scatter, "sparkle": shot_sparkle, "logo": shot_logo}
+         "hero": shot_hero, "carousel": shot_carousel, "scatter": shot_scatter, "sparkle": shot_sparkle, "logo": shot_logo,
+         "pillars": shot_pillars, "flow": shot_flow, "orbit": shot_orbit}
 
 
 def build(path):
@@ -515,13 +637,29 @@ def build(path):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["assets", "check", "still", "sheet", "render"])
+    ap.add_argument("cmd", choices=["assets", "icons", "check", "still", "sheet", "render"])
     ap.add_argument("args", nargs="*")
     ap.add_argument("--brief", default=os.path.join(HERE, "..", "examples", "prismor-enterprise", "brief.json"))
     ap.add_argument("--out")
     ap.add_argument("--audio")
     a = ap.parse_intermixed_args()
     base = os.path.dirname(os.path.abspath(a.brief))
+    if a.cmd == "icons":                                  # thesvg brand marks + lucide line icons used by the brief
+        brief = json.load(open(a.brief))
+        blob = json.dumps(brief["shots"])
+        assets = os.path.join(base, brief.get("assets_dir", "assets"))
+        brands = sorted(set(re.findall(r"brand:([a-z0-9-]+)", blob)) | {x for sh in brief["shots"] for ring in sh.get("rings", []) for x in ring})
+        for m in fetch_icons(brands, os.path.join(assets, "icons")):
+            print("brand:", m)
+        lucide = sorted(set(re.findall(r"lucide:([a-z0-9-]+)", blob)))
+        os.makedirs(os.path.join(assets, "lucide"), exist_ok=True)
+        for n in lucide:
+            pth = os.path.join(assets, "lucide", n + ".svg")
+            if not os.path.exists(pth):
+                open(pth, "wb").write(urllib.request.urlopen(f"https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/{n}.svg", timeout=60).read())
+            rasterize_svg(pth, pth[:-4] + ".png")
+        print("lucide:", lucide)
+        return
     if a.cmd == "assets":
         brief = json.load(open(a.brief))
         for m in generate_images(brief.get("assets", {}), os.path.join(base, brief.get("assets_dir", "assets")), names=a.args or None):

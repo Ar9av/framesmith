@@ -1,0 +1,135 @@
+{
+ "aws": {
+  "title": "AWS",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/aws/color.svg",
+  "license": "MIT",
+  "brand_url": "https://aws.amazon.com"
+ },
+ "azure": {
+  "title": "Microsoft Azure",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/azure/default.svg",
+  "license": "brand-use",
+  "brand_url": "https://azure.microsoft.com"
+ },
+ "claude-code": {
+  "title": "Claude Code",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/claude-code/color.svg",
+  "license": "MIT",
+  "brand_url": "https://code.claude.com"
+ },
+ "cursor": {
+  "title": "Cursor",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/cursor/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.cursor.com"
+ },
+ "datadog": {
+  "title": "Datadog",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/datadog/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.datadoghq.com/"
+ },
+ "github": {
+  "title": "GitHub",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/github/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://github.com/"
+ },
+ "github-copilot": {
+  "title": "GitHub Copilot",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/github-copilot/light.svg",
+  "license": "MIT",
+  "brand_url": "https://github.com/features/copilot"
+ },
+ "google-gemini": {
+  "title": "Google Gemini",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/google-gemini/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://gemini.google.com"
+ },
+ "grafana": {
+  "title": "Grafana",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/grafana/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://grafana.com/"
+ },
+ "jira": {
+  "title": "Jira",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/jira/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://atlassian.design/resources/logo-library"
+ },
+ "langchain": {
+  "title": "LangChain",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/langchain/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.langchain.com"
+ },
+ "model-context-protocol": {
+  "title": "Model Context Protocol",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/model-context-protocol/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://modelcontextprotocol.io/"
+ },
+ "new-relic": {
+  "title": "New Relic",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/new-relic/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://newrelic.com/about/media-assets"
+ },
+ "okta": {
+  "title": "Okta",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/okta/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.okta.com/"
+ },
+ "openai": {
+  "title": "OpenAI",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/openai/light.svg",
+  "license": "MIT",
+  "brand_url": "https://openai.com/"
+ },
+ "pagerduty": {
+  "title": "PagerDuty",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/pagerduty/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.pagerduty.com/brand/"
+ },
+ "slack": {
+  "title": "Slack",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/slack/default.svg",
+  "license": "MIT",
+  "brand_url": "https://www.slack.com"
+ },
+ "splunk": {
+  "title": "Splunk",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/splunk/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.splunk.com"
+ },
+ "windsurf": {
+  "title": "Windsurf",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/windsurf/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://windsurf.com/editor"
+ }
+}

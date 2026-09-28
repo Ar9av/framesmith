@@ -32,6 +32,7 @@ class State:
         self.blue = c("blue", (24, 110, 255))
         self.sky = c("sky", (120, 200, 255))
         self.muted = c("muted", (150, 156, 175))
+        self.bg = (255, 255, 255)
         self.W, self.H = brief.get("size", [1920, 1080])
         self.assets = os.path.join(base, brief.get("assets_dir", "assets"))
         self._c = {}
@@ -418,8 +419,149 @@ def shot_logo(c, s):
     return arr(im)
 
 
+# ---- icon shots (shared with glass-saas-promo), adapted to this template's backdrops
+from framesmith.media import fetch_icons, icon, is_light_mark, rasterize_svg
+import urllib.request
+
+
+def canvas():
+    return backdrop(getattr(G, "_icon_bg", "bg_wash"), 0)
+
+
+def draw_line(im, line, lt, f, cy, stagger=0.07):
+    dark = is_dark(getattr(G, "_icon_bg", "bg_wash"))
+    place(im, line_layer(line, f, (255, 255, 255) if dark else G.ink, G.sky if dark else G.blue, lt, stagger), cy)
+
+
+def with_bg(fn):
+    def run(c, s):
+        G._icon_bg = s.get("bg", "bg_wash")
+        return fn(c, s)
+    return run
+
+
+def icon_ref(ref, size, color=None):
+    """'lucide:name' (tinted line icon) or 'brand:slug' (thesvg mark, real colours)."""
+    kind, name = ref.split(":", 1)
+    if kind == "lucide":
+        return icon(os.path.join(G.assets, "lucide", name + ".svg"), int(size), tuple(color or G.ink))
+    im = icon(os.path.join(G.assets, "icons", name + ".svg"), int(size))
+    return icon(os.path.join(G.assets, "icons", name + ".svg"), int(size), G.ink) if is_light_mark(im) else im
+
+
+def glass_tile(size, inner, lift=0.0):
+    """A white rounded tile with a soft blue shadow holding an icon (app-icon style, not a pill)."""
+    pad = int(size * 0.3)
+    t = Image.new("RGBA", (size + pad * 2, size + pad * 2), (0, 0, 0, 0))
+    sh = Image.new("L", t.size, 0)
+    ImageDraw.Draw(sh).rounded_rectangle((pad, pad + size * 0.08, pad + size, pad + size * 1.08), int(size * 0.26), fill=90)
+    t.paste(G.blue + (255,), (0, 0), sh.filter(ImageFilter.GaussianBlur(size * 0.12)))
+    ImageDraw.Draw(t).rounded_rectangle((pad, pad, pad + size, pad + size), int(size * 0.26), fill=(255, 255, 255, 255),
+                                        outline=(222, 226, 246, 255), width=2)
+    t.alpha_composite(inner, (pad + (size - inner.width) // 2, pad + (size - inner.height) // 2))
+    return t
+
+
+def shot_pillars(c, s):
+    """Governance pillars: a row of icon tiles rising in with labels and a one-line detail each."""
+    im = canvas()
+    if s.get("words"):
+        draw_line(im, s["words"], c.lt - 0.1, F("sans_medium", s.get("size", 60)), c.H * 0.2)
+    items = s["items"]
+    n = len(items)
+    cell = min(280, (c.W - 200) / n)
+    x0 = c.W / 2 - cell * n / 2
+    d = ImageDraw.Draw(im)
+    for k, it in enumerate(items):
+        p = ease_out(min(1, max(0, (c.lt - 0.4 - k * 0.12) / 0.4)))
+        if p <= 0:
+            continue
+        ts = 118
+        ic = icon_ref(it["icon"], ts * 0.46, G.blue)
+        tile = glass_tile(ts, ic)
+        cx = x0 + cell * (k + 0.5)
+        y = c.H * 0.5 + (1 - p) * 40 + math.sin(c.lt * 1.6 + k) * 4
+        im.alpha_composite(fade(tile, p), (int(cx - tile.width / 2), int(y - tile.height / 2)))
+        d = ImageDraw.Draw(im)
+        text(d, (cx, y + 110), it["label"], F("sans_medium", 32), tuple(int(lerp(bg, v, p)) for bg, v in zip(G.bg, G.ink)), 0, "mm",
+             max_w=cell - 16)
+        if it.get("sub"):
+            text(d, (cx, y + 150), it["sub"], F("sans", 22), tuple(int(lerp(bg, v, p)) for bg, v in zip(G.bg, G.muted)), 0, "mm",
+                 max_w=cell - 16)
+    return arr(im)
+
+
+def shot_flow(c, s):
+    """A pipeline of icon tiles on a line; a glowing pulse travels through, lighting each step in turn."""
+    im = canvas()
+    if s.get("words"):
+        draw_line(im, s["words"], c.lt - 0.1, F("sans_medium", s.get("size", 60)), c.H * 0.2)
+    steps = s["steps"]
+    n = len(steps)
+    x0, x1, y = c.W * 0.14, c.W * 0.86, c.H * 0.52
+    d = ImageDraw.Draw(im)
+    lp = ease_out(min(1, c.lt / 0.6))
+    d.line((x0, y, lerp(x0, x1, lp), y), fill=(206, 212, 240), width=4)
+    head = (c.lt - 0.6) / max(0.1, c.dur - 1.2)
+    hx = lerp(x0, x1, max(0, min(1, head)))
+    if 0 < head < 1:
+        g = Image.new("L", im.size, 0)
+        ImageDraw.Draw(g).ellipse((hx - 40, y - 40, hx + 40, y + 40), fill=255)
+        im.paste(Image.new("RGB", im.size, G.blue), (0, 0), g.filter(ImageFilter.GaussianBlur(18)))
+        d = ImageDraw.Draw(im)
+        d.line((x0, y, hx, y), fill=G.blue, width=4)
+    elif head >= 1:
+        d.line((x0, y, x1, y), fill=G.blue, width=4)
+    for k, st in enumerate(steps):
+        cx = lerp(x0, x1, k / max(1, n - 1))
+        p = ease_out(min(1, max(0, (c.lt - 0.2 - k * 0.1) / 0.4)))
+        lit = hx >= cx - 1 and head > 0
+        ic = icon_ref(st["icon"], 50, G.blue if lit else G.muted)
+        tile = glass_tile(104, ic)
+        im.alpha_composite(fade(tile, p), (int(cx - tile.width / 2), int(y - tile.height / 2)))
+        d = ImageDraw.Draw(im)
+        text(d, (cx, y + 100), st["label"], F("sans_medium", 32), G.ink if lit else G.muted, 0, "mm", max_w=260)
+        if st.get("sub"):
+            text(d, (cx, y + 140), st["sub"], F("sans", 22), G.muted, 0, "mm", max_w=260)
+    return arr(im)
+
+
+def shot_orbit(c, s):
+    """The logo on a white tile at the centre, brand icons popping onto two slowly counter-rotating rings."""
+    im = canvas()
+    cx, cy = c.W / 2, c.H * 0.5
+    d = ImageDraw.Draw(im)
+    rings = s["rings"]
+    radii = s.get("radii", [250, 400])
+    for r in radii:
+        rp = ease_out(min(1, c.lt / 0.6))
+        rr = r * lerp(0.8, 1, rp)
+        d.ellipse((cx - rr * 1.35, cy - rr * 0.78, cx + rr * 1.35, cy + rr * 0.78), outline=(214, 220, 245), width=2)
+    for ri, ring in enumerate(rings):
+        r = radii[ri]
+        spin = c.lt * (0.18 if ri % 2 == 0 else -0.13)
+        for k, slug in enumerate(ring):
+            t0 = 0.3 + ri * 0.4 + k * 0.06
+            p = ease_out(min(1, max(0, (c.lt - t0) / 0.35)))
+            if p <= 0:
+                continue
+            a = k / len(ring) * math.tau + spin + ri * 0.4
+            x, y = cx + math.cos(a) * r * 1.35, cy + math.sin(a) * r * 0.78
+            ts = int(lerp(40, 84, p))
+            tile = glass_tile(ts, icon_ref("brand:" + slug, ts * 0.58))
+            im.alpha_composite(fade(tile, p), (int(x - tile.width / 2), int(y - tile.height / 2)))
+    lp = ease_out(min(1, c.lt / 0.5))
+    ls = int(150 * lerp(0.7, 1, lp))
+    lg = png("logo").resize((int(ls * 0.66),) * 2, Image.LANCZOS)
+    im.alpha_composite(fade(glass_tile(ls, lg), lp), (int(cx - ls * 0.8), int(cy - ls * 0.8)))
+    if s.get("words"):
+        draw_line(im, s["words"], c.lt - 0.6, F("sans_medium", s.get("size", 56)), c.H * 0.9)
+    return arr(im)
+
+
 SHOTS = {"type": shot_type, "line": shot_line, "meet": shot_meet, "tilt": shot_tilt, "split": shot_split,
-         "brackets": shot_brackets, "wide": shot_wide, "form": shot_form, "logo": shot_logo}
+         "brackets": shot_brackets, "wide": shot_wide, "form": shot_form, "logo": shot_logo,
+         "pillars": with_bg(shot_pillars), "flow": with_bg(shot_flow), "orbit": with_bg(shot_orbit)}
 
 
 def build(path):

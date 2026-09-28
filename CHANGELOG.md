@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.0 (2026-09-28)
+- glass-saas-promo + blue-story-film: `pillars`, `flow`, `orbit` icon shots and an `icons` verb; Prismor Enterprise examples rebuilt on real prismor.dev dashboard components (overview, permission profiles, runtime monitor, agent stack, closed-loop, routing diagram, session), with AI agent governance pillars, the runtime pipeline and a platform orbit of 19 brand marks.
+- video-to-template: `grab.mjs`/`lib.mjs` (CDP capture of real product UI from a live site).
+
 ## 0.10.0 (2026-09-28)
 - Skill `glass-saas-promo`: frosted-glass SaaS promo (perspective UI, screen tunnel, gradient stream into a progress bar, confetti check, card scatter, carousel, glass heroes). Example: Prismor Enterprise with gpt-image-2 glass objects.
 - Skill `blue-story-film`: blue-light story film (typewriter captions with selection, "Meet" collapse, split UI-to-terminal, bracket and wide words, form fly-over, black CTA). Example: Prismor Enterprise with gpt-image-2 backdrops.

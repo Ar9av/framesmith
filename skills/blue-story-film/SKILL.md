@@ -19,3 +19,15 @@ Built with `video-to-template` from a reference film. Example: `examples/prismor
 4. Run `check` (it fails on overflow and warns on trailing periods), then `still … t1 t2` to review, then `render --audio music.m4a`. These films are music-driven, so cut shot lengths to the beat.
 
 Shot types and their keys are documented at the top of each function in `scripts/main.py`.
+
+## Platform and icon shots
+
+- `pillars`: a row of icon tiles with a label and one-line detail each (governance pillars).
+- `flow`: a pipeline of icon tiles on a line, with a glowing pulse lighting each step.
+- `orbit`: the logo at the centre, with brand icons from thesvg on two counter-rotating rings.
+
+Fetch every icon a brief uses with `python3 scripts/main.py icons --brief brief.json` (Lucide line icons plus thesvg brand marks, with licences).
+
+## Real product UI
+
+Prefer the product's real frontend over recreations. `skills/video-to-template/scripts/grab.mjs` drives headless Chromium over CDP: it scrolls the live site so scroll-triggered sections render, then clips components by selector or rectangle. It can also isolate a single layer of a pinned or crossfading section. The `web/*.png` panels in the example came from prismor.dev this way.

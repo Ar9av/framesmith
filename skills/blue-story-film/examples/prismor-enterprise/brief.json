@@ -21,28 +21,28 @@
       "size": 56,
       "ghosts": [
         {
-          "media": "ui/devices.png",
+          "media": "web/overview.png",
           "x": 0.2,
           "y": 0.2,
           "w": 460,
           "rz": -3
         },
         {
-          "media": "ui/policy.png",
+          "media": "web/monitor.png",
           "x": 0.8,
           "y": 0.22,
           "w": 380,
           "rz": 3
         },
         {
-          "media": "ui/agents.png",
+          "media": "web/profiles.png",
           "x": 0.24,
           "y": 0.8,
           "w": 440,
           "rz": 2
         },
         {
-          "media": "ui/approval.png",
+          "media": "web/agent_stack.png",
           "x": 0.78,
           "y": 0.8,
           "w": 380,
@@ -88,9 +88,28 @@
     },
     {
       "type": "tilt",
+      "dur": 3.0,
+      "bg": "bg_sky",
+      "media": "web/routing.png",
+      "from": {
+        "rx": 24,
+        "ry": -18,
+        "rz": 4,
+        "scale": 0.75
+      },
+      "to": {
+        "rx": 8,
+        "ry": -4,
+        "scale": 0.95
+      },
+      "width": 0.55,
+      "line": "One *independent layer across your stack"
+    },
+    {
+      "type": "tilt",
       "dur": 3.2,
       "bg": "bg_sky",
-      "media": "ui/dashboard.png",
+      "media": "web/overview.png",
       "from": {
         "rx": 24,
         "ry": -30,
@@ -108,7 +127,7 @@
       "type": "tilt",
       "dur": 3.0,
       "bg": "bg_sky",
-      "media": "ui/devices.png",
+      "media": "web/profiles.png",
       "from": {
         "rx": 16,
         "ry": 24,
@@ -120,14 +139,14 @@
         "ry": 8,
         "scale": 1.05
       },
-      "line": "Every device, *live"
+      "line": "Least privilege for *every *agent"
     },
     {
       "type": "split",
       "dur": 5.0,
       "bg": "bg_wash",
-      "media": "ui/devices.png",
-      "row": 0.33,
+      "media": "web/profiles.png",
+      "row": 0.3,
       "step": 0.75,
       "lines": [
         {
@@ -145,6 +164,80 @@
         {
           "t": "Hooks  claude-code  cursor  codex",
           "check": true
+        }
+      ]
+    },
+    {
+      "type": "pillars",
+      "dur": 3.8,
+      "bg": "bg_wash",
+      "words": "AI agent governance, *end *to *end",
+      "size": 60,
+      "tr": "blur",
+      "items": [
+        {
+          "icon": "lucide:fingerprint",
+          "label": "Identity",
+          "sub": "named agent instances"
+        },
+        {
+          "icon": "lucide:key-round",
+          "label": "Access",
+          "sub": "least-privilege profiles"
+        },
+        {
+          "icon": "lucide:shield-check",
+          "label": "Runtime",
+          "sub": "every tool call checked"
+        },
+        {
+          "icon": "lucide:user-check",
+          "label": "Approvals",
+          "sub": "humans on high stakes"
+        },
+        {
+          "icon": "lucide:scroll-text",
+          "label": "Audit",
+          "sub": "signed, tamper-evident"
+        },
+        {
+          "icon": "lucide:file-check",
+          "label": "Compliance",
+          "sub": "OWASP, NIST, EU AI Act"
+        }
+      ]
+    },
+    {
+      "type": "flow",
+      "dur": 3.6,
+      "bg": "bg_wash",
+      "words": "One runtime, *five *steps",
+      "size": 60,
+      "steps": [
+        {
+          "icon": "lucide:plug",
+          "label": "Connect",
+          "sub": "any agent or SDK"
+        },
+        {
+          "icon": "lucide:scan-search",
+          "label": "Intercept",
+          "sub": "before it runs"
+        },
+        {
+          "icon": "lucide:shield",
+          "label": "Enforce",
+          "sub": "your policy"
+        },
+        {
+          "icon": "lucide:scroll-text",
+          "label": "Audit",
+          "sub": "every decision"
+        },
+        {
+          "icon": "lucide:refresh-cw",
+          "label": "Improve",
+          "sub": "rules from evidence"
         }
       ]
     },
@@ -197,7 +290,7 @@
       "type": "tilt",
       "dur": 3.0,
       "bg": "bg_sky",
-      "media": "ui/policy.png",
+      "media": "web/monitor.png",
       "from": {
         "rx": -18,
         "ry": -24,
@@ -238,7 +331,7 @@
       "type": "tilt",
       "dur": 3.0,
       "bg": "bg_sky",
-      "media": "ui/agents.png",
+      "media": "web/agent_stack.png",
       "from": {
         "rx": 20,
         "ry": 20,
@@ -250,13 +343,13 @@
         "ry": 6,
         "scale": 1.05
       },
-      "line": "Every agent gets *its *own *controls"
+      "line": "One layer for *every *agent"
     },
     {
       "type": "tilt",
       "dur": 3.0,
       "bg": "bg_sky",
-      "media": "ui/approval.png",
+      "media": "web/feedback_loop.png",
       "from": {
         "rx": -14,
         "ry": -18,
@@ -268,7 +361,44 @@
         "ry": -4,
         "scale": 1.0
       },
-      "line": "Risky actions wait for *a *human"
+      "line": "A human approves what *matters"
+    },
+    {
+      "type": "orbit",
+      "dur": 3.8,
+      "bg": "bg_wash",
+      "words": "Plugs into the stack you *already *run",
+      "size": 56,
+      "radii": [
+        250,
+        390
+      ],
+      "tr": "blur",
+      "rings": [
+        [
+          "claude-code",
+          "openai",
+          "cursor",
+          "github-copilot",
+          "google-gemini",
+          "windsurf",
+          "langchain"
+        ],
+        [
+          "github",
+          "aws",
+          "azure",
+          "okta",
+          "slack",
+          "datadog",
+          "splunk",
+          "grafana",
+          "new-relic",
+          "pagerduty",
+          "jira",
+          "model-context-protocol"
+        ]
+      ]
     },
     {
       "type": "line",
