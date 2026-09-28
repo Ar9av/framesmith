@@ -85,8 +85,36 @@ def generate_images(specs, out_dir, key=None, names=None, force=False, workers=6
     todo = names or [n for n in specs if force or not Assets(out_dir).path(n)]
     fmt = fmt or (lambda s: s)
 
+    def edit(name, spec):
+        """Reference-guided generation (/v1/images/edits): keeps a character on-model across poses."""
+        import uuid
+        bnd = uuid.uuid4().hex
+        fields = [("model", spec.get("model", "gpt-image-2")), ("prompt", fmt(spec["prompt"])),
+                  ("size", spec.get("size", "1024x1024")), ("quality", spec.get("quality", "medium")), ("n", "1")]
+        if spec.get("background"):
+            fields.append(("background", spec["background"]))
+        parts = [f'--{bnd}\r\nContent-Disposition: form-data; name="{k}"\r\n\r\n{v}\r\n'.encode() for k, v in fields]
+        refs = spec["ref"] if isinstance(spec["ref"], list) else [spec["ref"]]
+        for r in refs:
+            rp = r if os.path.isabs(r) else os.path.join(out_dir, r if r.endswith(".png") else r + ".png")
+            with open(rp, "rb") as f:
+                parts.append(f'--{bnd}\r\nContent-Disposition: form-data; name="image[]"; filename="{os.path.basename(rp)}"\r\n'
+                             f'Content-Type: image/png\r\n\r\n'.encode() + f.read() + b"\r\n")
+        parts.append(f"--{bnd}--\r\n".encode())
+        req = urllib.request.Request("https://api.openai.com/v1/images/edits", data=b"".join(parts),
+                                     headers={"Authorization": "Bearer " + key, "Content-Type": f"multipart/form-data; boundary={bnd}"})
+        try:
+            r = json.load(urllib.request.urlopen(req, timeout=600))
+        except urllib.error.HTTPError as e:
+            return f"{name}: HTTP {e.code} {e.read()[:300].decode(errors='replace')}"
+        with open(os.path.join(out_dir, name + ".png"), "wb") as f:
+            f.write(base64.b64decode(r["data"][0]["b64_json"]))
+        return f"{name}: ok (edit from {', '.join(refs)})"
+
     def one(name):
         spec = specs[name]
+        if spec.get("ref"):
+            return edit(name, spec)
         body = {"model": spec.get("model", "gpt-image-2"), "prompt": fmt(spec["prompt"]),
                 "size": spec.get("size", "1024x1024"), "quality": spec.get("quality", "medium"), "n": 1}
         if spec.get("background"):

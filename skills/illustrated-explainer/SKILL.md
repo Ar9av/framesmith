@@ -9,7 +9,10 @@ metadata:
 
 # Illustrated explainer
 
-Built with `video-to-template` from a narrated flat-illustration explainer. The example is `examples/prismor-enterprise/`, a 62.8 s Prismor Enterprise explainer with 11 beats.
+Built with `video-to-template` from a narrated flat-illustration explainer. There are two examples, both Prismor Enterprise with the same voiceover:
+
+- `examples/prismor-layered/` (**recommended**): composited from a transparent-PNG cast, props and icons that animate independently.
+- `examples/prismor-enterprise/`: full-frame illustrations with camera pans.
 
 ## Workflow
 
@@ -18,6 +21,24 @@ Built with `video-to-template` from a narrated flat-illustration explainer. The 
 3. **Illustrations:** list scenes in `assets.json`. Each prompt starts with `STYLE` and describes one scene; the brief's `style` string (or the example's) replaces it, which keeps every image in one house style. Then run `python3 scripts/main.py assets` (1536×1024, medium quality; the hub ring on a transparent background). Leave the top edge calm for captions, and ask for no text in images: all words are typeset.
 4. **Beats:** in `brief.json`, each beat starts on a cue phrase (`at`). Cards and bullets can have their own cues. The real logo goes in `assets/logo.png`.
 5. **Check, stills, render:** the voiceover is muxed automatically.
+
+## Layered production (characters, props, icons)
+
+1. **Cast:** generate one base image per character on a transparent background (`background: transparent`, full body, no floor or shadow), e.g. `maya`, `leo`, `bot`.
+2. **Poses:** add `"ref": "<base name>"` to a pose's spec. The engine then calls gpt-image-2's edits endpoint with the base image, so the face, hair, clothes and colours stay on-model. Example: `maya_worried`, `maya_point`, `maya_confident`. See `examples/prismor-layered/assets2.json`.
+3. **Props and backdrops:** props go on transparent backgrounds (desk, whiteboard, laptop, server, cloud-shield, plant). Backdrops are empty rooms with an open floor and no people.
+4. **Icons:** `lucide:<name>` line icons (tinted) and `brand:<slug>` marks from thesvg, drawn as white app-icon tiles that pop in with a spring overshoot.
+5. **Stage beats:** each scene is a `stage` with `bg`, `cam: [z0, z1, fx0, fx1]` (parallax by layer depth `z`), optional `veil` (`left` or `right`), and `layers`:
+
+| layer | keys |
+|---|---|
+| sprite | `img`, `x`, `y` (the bottom anchor, as a fraction of the frame), `h` (fraction of frame height), `anchor: bottom\|center`, `enter: left\|right\|up\|pop\|fade`, `at` (cue) or `t`, `idle: breathe\|bob\|float`, `flip`, `swap: [{at, img}]` (pose change on a cue), `exit_at` |
+| icon tile | `icon: lucide:…\|brand:…`, `size`, `color`, `label`, `x`, `y`, `enter: pop`, `at` |
+| label | `label`, `size`, `font`, `color`, `anchor` |
+| flow | `flow: [{icon, label, at}]`, `box: [x0, y0, x1, y1]` (icons joined by arrows, e.g. on a whiteboard) |
+| list | `list: [{icon, color, text, at}]`, `x`, `y`, `gap` |
+| lines | `lines: [[x, y]…]`, `from: [x, y]` (connectors drawn from a hub) |
+| pins | `pins: [city keys]` (map pins) |
 
 ## Beat types
 

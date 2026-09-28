@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.0 (2026-09-28)
+- Engine: reference-guided gpt-image-2 generation (`"ref"` in an asset spec calls the edits endpoint) to keep characters on-model across poses.
+- illustrated-explainer: layered `stage` beat (transparent-PNG cast, props, backdrops; parallax camera; slide/pop/rise entrances; idle breathe/bob/float; pose swaps on spoken cues; spring icon tiles with Lucide + thesvg; whiteboard flows, lists, connector lines, map pins; side veil). Example `prismor-layered` with a 4-character cast in 14 poses.
+
 ## 0.13.0 (2026-09-28)
 - Skill `illustrated-explainer`: narrated flat-vector explainer (cue-timed beats, house-style gpt-image-2 illustrations via a STYLE prompt prefix, scene/bullets/split/logo/map/cards/cta beats, zoom-blur whoosh). Example: Prismor Enterprise, 62.8 s with voiceover.
 

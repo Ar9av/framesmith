@@ -1,6 +1,6 @@
 {
   "name": "framesmith",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Motion-graphics, video and visual-design skills for AI agents: brief in, MP4 out. Product promos, animated spec sheets, kinetic typography, glitch/brutalist visuals, gpt-image-2 assets. Deterministic Python + ffmpeg.",
   "author": { "name": "Arnav", "url": "https://github.com/Ar9av" },
   "homepage": "https://github.com/Ar9av/framesmith",

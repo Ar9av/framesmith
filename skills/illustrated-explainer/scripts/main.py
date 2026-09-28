@@ -255,7 +255,224 @@ def b_cta(c, s):
     return arr(im)
 
 
-BEATS = {"scene": b_scene, "bullets": b_bullets, "split": b_split, "logo": b_logo, "map": b_map, "cards": b_cards, "cta": b_cta}
+# ------------------------------------------------------------------ layered stage
+from framesmith.media import icon as _icon, is_light_mark
+
+
+def back_out(t, k=1.7):
+    """Ease-out with overshoot, for icon pops."""
+    t = min(1.0, max(0.0, t))
+    return 1 + (k + 1) * (t - 1) ** 3 + k * (t - 1) ** 2
+
+
+def icon_img(ref, size, color=None):
+    kind, name = ref.split(":", 1)
+    if kind == "lucide":
+        from framesmith import console
+        return console.lucide(name, size, color or G.ink)
+    pth = os.path.join(G.assets, "icons", name + ".svg")
+    im = _icon(pth, int(size))
+    return _icon(pth, int(size), G.ink) if is_light_mark(im) else im
+
+
+def icon_tile(ref, size, color=None):
+    """White rounded tile with a soft navy shadow, holding a line icon or brand mark (an app-icon, not a pill)."""
+    key = ("tile", ref, int(size), color)
+    def build():
+        pad = int(size * 0.35)
+        t = Image.new("RGBA", (size + pad * 2, size + pad * 2), (0, 0, 0, 0))
+        sh = Image.new("L", t.size, 0)
+        ImageDraw.Draw(sh).rounded_rectangle((pad, pad + size * 0.1, pad + size, pad + size * 1.1), int(size * 0.26), fill=80)
+        t.paste(G.ink + (255,), (0, 0), sh.filter(ImageFilter.GaussianBlur(size * 0.14)))
+        ImageDraw.Draw(t).rounded_rectangle((pad, pad, pad + size, pad + size), int(size * 0.26), fill=(255, 255, 255, 255))
+        ic = icon_img(ref, size * 0.56, hex2rgb(color) if color else None)
+        t.alpha_composite(ic, (pad + (size - ic.width) // 2, pad + (size - ic.height) // 2))
+        return t
+    return G.cache(key, build)
+
+
+class Cam:
+    """Camera with parallax: a layer at depth d moves and zooms d times as much as the camera."""
+    def __init__(self, spec, lt, dur):
+        z0, z1, fx0, fx1 = spec if spec else (1.0, 1.06, 0.5, 0.5)
+        p = ease_in_out(min(1, lt / max(0.1, dur)))
+        self.z, self.fx = lerp(z0, z1, p), lerp(fx0, fx1, p)
+
+    def map(self, x, y, d=1.0):
+        z = 1 + (self.z - 1) * d
+        ox = (self.fx - 0.5) * G.W * (self.z - 1) * 2 * d
+        return G.W / 2 + (x - G.W / 2) * z - ox, G.H * 0.62 + (y - G.H * 0.62) * z, z
+
+
+def layer_t(L, beat):
+    if "at" not in L:
+        return L.get("t", 0.0)
+    if isinstance(L["at"], (int, float)):
+        return float(L["at"])
+    return cue_t(L, "at", beat)
+
+
+def draw_sprite(im, cam, name, x, y, hgt, d, alpha, flip=False, anchor="bottom", scale=1.0, rot=0.0):
+    src = img(name)
+    hh = hgt * G.H
+    xs, ys, z = cam.map(x * G.W, y * G.H, d)
+    th = max(2, int(hh * z * scale))
+    tw = max(2, int(src.width * th / src.height))
+    sp = src.resize((tw, th), Image.BILINEAR)
+    if flip:
+        sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
+    if rot:
+        sp = sp.rotate(rot, expand=True, resample=Image.BICUBIC)
+    oy = ys - sp.height if anchor == "bottom" else ys - sp.height / 2
+    im.alpha_composite(fade(sp, alpha), (int(xs - sp.width / 2), int(oy)))
+    return xs, oy, sp.width, sp.height
+
+
+def b_stage(c, s):
+    lt = c.lt
+    cam = Cam(s.get("cam"), lt, c.dur)
+    im = canvas()
+    if s.get("bg"):
+        bg = img(s["bg"]).convert("RGB")
+        z = 1 + (cam.z - 1) * 0.35
+        im.alpha_composite(cover(bg, G.W, G.H, 1.04 * z, 0.5 + (cam.fx - 0.5) * 0.35, 0.5).convert("RGBA"))
+    if s.get("veil"):                                        # soft pale wash so text on one side stays readable
+        m = Image.new("L", im.size, 0)
+        x1 = G.W * (0.58 if s["veil"] == "left" else 1.0)
+        x0 = 0 if s["veil"] == "left" else G.W * 0.42
+        ImageDraw.Draw(m).rectangle((x0 - 200, -100, x1, G.H + 100), fill=235)
+        im.paste(Image.new("RGB", im.size, (243, 247, 254)), (0, 0), m.filter(ImageFilter.GaussianBlur(140)))
+    d = ImageDraw.Draw(im)
+    for L in s["layers"]:
+        t0 = layer_t(L, s)
+        if lt < t0:
+            continue
+        age = lt - t0
+        dep = L.get("z", 1.0)
+        enter = L.get("enter", "fade")
+        p = ease_out(min(1, age / L.get("enter_dur", 0.55)))
+        x, y = L.get("x", 0.5), L.get("y", 0.95)
+        alpha, scale = 1.0, 1.0
+        if enter == "left":
+            x -= (1 - p) * 0.5
+        elif enter == "right":
+            x += (1 - p) * 0.5
+        elif enter == "up":
+            y += (1 - p) * 0.25
+            alpha = p
+        elif enter == "pop":
+            scale = max(0.01, back_out(age / 0.45))
+            alpha = min(1, age / 0.15)
+        else:
+            alpha = p
+        if L.get("exit_at") is not None:
+            et = cue_t(L, "exit_at", s) if isinstance(L["exit_at"], str) else L["exit_at"]
+            if lt >= et:
+                alpha *= max(0.0, 1 - (lt - et) / 0.3)
+                if alpha <= 0:
+                    continue
+        idle = L.get("idle")
+        if idle == "bob":
+            y += math.sin(lt * 2.2 + x * 7) * 0.006
+        elif idle == "float":
+            y += math.sin(lt * 1.8 + x * 5) * 0.014
+        elif idle == "breathe":
+            scale *= 1 + 0.008 * math.sin(lt * 2.4 + x * 9)
+        if "img" in L:
+            name = L["img"]
+            swaps = [(cue_t(sw, "at", s) if isinstance(sw["at"], str) else sw["at"], sw["img"]) for sw in L.get("swap", [])]
+            cur, prev, since = name, None, 9.0
+            for tsw, nm in swaps:
+                if lt >= tsw:
+                    prev, cur, since = cur, nm, lt - tsw
+            if prev and since < 0.25:                     # quick cross-dissolve between poses
+                draw_sprite(im, cam, prev, x, y, L.get("h", 0.6), dep, alpha * (1 - since / 0.25), L.get("flip", False), L.get("anchor", "bottom"), scale)
+                draw_sprite(im, cam, cur, x, y, L.get("h", 0.6), dep, alpha * (since / 0.25), L.get("flip", False), L.get("anchor", "bottom"), scale)
+            else:
+                draw_sprite(im, cam, cur, x, y, L.get("h", 0.6), dep, alpha, L.get("flip", False), L.get("anchor", "bottom"), scale)
+        elif "icon" in L:
+            tile = icon_tile(L["icon"], int(L.get("size", 110)), L.get("color"))
+            xs, ys, z = cam.map(x * G.W, y * G.H, dep)
+            sz = max(2, int(tile.width * z * scale))
+            t2 = tile.resize((sz, sz), Image.BILINEAR)
+            im.alpha_composite(fade(t2, alpha), (int(xs - sz / 2), int(ys - sz / 2)))
+            if L.get("label"):
+                lp = ease_out(min(1, max(0, (age - 0.25) / 0.35)))
+                text(ImageDraw.Draw(im), (xs, ys + sz * 0.42), L["label"].upper(), F("sans_medium", 24), G.ink, 1.5, "ma", max_w=360)
+        elif "label" in L:
+            xs, ys, z = cam.map(x * G.W, y * G.H, dep)
+            lay = Image.new("RGBA", im.size, (0, 0, 0, 0))
+            text(ImageDraw.Draw(lay), (xs, ys), L["label"], F(L.get("font", "sans_medium"), L.get("size", 40)), hex2rgb(L.get("color", "#1F3A5F")),
+                 L.get("track", 0), L.get("anchor", "mm"), max_w=L.get("max_w", 900))
+            im.alpha_composite(fade(lay, p))
+        elif "lines" in L:                                  # connection lines from a hub point to targets
+            hx, hy, _ = cam.map(L["from"][0] * G.W, L["from"][1] * G.H, dep)
+            dd = ImageDraw.Draw(im)
+            for k, (tx, ty) in enumerate(L["lines"]):
+                lp = ease_out(min(1, max(0, (age - k * 0.12) / 0.5)))
+                ex, ey, _ = cam.map(tx * G.W, ty * G.H, dep)
+                dd.line((hx, hy, lerp(hx, ex, lp), lerp(hy, ey, lp)), fill=hex2rgb(L.get("color", "#39B8B0")), width=4)
+                if lp >= 1:
+                    dd.ellipse((ex - 7, ey - 7, ex + 7, ey + 7), fill=hex2rgb(L.get("color", "#39B8B0")))
+        elif "flow" in L:                                   # icon pipeline drawn inside a box (e.g. on the whiteboard)
+            x0, y0, x1, y1 = L["box"]
+            items = L["flow"]
+            n = len(items)
+            X0, Y0, _ = cam.map(x0 * G.W, y0 * G.H, dep)
+            X1, Y1, zz = cam.map(x1 * G.W, y1 * G.H, dep)
+            cy = (Y0 + Y1) / 2
+            dd = ImageDraw.Draw(im)
+            for k, it in enumerate(items):
+                tk = cue_t(it, "at", s) if isinstance(it.get("at"), str) else it.get("t", k * 0.5)
+                if lt < tk:
+                    continue
+                q = back_out((lt - tk) / 0.45)
+                cx = X0 + (X1 - X0) * (k + 0.5) / n
+                if k:
+                    px = X0 + (X1 - X0) * (k - 0.5) / n
+                    ap = ease_out(min(1, (lt - tk) / 0.3))
+                    ax0, ax1 = px + 60 * zz, lerp(px + 60 * zz, cx - 60 * zz, ap)
+                    dd.line((ax0, cy, ax1, cy), fill=G.mid, width=5)
+                    if ap >= 1:
+                        dd.polygon([(ax1, cy - 12), (ax1 + 16, cy), (ax1, cy + 12)], fill=G.mid)
+                ts = int(it.get("size", 96) * zz * max(0.01, q))
+                ic = icon_tile(it["icon"], int(it.get("size", 96)), it.get("color"))
+                ic = ic.resize((max(2, int(ic.width * zz * q)),) * 2, Image.BILINEAR)
+                im.alpha_composite(ic, (int(cx - ic.width / 2), int(cy - ic.height / 2)))
+                if it.get("label"):
+                    text(ImageDraw.Draw(im), (cx, cy + 86 * zz), it["label"].upper(), F("sans_medium", int(22 * zz)), G.ink, 1.2, "ma", max_w=260 * zz)
+        elif "list" in L:                                   # icon bullet list
+            for k, it in enumerate(L["list"]):
+                tk = cue_t(it, "at", s) if isinstance(it.get("at"), str) else it.get("t", k * 0.5)
+                if lt < tk:
+                    continue
+                q = ease_out(min(1, (lt - tk) / 0.4))
+                xs, ys, z = cam.map((x - (1 - q) * 0.03) * G.W, (y + k * L.get("gap", 0.11)) * G.H, dep)
+                tile = icon_tile(it["icon"], 84, it.get("color"))
+                im.alpha_composite(fade(tile, q), (int(xs - tile.width / 2), int(ys - tile.height / 2)))
+                lay = Image.new("RGBA", im.size, (0, 0, 0, 0))
+                text(ImageDraw.Draw(lay), (xs + 80, ys), it["text"].upper(), F("sans_medium", 42), G.ink, 2, "lm", max_w=G.W * 0.45)
+                im.alpha_composite(fade(lay, q))
+        elif "pins" in L:
+            dd = ImageDraw.Draw(im)
+            for k, key in enumerate(L["pins"]):
+                fx, fy = CITIES[key]
+                tk = t0 + k * L.get("every", 0.16)
+                q = ease_out(min(1, max(0, (lt - tk) / 0.35)))
+                if q <= 0:
+                    continue
+                xs, ys, _ = cam.map(fx * G.W, fy * G.H, dep)
+                r = 15
+                col = G.accent if k % 3 else G.ink
+                yy = ys - (1 - q) * 40
+                dd.polygon([(xs - r, yy - r * 1.6), (xs + r, yy - r * 1.6), (xs, yy + 2)], fill=col)
+                dd.ellipse((xs - r, yy - r * 2.6, xs + r, yy - r * 0.6), fill=col)
+                dd.ellipse((xs - r * 0.4, yy - r * 2.0, xs + r * 0.4, yy - r * 1.2), fill=(255, 255, 255))
+    caption(im, s.get("caption"), lt)
+    return arr(im)
+
+
+BEATS = {"stage": b_stage, "scene": b_scene, "bullets": b_bullets, "split": b_split, "logo": b_logo, "map": b_map, "cards": b_cards, "cta": b_cta}
 
 
 class ZoomBlur:

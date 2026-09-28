@@ -1,0 +1,11 @@
+Your developers now work alongside AI agents. Claude Code, Codex and Cursor run commands on their own, all day.
+Do you know what those agents did today? Which secrets they read, which packages they installed?
+Leaked keys, poisoned files, deleted work, and no record of any of it.
+You are not alone.
+Here comes Prismor Enterprise, the control plane for every AI agent in your company.
+Prismor checks every tool call against your policy before it runs. Secrets stay placeholders, and risky actions wait for a human.
+Enroll every laptop with one command, then publish one signed policy to the whole fleet.
+Watch every device, agent and decision live, from your office or anywhere in the world.
+Find shadow AI, give each agent its own permissions, and hand your auditors a signed trail of every action.
+It is built on the open source Prismor runtime, and it runs on your own machines.
+Never let an agent go rogue again. Book a demo at prismor dot dev.

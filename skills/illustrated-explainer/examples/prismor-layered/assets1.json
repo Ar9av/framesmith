@@ -1,0 +1,77 @@
+{
+ "maya": {
+  "size": "1024x1536",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Flat vector character illustration, full body from head to shoes, clean geometric shapes, soft gentle shading, friendly simple face, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, centred, modern corporate explainer style. Maya, a security lead: woman in her 30s, short dark bob haircut, navy blazer over a teal top, grey trousers, white sneakers, standing relaxed facing the viewer, arms by her sides."
+ },
+ "leo": {
+  "size": "1024x1536",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Flat vector character illustration, full body from head to shoes, clean geometric shapes, soft gentle shading, friendly simple face, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, centred, modern corporate explainer style. Leo, a software developer: young man with curly dark hair and light beard, light blue hoodie with a white t-shirt, navy jeans, yellow sneakers, standing relaxed facing the viewer, holding a closed laptop under one arm."
+ },
+ "bot": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Flat vector character illustration, full body from head to shoes, clean geometric shapes, soft gentle shading, friendly simple face, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, centred, modern corporate explainer style. An AI coding agent mascot: a small friendly rounded robot with a white glossy body, a navy face screen with two teal glowing eyes, a short antenna with a yellow tip, small arms, floating with no legs, facing the viewer, waving one hand."
+ },
+ "auditor": {
+  "size": "1024x1536",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Flat vector character illustration, full body from head to shoes, clean geometric shapes, soft gentle shading, friendly simple face, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, centred, modern corporate explainer style. An external auditor: man in his 50s with grey hair and glasses, charcoal grey suit and navy tie, standing facing the viewer, holding a tablet against his chest."
+ },
+ "desk": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Flat vector illustration object, clean geometric shapes, soft gentle shading, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, no logos. A modern office desk seen from the front at slight angle with a large monitor and a keyboard on it, an office chair behind the desk, empty, nobody sitting. The monitor screen is plain light blue and empty."
+ },
+ "whiteboard": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Flat vector illustration object, clean geometric shapes, soft gentle shading, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, no logos. A large freestanding whiteboard on a stand, seen straight on, the board surface completely blank white with a thin grey frame, empty."
+ },
+ "laptop": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Flat vector illustration object, clean geometric shapes, soft gentle shading, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, no logos. An open modern laptop seen from the front three-quarter view, the screen shows a large teal shield with a white check mark on a navy background."
+ },
+ "server": {
+  "size": "1024x1536",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Flat vector illustration object, clean geometric shapes, soft gentle shading, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, no logos. A tall server rack cabinet with several units and small teal and yellow status lights, front view."
+ },
+ "cloud_shield": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Flat vector illustration object, clean geometric shapes, soft gentle shading, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, no logos. A soft light-blue cloud with a large navy shield in front of it, the shield has a white check mark, gentle glow."
+ },
+ "plant": {
+  "size": "1024x1536",
+  "quality": "low",
+  "background": "transparent",
+  "prompt": "Flat vector illustration object, clean geometric shapes, soft gentle shading, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, no logos. A tall potted monstera office plant in a white pot, front view."
+ },
+ "bg_office": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Flat vector illustration of an empty modern office interior backdrop in a soft blue palette (pale blue walls #DEE8F8, mid blue #A6CDF5 accents, navy details), wide 3:2, clean geometric shapes, no people, no text, no logos, the lower two thirds are an open empty floor area. A back wall with a large window showing a pale city skyline, a shelf with books and small plants, framed pictures, a pendant lamp."
+ },
+ "bg_meeting": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Flat vector illustration of an empty modern office interior backdrop in a soft blue palette (pale blue walls #DEE8F8, mid blue #A6CDF5 accents, navy details), wide 3:2, clean geometric shapes, no people, no text, no logos, the lower two thirds are an open empty floor area. A meeting room back wall with a big blank wall-mounted screen showing nothing, a low credenza with a plant, soft window light."
+ },
+ "bg_plain": {
+  "size": "1536x1024",
+  "quality": "low",
+  "prompt": "Flat vector illustration of an empty modern office interior backdrop in a soft blue palette (pale blue walls #DEE8F8, mid blue #A6CDF5 accents, navy details), wide 3:2, clean geometric shapes, no people, no text, no logos, the lower two thirds are an open empty floor area. Just a clean back wall with a subtle horizontal band, a couple of hanging lamps and a small framed picture, very minimal."
+ }
+}
