@@ -26,6 +26,7 @@ framesmith templates are **skills**: a `SKILL.md`, a brief schema, an example br
 | [`glass-saas-promo`](../glass-saas-promo/SKILL.md) | 16:9 MP4, music-driven | Render a bright, music-driven SaaS promo (about 30–40 s, 16:9) in the frosted-glass style: a lavender-white field, blue-to-violet gradients, gpt-image-2 glass 3D objects (shield, folder, check, sparkle, laptop), real product UI in |
 | [`blue-story-film`](../blue-story-film/SKILL.md) | 16:9 MP4, music-driven | Render a music-driven SaaS story film (about 60–90 s, 16:9) in the blue-light style. It opens with typewriter captions, a caret and a selection highlight over ghosted UI, then a huge 'Meet' word that collapses into the brand line. |
 | [`illustrated-explainer`](../illustrated-explainer/SKILL.md) | ~60–100 s 16:9 MP4 with voiceover | Narrated flat-vector corporate explainer: gpt-image-2 illustrations in one house style, pans with small-caps captions, bullets, split screen, whoosh to logo, world map, product cards, CTA |
+| [`animated-character-explainer`](../animated-character-explainer/SKILL.md) | ~45–90 s 16:9 MP4 with voiceover | Narrated explainer animated from a consistent transparent-PNG cast (on-model poses via gpt-image-2 edits), props, backdrops and icon tiles; pose swaps and icon pops on spoken cues; starter via `init` |
 <!-- catalog:end -->
 
 If nothing fits, say so and offer to build a new template (section 3) rather than forcing the wrong one.

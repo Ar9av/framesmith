@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.15.0 (2026-09-28)
+- Skill `animated-character-explainer`: the layered, character-driven explainer as its own template. `cast` builds a whole cast from `cast.json` (bases → on-model poses via gpt-image-2 edits → props → backdrops), `init` copies a fill-in starter (11-beat arc, stand-in cast), `check` warns on unfilled placeholders and trailing periods, previews work before the voiceover exists. Example: Prismor Enterprise (4 characters, 14 poses).
+
 ## 0.14.0 (2026-09-28)
 - Engine: reference-guided gpt-image-2 generation (`"ref"` in an asset spec calls the edits endpoint) to keep characters on-model across poses.
 - illustrated-explainer: layered `stage` beat (transparent-PNG cast, props, backdrops; parallax camera; slide/pop/rise entrances; idle breathe/bob/float; pose swaps on spoken cues; spring icon tiles with Lucide + thesvg; whiteboard flows, lists, connector lines, map pins; side veil). Example `prismor-layered` with a 4-character cast in 14 poses.

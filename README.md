@@ -22,6 +22,7 @@ The skills share a tiny engine (`core/framesmith`) with a seekable timeline, exa
 <!-- catalog:start -->
 | Skill | What it makes | Preview |
 |---|---|---|
+| [`animated-character-explainer`](skills/animated-character-explainer/SKILL.md) | Render a narrated explainer video (about 45–90 s, 16:9) animated from layers. | <img src="docs/media/animated-character-explainer.gif" width="120"> |
 | [`blue-story-film`](skills/blue-story-film/SKILL.md) | Render a music-driven SaaS story film (about 60–90 s, 16:9) in the blue-light style. | <img src="docs/media/blue-story-film.gif" width="120"> |
 | [`brand-icons`](skills/brand-icons/SKILL.md) | Find, fetch, preview and credit real brand/logo SVG icons from thesvg.org (7,400+ marks, e.g. | — |
 | [`brutalist-product-promo`](skills/brutalist-product-promo/SKILL.md) | Render a 22-second brutalist / industrial product promo video (spec-sheet motion graphics) for any hardware, device, robot, drone, vehicle or tech product. | <img src="docs/media/brutalist-product-promo.gif" width="120"> |

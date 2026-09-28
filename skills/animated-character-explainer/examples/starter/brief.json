@@ -1,0 +1,665 @@
+{
+  "size": [
+    1920,
+    1080
+  ],
+  "fps": 30,
+  "theme": {
+    "bg": "#DEE8F8",
+    "ink": "#1F3A5F",
+    "mid": "#5C80A3",
+    "accent": "#39B8B0",
+    "warm": "#F4C542"
+  },
+  "vo": {
+    "script": "vo.txt",
+    "audio": "vo.m4a",
+    "words": "words.json",
+    "voice": "onyx",
+    "instructions": "Warm, confident explainer narrator. Clear, measured pace, friendly authority, slight pauses between sentences."
+  },
+  "lead": 0.1,
+  "tail": 1.6,
+  "beats": [
+    {
+      "at": "[Opening line",
+      "type": "stage",
+      "bg": "bg_office",
+      "cam": [
+        1.0,
+        1.08,
+        0.45,
+        0.55
+      ],
+      "caption": "[Scene one caption]\n[second line]",
+      "layers": [
+        {
+          "img": "desk",
+          "x": 0.3,
+          "y": 0.93,
+          "h": 0.46,
+          "enter": "fade",
+          "t": 0
+        },
+        {
+          "img": "plant",
+          "x": 0.08,
+          "y": 0.95,
+          "h": 0.5,
+          "z": 1.15,
+          "t": 0
+        },
+        {
+          "img": "leo_typing",
+          "x": 0.52,
+          "y": 0.97,
+          "h": 0.66,
+          "enter": "right",
+          "t": 0.3,
+          "idle": "breathe"
+        },
+        {
+          "img": "bot_working",
+          "x": 0.75,
+          "y": 0.6,
+          "h": 0.36,
+          "anchor": "center",
+          "enter": "pop",
+          "t": 1.0,
+          "idle": "float"
+        },
+        {
+          "icon": "brand:claude-code",
+          "x": 0.66,
+          "y": 0.3,
+          "size": 100,
+          "enter": "pop",
+          "t": 1.4
+        },
+        {
+          "icon": "brand:openai",
+          "x": 0.79,
+          "y": 0.26,
+          "size": 100,
+          "enter": "pop",
+          "t": 1.6
+        },
+        {
+          "icon": "brand:cursor",
+          "x": 0.91,
+          "y": 0.34,
+          "size": 100,
+          "enter": "pop",
+          "t": 1.8
+        }
+      ]
+    },
+    {
+      "at": "Question that names",
+      "type": "stage",
+      "bg": "bg_office",
+      "cam": [
+        1.04,
+        1.12,
+        0.5,
+        0.58
+      ],
+      "caption": "[Question caption]",
+      "layers": [
+        {
+          "img": "desk",
+          "x": 0.32,
+          "y": 0.93,
+          "h": 0.46,
+          "t": 0
+        },
+        {
+          "img": "maya_worried",
+          "x": 0.62,
+          "y": 0.97,
+          "h": 0.66,
+          "enter": "left",
+          "t": 0.1,
+          "idle": "breathe"
+        },
+        {
+          "icon": "lucide:circle-help",
+          "x": 0.78,
+          "y": 0.3,
+          "size": 90,
+          "color": "#5C80A3",
+          "enter": "pop",
+          "t": 0.9
+        },
+        {
+          "icon": "lucide:key-round",
+          "x": 0.2,
+          "y": 0.34,
+          "size": 96,
+          "color": "#E0525A",
+          "enter": "pop",
+          "label": "[label]",
+          "t": 1.2
+        },
+        {
+          "icon": "lucide:package",
+          "x": 0.37,
+          "y": 0.28,
+          "size": 96,
+          "color": "#E0525A",
+          "enter": "pop",
+          "label": "[label]",
+          "t": 1.4
+        }
+      ]
+    },
+    {
+      "at": "Pain one",
+      "type": "stage",
+      "bg": "bg_plain",
+      "cam": [
+        1.0,
+        1.05,
+        0.5,
+        0.5
+      ],
+      "caption": "[List title]",
+      "layers": [
+        {
+          "list": [
+            {
+              "icon": "lucide:key-round",
+              "color": "#E0525A",
+              "text": "[list item]"
+            },
+            {
+              "icon": "lucide:file-warning",
+              "color": "#E0525A",
+              "text": "[list item]"
+            },
+            {
+              "icon": "lucide:trash-2",
+              "color": "#E0525A",
+              "text": "[list item]"
+            },
+            {
+              "icon": "lucide:eye-off",
+              "color": "#E0525A",
+              "text": "[list item]"
+            }
+          ],
+          "x": 0.12,
+          "y": 0.34,
+          "gap": 0.13
+        },
+        {
+          "img": "bot_alarm",
+          "x": 0.78,
+          "y": 0.58,
+          "h": 0.5,
+          "anchor": "center",
+          "enter": "pop",
+          "idle": "float",
+          "t": 0.8
+        }
+      ],
+      "veil": "left"
+    },
+    {
+      "at": "Reassurance that",
+      "type": "stage",
+      "bg": "bg_plain",
+      "cam": [
+        1.02,
+        1.08,
+        0.5,
+        0.5
+      ],
+      "caption": "[Reassurance caption]",
+      "layers": [
+        {
+          "img": "leo_shrug",
+          "x": 0.34,
+          "y": 0.97,
+          "h": 0.66,
+          "enter": "left",
+          "t": 0,
+          "idle": "breathe"
+        },
+        {
+          "img": "maya_worried",
+          "x": 0.66,
+          "y": 0.97,
+          "h": 0.66,
+          "enter": "right",
+          "t": 0.1,
+          "idle": "breathe",
+          "flip": true
+        }
+      ]
+    },
+    {
+      "at": "Here comes",
+      "type": "logo",
+      "tr": "whoosh",
+      "caption": "[Positioning caption]\n[second line]",
+      "name": "[Product]"
+    },
+    {
+      "at": "How it works",
+      "type": "stage",
+      "bg": "bg_plain",
+      "cam": [
+        1.0,
+        1.06,
+        0.45,
+        0.5
+      ],
+      "caption": "[How it works caption]\n[second line]",
+      "layers": [
+        {
+          "img": "whiteboard",
+          "x": 0.38,
+          "y": 0.9,
+          "h": 0.62,
+          "t": 0
+        },
+        {
+          "flow": [
+            {
+              "icon": "lucide:terminal",
+              "label": "[step]",
+              "t": 0.5
+            },
+            {
+              "icon": "lucide:shield-check",
+              "color": "#39B8B0",
+              "label": "[step]",
+              "t": 1.3
+            },
+            {
+              "icon": "lucide:circle-check",
+              "color": "#2F9E5A",
+              "label": "[step]",
+              "t": 2.1
+            }
+          ],
+          "box": [
+            0.19,
+            0.33,
+            0.57,
+            0.56
+          ]
+        },
+        {
+          "img": "maya_point",
+          "x": 0.78,
+          "y": 0.97,
+          "h": 0.66,
+          "enter": "right",
+          "t": 0.2,
+          "idle": "breathe"
+        },
+        {
+          "icon": "lucide:lock",
+          "x": 0.25,
+          "y": 0.72,
+          "size": 90,
+          "color": "#7C5CC4",
+          "enter": "pop",
+          "label": "[label]",
+          "t": 1.2
+        },
+        {
+          "icon": "lucide:user-check",
+          "x": 0.5,
+          "y": 0.72,
+          "size": 90,
+          "color": "#E0761F",
+          "enter": "pop",
+          "label": "[label]",
+          "t": 1.4
+        }
+      ]
+    },
+    {
+      "at": "Setup step",
+      "type": "stage",
+      "bg": "bg_plain",
+      "cam": [
+        1.0,
+        1.06,
+        0.5,
+        0.45
+      ],
+      "caption": "[Setup caption]\n[second line]",
+      "layers": [
+        {
+          "img": "cloud_shield",
+          "x": 0.45,
+          "y": 0.34,
+          "h": 0.3,
+          "anchor": "center",
+          "enter": "pop",
+          "idle": "float",
+          "t": 0.6
+        },
+        {
+          "lines": [
+            [
+              0.13,
+              0.72
+            ],
+            [
+              0.29,
+              0.72
+            ],
+            [
+              0.45,
+              0.72
+            ],
+            [
+              0.61,
+              0.72
+            ],
+            [
+              0.77,
+              0.72
+            ]
+          ],
+          "from": [
+            0.45,
+            0.42
+          ],
+          "z": 1.0,
+          "t": 0.8
+        },
+        {
+          "img": "laptop",
+          "x": 0.13,
+          "y": 0.9,
+          "h": 0.2,
+          "enter": "pop",
+          "t": 0.3
+        },
+        {
+          "img": "laptop",
+          "x": 0.29,
+          "y": 0.9,
+          "h": 0.2,
+          "enter": "pop",
+          "t": 0.45
+        },
+        {
+          "img": "laptop",
+          "x": 0.45,
+          "y": 0.9,
+          "h": 0.2,
+          "enter": "pop",
+          "t": 0.6
+        },
+        {
+          "img": "laptop",
+          "x": 0.61,
+          "y": 0.9,
+          "h": 0.2,
+          "enter": "pop",
+          "t": 0.75
+        },
+        {
+          "img": "laptop",
+          "x": 0.77,
+          "y": 0.9,
+          "h": 0.2,
+          "enter": "pop",
+          "t": 0.9
+        },
+        {
+          "img": "leo_happy",
+          "x": 0.91,
+          "y": 0.99,
+          "h": 0.6,
+          "enter": "right",
+          "idle": "breathe",
+          "t": 2.0
+        }
+      ]
+    },
+    {
+      "at": "Where and how",
+      "type": "stage",
+      "bg": "world_map",
+      "cam": [
+        1.0,
+        1.05,
+        0.5,
+        0.5
+      ],
+      "caption": "[Reach caption]\n[second line]",
+      "layers": [
+        {
+          "pins": [
+            "ldn",
+            "sf",
+            "ny",
+            "ber",
+            "blr",
+            "sgp",
+            "tok",
+            "sp",
+            "dxb",
+            "syd",
+            "lag",
+            "nbo"
+          ],
+          "t": 0.3,
+          "z": 0.35
+        },
+        {
+          "img": "maya_confident",
+          "x": 0.12,
+          "y": 1.02,
+          "h": 0.55,
+          "enter": "left",
+          "t": 0.6,
+          "idle": "breathe"
+        }
+      ]
+    },
+    {
+      "at": "Benefit one",
+      "type": "stage",
+      "bg": "bg_office",
+      "cam": [
+        1.04,
+        1.1,
+        0.5,
+        0.5
+      ],
+      "caption": "[Benefits caption]",
+      "layers": [
+        {
+          "img": "server",
+          "x": 0.16,
+          "y": 0.95,
+          "h": 0.58,
+          "t": 0
+        },
+        {
+          "img": "bot_alarm",
+          "x": 0.4,
+          "y": 0.6,
+          "h": 0.36,
+          "anchor": "center",
+          "enter": "pop",
+          "idle": "float",
+          "swap": [
+            {
+              "at": 2.5,
+              "img": "bot_happy"
+            }
+          ],
+          "t": 0.8
+        },
+        {
+          "icon": "lucide:radar",
+          "x": 0.57,
+          "y": 0.3,
+          "size": 92,
+          "color": "#E0761F",
+          "enter": "pop",
+          "label": "[label]",
+          "t": 1.0
+        },
+        {
+          "icon": "lucide:key-round",
+          "x": 0.7,
+          "y": 0.44,
+          "size": 92,
+          "color": "#1F3A5F",
+          "enter": "pop",
+          "label": "[label]",
+          "t": 1.2
+        },
+        {
+          "icon": "lucide:scroll-text",
+          "x": 0.57,
+          "y": 0.62,
+          "size": 92,
+          "color": "#2F9E5A",
+          "enter": "pop",
+          "label": "[label]",
+          "t": 1.4
+        },
+        {
+          "img": "maya_confident",
+          "x": 0.86,
+          "y": 0.98,
+          "h": 0.64,
+          "enter": "right",
+          "t": 0.3,
+          "idle": "breathe"
+        }
+      ]
+    },
+    {
+      "at": "Trust line",
+      "type": "stage",
+      "bg": "bg_meeting",
+      "cam": [
+        1.0,
+        1.07,
+        0.5,
+        0.5
+      ],
+      "caption": "[Trust caption]\n[second line]",
+      "layers": [
+        {
+          "img": "maya_confident",
+          "x": 0.27,
+          "y": 0.97,
+          "h": 0.64,
+          "enter": "left",
+          "t": 0,
+          "idle": "breathe"
+        },
+        {
+          "img": "auditor_happy",
+          "x": 0.73,
+          "y": 0.97,
+          "h": 0.66,
+          "enter": "right",
+          "t": 0.2,
+          "idle": "breathe",
+          "flip": true
+        },
+        {
+          "icon": "brand:github",
+          "x": 0.44,
+          "y": 0.3,
+          "size": 110,
+          "enter": "pop",
+          "label": "[label]",
+          "t": 1.0
+        },
+        {
+          "icon": "lucide:server",
+          "x": 0.56,
+          "y": 0.3,
+          "size": 110,
+          "color": "#1F3A5F",
+          "enter": "pop",
+          "label": "[label]",
+          "t": 1.2
+        }
+      ]
+    },
+    {
+      "at": "Closing promise",
+      "type": "stage",
+      "bg": "bg_plain",
+      "cam": [
+        1.0,
+        1.04,
+        0.5,
+        0.5
+      ],
+      "layers": [
+        {
+          "img": "logo",
+          "x": 0.12,
+          "y": 0.28,
+          "h": 0.13,
+          "anchor": "center",
+          "enter": "pop",
+          "t": 0
+        },
+        {
+          "img": "laptop",
+          "x": 0.72,
+          "y": 0.86,
+          "h": 0.36,
+          "enter": "up",
+          "t": 0
+        },
+        {
+          "img": "bot_happy",
+          "x": 0.9,
+          "y": 0.55,
+          "h": 0.34,
+          "anchor": "center",
+          "enter": "pop",
+          "t": 0.5,
+          "idle": "float"
+        },
+        {
+          "label": "[Product]",
+          "x": 0.17,
+          "y": 0.28,
+          "size": 76,
+          "anchor": "lm",
+          "t": 0.2
+        },
+        {
+          "label": "[Closing promise]",
+          "x": 0.08,
+          "y": 0.52,
+          "size": 44,
+          "font": "sans",
+          "color": "#5C80A3",
+          "anchor": "lm",
+          "t": 0.6
+        },
+        {
+          "label": "[your-site.com]",
+          "x": 0.08,
+          "y": 0.63,
+          "size": 48,
+          "anchor": "lm",
+          "t": 1.6
+        }
+      ],
+      "veil": "left"
+    }
+  ]
+}

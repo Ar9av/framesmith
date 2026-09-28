@@ -1,0 +1,67 @@
+{
+ "style": {
+  "character": "Flat vector character illustration, full body from head to shoes, clean geometric shapes, soft gentle shading, friendly simple face, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, centred, modern corporate explainer style. ",
+  "prop": "Flat vector illustration object, clean geometric shapes, soft gentle shading, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, no logos. ",
+  "backdrop": "Flat vector illustration of an empty modern office interior backdrop in a soft blue palette (pale blue walls #DEE8F8, mid blue #A6CDF5 accents, navy details), wide 3:2, clean geometric shapes, no people, no text, no logos, the lower two thirds are an open empty floor area. "
+ },
+ "characters": {
+  "lead": {
+   "size": "1024x1536",
+   "desc": "[Name], a [role]: [age, hair, clothes and colours], standing relaxed facing the viewer, arms by the sides.",
+   "poses": {
+    "lead_worried": "[a stressed pose, e.g. hand on forehead]",
+    "lead_point": "[pointing to the viewer's left at something]",
+    "lead_confident": "[arms crossed, confident smile]"
+   }
+  },
+  "user": {
+   "size": "1024x1536",
+   "desc": "[Name], a [role]: [appearance], standing relaxed facing the viewer.",
+   "poses": {
+    "user_working": "[doing the everyday task]",
+    "user_shrug": "[confused shrug, palms up]",
+    "user_happy": "[thumbs up, big smile]"
+   }
+  },
+  "mascot": {
+   "size": "1024x1024",
+   "desc": "[Your product's mascot or the thing being protected, e.g. a friendly robot], facing the viewer, waving.",
+   "poses": {
+    "mascot_working": "[busy working]",
+    "mascot_alarm": "[alarmed, something wrong]",
+    "mascot_happy": "[happy, thumbs up]"
+   }
+  }
+ },
+ "props": {
+  "desk": {
+   "size": "1536x1024",
+   "desc": "A modern office desk seen from the front at slight angle with a large monitor and a keyboard on it, an office chair behind the desk, empty, nobody sitting. The monitor screen is plain light blue and empty.",
+   "quality": "medium"
+  },
+  "whiteboard": {
+   "size": "1536x1024",
+   "desc": "A large freestanding whiteboard on a stand, seen straight on, the board surface completely blank white with a thin grey frame, empty.",
+   "quality": "medium"
+  },
+  "laptop": {
+   "size": "1024x1024",
+   "quality": "medium",
+   "desc": "An open modern laptop seen from the front three-quarter view, the screen shows [your product's hero symbol]."
+  }
+ },
+ "backdrops": {
+  "bg_office": {
+   "desc": "A back wall with a large window showing a pale city skyline, a shelf with books and small plants, framed pictures, a pendant lamp.",
+   "quality": "medium"
+  },
+  "bg_meeting": {
+   "desc": "A meeting room back wall with a big blank wall-mounted screen showing nothing, a low credenza with a plant, soft window light.",
+   "quality": "medium"
+  },
+  "bg_plain": {
+   "desc": "Just a clean back wall with a subtle horizontal band, a couple of hanging lamps and a small framed picture, very minimal.",
+   "quality": "low"
+  }
+ }
+}

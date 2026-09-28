@@ -1,0 +1,89 @@
+{
+ "style": {
+  "character": "Flat vector character illustration, full body from head to shoes, clean geometric shapes, soft gentle shading, friendly simple face, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, centred, modern corporate explainer style. ",
+  "prop": "Flat vector illustration object, clean geometric shapes, soft gentle shading, palette of navy #1F3A5F, mid blue #5C80A3, light blue #A6CDF5, teal #39B8B0 and warm yellow #F4C542, isolated on a transparent background, no floor, no shadow, no text, no logos. ",
+  "backdrop": "Flat vector illustration of an empty modern office interior backdrop in a soft blue palette (pale blue walls #DEE8F8, mid blue #A6CDF5 accents, navy details), wide 3:2, clean geometric shapes, no people, no text, no logos, the lower two thirds are an open empty floor area. "
+ },
+ "characters": {
+  "maya": {
+   "size": "1024x1536",
+   "desc": "Maya, a security lead: woman in her 30s, short dark bob haircut, navy blazer over a teal top, grey trousers, white sneakers, standing relaxed facing the viewer, arms by her sides.",
+   "poses": {
+    "maya_worried": "she is stressed, one hand on her forehead, the other hand holding a phone, worried expression, slight lean.",
+    "maya_point": "she points with her right arm extended to the viewer's left at something off to the side, confident explaining expression, body turned slightly left.",
+    "maya_confident": "she stands with arms crossed and a relaxed confident smile."
+   }
+  },
+  "leo": {
+   "size": "1024x1536",
+   "desc": "Leo, a software developer: young man with curly dark hair and light beard, light blue hoodie with a white t-shirt, navy jeans, yellow sneakers, standing relaxed facing the viewer, holding a closed laptop under one arm.",
+   "poses": {
+    "leo_typing": "he holds an open laptop on one forearm and types on it with the other hand, focused expression, laptop screen facing away from viewer.",
+    "leo_shrug": "he shrugs with both palms up, confused puzzled expression, the laptop set aside is not visible.",
+    "leo_happy": "he gives a cheerful thumbs up with a big smile, laptop under the other arm."
+   }
+  },
+  "bot": {
+   "size": "1024x1024",
+   "desc": "An AI coding agent mascot: a small friendly rounded robot with a white glossy body, a navy face screen with two teal glowing eyes, a short antenna with a yellow tip, small arms, floating with no legs, facing the viewer, waving one hand.",
+   "poses": {
+    "bot_working": "the robot types busily on a small floating translucent keyboard, eyes focused, small code symbols floating around.",
+    "bot_alarm": "the robot is alarmed and frozen, its eyes turned red, arms raised, a small red warning triangle floating above its head.",
+    "bot_happy": "the robot is happy, eyes curved in a smile, giving a thumbs up, a small teal check mark floating beside it."
+   }
+  },
+  "auditor": {
+   "size": "1024x1536",
+   "desc": "An external auditor: man in his 50s with grey hair and glasses, charcoal grey suit and navy tie, standing facing the viewer, holding a tablet against his chest.",
+   "poses": {
+    "auditor_happy": "he smiles and extends his right hand forward for a handshake, tablet in the other hand."
+   }
+  }
+ },
+ "props": {
+  "desk": {
+   "size": "1536x1024",
+   "desc": "A modern office desk seen from the front at slight angle with a large monitor and a keyboard on it, an office chair behind the desk, empty, nobody sitting. The monitor screen is plain light blue and empty.",
+   "quality": "medium"
+  },
+  "whiteboard": {
+   "size": "1536x1024",
+   "desc": "A large freestanding whiteboard on a stand, seen straight on, the board surface completely blank white with a thin grey frame, empty.",
+   "quality": "medium"
+  },
+  "laptop": {
+   "size": "1024x1024",
+   "desc": "An open modern laptop seen from the front three-quarter view, the screen shows a large teal shield with a white check mark on a navy background.",
+   "quality": "medium"
+  },
+  "server": {
+   "size": "1024x1536",
+   "desc": "A tall server rack cabinet with several units and small teal and yellow status lights, front view.",
+   "quality": "medium"
+  },
+  "cloud_shield": {
+   "size": "1024x1024",
+   "desc": "A soft light-blue cloud with a large navy shield in front of it, the shield has a white check mark, gentle glow.",
+   "quality": "medium"
+  },
+  "plant": {
+   "size": "1024x1536",
+   "desc": "A tall potted monstera office plant in a white pot, front view.",
+   "quality": "low"
+  }
+ },
+ "backdrops": {
+  "bg_office": {
+   "desc": "A back wall with a large window showing a pale city skyline, a shelf with books and small plants, framed pictures, a pendant lamp.",
+   "quality": "medium"
+  },
+  "bg_meeting": {
+   "desc": "A meeting room back wall with a big blank wall-mounted screen showing nothing, a low credenza with a plant, soft window light.",
+   "quality": "medium"
+  },
+  "bg_plain": {
+   "desc": "Just a clean back wall with a subtle horizontal band, a couple of hanging lamps and a small framed picture, very minimal.",
+   "quality": "low"
+  }
+ }
+}
