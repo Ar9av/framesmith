@@ -12,7 +12,7 @@ metadata:
 
 This template produces a 22.64 s, 25 fps, 720×1280 promo made of 21 hard-cut scenes. It is driven entirely by a JSON **brief**: copy, colours, image prompts and scene timing. Every frame is a pure function of time, so you can review any single frame before rendering the full video.
 
-Preview: `examples/arc/contact_sheet.png`. The storyboard with per-scene timing and purpose is in `references/storyboard.md`.
+Preview: `examples/arc/contact_sheet.png`. A second example, `examples/prismor/`, applies the style to software (Prismor, electric violet, a key, a padlock sprite and a server rack instead of a robot) and shows the brand's real logo beside the wordmark via `meta.logo`. The storyboard with per-scene timing and purpose is in `references/storyboard.md`.
 
 ## Requirements
 
@@ -52,5 +52,6 @@ Prompt craft: write full sentences and name the materials, lighting, lens and ba
 ## Guardrails
 
 - Don't put a real company's trademarks in the copy or prompts unless the user owns them or has asked for them.
+- Never have gpt-image-2 draw the brand's logo. Set `meta.logo` to the real logo file, and the engine places it beside the wordmark on the logo, cross and outro scenes (with a hairline on dark grounds so a dark mark stays visible).
 - Report honestly which slots are placeholders versus generated.
 - To change motion itself, edit `scripts/promo.py` (one function per scene). Never edit `scripts/framesmith/`: it is vendored from the repo's `core/` and gets overwritten.

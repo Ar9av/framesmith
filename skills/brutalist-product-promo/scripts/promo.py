@@ -38,6 +38,7 @@ class P:
         self.assets = Assets(os.path.join(brief_dir, brief.get("assets_dir", "assets")),
                              os.path.join(HERE, "..", "placeholders"))
         self.meta = brief.get("meta", {})
+        self.brief_dir = brief_dir
         self._cache = {}
 
     def img(self, name):
@@ -78,11 +79,41 @@ def U(unit, frac=0.5):
     return fit_unit(G.c["brand"], G.W * frac, unit)
 
 
-def logo(im, col, unit, y, frac=0.5, **kw):
+def brand_mark(hgt):
+    """The brand's real logo file (meta.logo, relative to the brief) scaled to a height, or None."""
+    path = G.meta.get("logo")
+    if not path:
+        return None
+    def load():
+        lg = Image.open(os.path.join(G.brief_dir, path)).convert("RGBA")
+        bb = lg.getbbox()
+        return lg.crop(bb) if bb else lg
+    lg = G.cached("brand_mark", load)
+    return lg.resize((max(1, int(lg.width * hgt / lg.height)), max(1, int(hgt))), Image.LANCZOS)
+
+
+def logo(im, col, unit, y, frac=0.5, mark=True, **kw):
+    """Blocky wordmark of the brand name; with meta.logo set, the real logo mark sits to its left."""
     unit = U(unit, frac)
     m, boxes = wordmark_mask(G.c["brand"], (G.W, int(unit * 9)), unit, **kw)
-    im.paste(Image.new("RGB", m.size, col), (0, int(y - m.height / 2)), m)
-    return boxes
+    top = int(y - m.height / 2)
+    bb = m.getbbox()
+    lg = brand_mark((bb[3] - bb[1]) * 1.6) if (mark and bb) else None
+    if lg is None:
+        im.paste(Image.new("RGB", m.size, col), (0, top), m)
+        return boxes
+    gap = int(lg.height * 0.35)
+    dx = (lg.width + gap) // 2
+    im.paste(Image.new("RGB", m.size, col), (dx, top), m)
+    mx, my = bb[0] + dx - gap - lg.width, top + (bb[1] + bb[3]) // 2 - lg.height // 2
+    if sum(im.getpixel((max(0, mx - 4), max(0, my - 4)))[:3]) < 180:     # dark ground: a hairline keeps a dark mark visible
+        r = max(3, lg.height // 5)
+        ImageDraw.Draw(im).rounded_rectangle((mx - 2, my - 2, mx + lg.width + 1, my + lg.height + 1), r, fill=(236, 236, 240))
+    if im.mode == "RGBA":
+        im.alpha_composite(lg, (mx, my))
+    else:
+        im.paste(lg.convert("RGB"), (mx, my), lg)
+    return [(x0 + dx, y0, x1 + dx, y1) for x0, y0, x1, y1 in boxes]
 
 
 def footer(d, p, col, y0=735):
@@ -477,11 +508,11 @@ def s_outro(c):
     d = ImageDraw.Draw(im)
     n = len(G.c["brand"])
     if lt < 0.25:                                            # oversized ghost outline
-        logo(im, (60, 60, 60), 15, 640, 0.8, outline=1)
+        logo(im, (60, 60, 60), 15, 640, 0.8, mark=False, outline=1)
         logo(im, th.accent, 9.5, 640)
     elif lt < 0.55:                                          # barcode interrupt
-        logo(im, (40, 40, 40), 15, 640, 0.8, outline=1)
-        logo(im, th.accent, 9.5, 640, letters_dx=spread(n, 40))
+        logo(im, (40, 40, 40), 15, 640, 0.8, mark=False, outline=1)
+        logo(im, th.accent, 9.5, 640, mark=False, letters_dx=spread(n, 40))
         fx.barcode(d, c.W / 2 - 55, 540, 110, 170, th.paper, c.fi // 2)
     else:                                                    # letters drift apart, then drop out
         p = ease_out(c.p(0.55, 0.9))

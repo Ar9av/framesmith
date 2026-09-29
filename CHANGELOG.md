@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.16.1 (2026-09-29)
+- brutalist-product-promo: `meta.logo` puts the brand's real logo beside the wordmark (hairline on dark grounds); new example `examples/prismor/` (software product in the ARC style: violet accent, key closeups, padlock sprite, server-rack line art, prismor.dev copy).
+
 ## 0.16.0 (2026-09-29)
 - Engine `framesmith.motion` (ideas from howseen-ai/claude-motion-design, MIT, ported to pure Python): closed-form springs, voice-synced masked word rises with accent fills, letter stretch, words on dashed paths, scatter, 3D perspective tilt, detection boxes, border and connector beams, spinner, code-synthesised SFX and a voice+SFX mixer.
 - Engine: `narration.transcribe_windows` (overlapping-window Whisper; long takes no longer lose stretches of timings); `Timeline.render` feeds the encoder in bounded batches (no more out-of-memory kills on small machines) and takes `preset=` / `FRAMESMITH_PRESET`.

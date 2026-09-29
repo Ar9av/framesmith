@@ -1,0 +1,88 @@
+{
+  "size": [720, 1280],
+  "fps": 25,
+  "speed": 1.0,
+  "theme": {
+    "accent": "#6D4AFF",
+    "ink": "#000000",
+    "paper": "#FFFFFF",
+    "tint": "#2A1A73"
+  },
+  "copy": {
+    "brand": "PRISMOR",
+    "company": "Prismor",
+    "origin": "Open source",
+    "tagline": "AN IMMUNE LAYER FOR AI AGENTS",
+    "tagline_keyword": "IMMUNE",
+    "field_word": "PRISMOR AGENT SECURITY",
+    "model": "OSS",
+    "dim_label": "TOOL CALLS",
+    "sheet_title": "Agent Sheet",
+    "terminal": [
+      "PRISMOR // AGENT RUNTIME TERMINAL",
+      "SESSION : CLAUDE-CODE ~/PRISMOR-WEB",
+      "STATUS : ENFORCING"
+    ],
+    "product_name": "Prismor Runtime",
+    "overview_header": "PRODUCT OVERVIEW",
+    "overview_title": ["Stop your agents", "from going rogue"],
+    "overview_words": ["Cloak", "Guard"],
+    "overview_specs": [
+      "EVERY TOOL CALL INSPECTED",
+      "SECRETS AS PLACEHOLDERS",
+      "OUTPUT SCRUBBED OF KEYS",
+      "HUMAN APPROVAL ON RISKY CALLS",
+      "AUDIT TRAIL FOR EVERY CALL",
+      "RUNS ON YOUR OWN MACHINES"
+    ],
+    "overview_fineprint": "EVERY TOOL CALL INTERCEPTED, MASKED AND LOGGED",
+    "overview_side": [["Open Source", "Independent"], ["Claude Code", "Codex / Cursor"]],
+    "glitch_words": ["PRISMOR", "ROMSIRP", "PRRRIIISM", "SSSMOR", "CLOAKED", "ROGUE", "EUGOR", "GUARD", "MOR"],
+    "specs_title": "Specs",
+    "spec_blocks": [
+      {"head": "RUNTIME GUARD", "lines": ["CHECKS EVERY TOOL CALL", "BLOCKS DESTRUCTIVE COMMANDS", "HOLDS RISKY ACTIONS FOR REVIEW", "POLICY AS CODE"]},
+      {"head": "CLOAK", "lines": ["SECRETS STAY PLACEHOLDERS", "REAL VALUES AT EXECUTION", "OUTPUT SCRUBBED FROM LOGS"]},
+      {"head": "WORKS WITH", "lines": ["CLAUDE CODE / CODEX / CURSOR", "OPENAI AGENTS SDK", "LANGCHAIN / CREWAI", "MCP AGENTS"]}
+    ],
+    "spec_side_labels": ["OPS READY // IN SESSION", "HOOK-01 OVERWATCH", "CLOAK //"],
+    "labels": ["SECRET // CLOAKED", "REAL TIME TOOL CALL GUARD // ACTIVE"],
+    "connecting": "HOOKING AGENT",
+    "connected": "AGENT GUARDED",
+    "footer": [
+      "OPEN SOURCE AGENT SECURITY // PRISMOR",
+      "GITHUB.COM/PRISMORSEC/PRISMOR",
+      "PRISMOR.DEV"
+    ]
+  },
+  "meta": {
+    "hero_target": [0.5, 0.36],
+    "logo": "assets/logo.png"
+  },
+  "scenes": {},
+  "assets": {
+    "hero": {
+      "size": "1024x1024", "quality": "medium",
+      "prompt": "Studio product render of an open matte graphite laptop, three-quarter view from the front left, the screen showing a dark terminal window with a few rows of thin white monospace lines and one violet highlighted line. Soft white rim highlights on the aluminium edges. Plain flat medium-dark grey seamless background (#3a3a3a), soft diffused top light, 85mm lens, minimal, no other objects, no logos, no readable text."
+    },
+    "closeup": {
+      "size": "1536x1024", "quality": "medium",
+      "prompt": "Extreme close-up product photo of a polished steel key entering from the left edge of the frame, its blade and teeth pointing right, a thin violet anodized ring around the bow. Pure black background, hard rim light from above, crisp specular reflections, high contrast, 100mm macro lens, no text."
+    },
+    "cutout": {
+      "size": "1536x1024", "quality": "medium", "background": "transparent",
+      "prompt": "Isolated side view of a long brushed steel key pointing right, the bow on the left wrapped in a matte violet rubber grip, detailed teeth on the blade. Flat even studio lighting, transparent background, no shadow, no text, subject spans the full width."
+    },
+    "environment": {
+      "size": "1024x1536", "quality": "low",
+      "prompt": "Top-down black and white photograph of a data centre aisle: long parallel rows of server racks with cable trays and perforated floor tiles, strong vertical lines, high contrast, harsh overhead light, documentary industrial photography."
+    },
+    "lineart": {
+      "size": "1024x1536", "quality": "medium",
+      "prompt": "Technical contour line drawing of a tall server rack seen from a low three-quarter angle, stacked server units with vents, drive bays and cable loops, a small padlock on the rack door. Thin pure white outlines only on a pure black background, no shading, no fill, no text, clean vector engineering illustration, subject fills the frame."
+    },
+    "sprite": {
+      "size": "1536x1024", "quality": "medium", "grid": [2, 2],
+      "prompt": "Sprite sheet for animation: a 2 by 2 grid of four equal cells on a pure white background, each cell shows the SAME padlock in front view, drawn as thin black technical outline line art with no shading. Same position, scale and framing in every cell; only the shackle moves: cell 1 top-left shackle fully open and raised, cell 2 top-right lowering, cell 3 bottom-left almost closed, cell 4 bottom-right fully closed and locked. No grid lines, no numbers, no text."
+    }
+  }
+}

@@ -12,6 +12,7 @@ The brief is a single JSON file. Relative paths resolve from the brief's folder.
 | `theme` | ARC orange | `accent`, `ink`, `paper`, `tint` (hex). If `tint` is omitted, it's derived as accent mixed toward ink. |
 | `assets_dir` | `"assets"` | Where slot images live. |
 | `meta.hero_target` | `[0.8, 0.3]` | Point on the hero image (fractions) for the targeting box. |
+| `meta.logo` | none | Path (from the brief) to the brand's real logo; shown beside the wordmark. |
 | `scenes` | `{}` | `{scene_name: seconds}`; `0` drops a scene. Names are in the storyboard. |
 | `assets` | — | Slot → `{prompt, size, quality, background?, grid?}`. Prompts can use `{brand}`, `{company}`, `{model}`, etc. |
 
