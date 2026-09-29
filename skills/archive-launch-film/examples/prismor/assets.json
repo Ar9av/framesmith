@@ -1,0 +1,39 @@
+{
+ "troy": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Nineteenth-century wood engraving, black ink cross-hatching on aged paper, crowds hauling the giant wooden Trojan horse through the stone gates of Troy at dusk, torches, dramatic low angle, dense detail, no text, no border, no signature"
+ },
+ "troy_cut": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Technical cutaway line drawing of the wooden Trojan horse in side view on wheels, its hollow belly cut open to show armed Greek soldiers crouching inside, clean thin black ink lines on a pure white background, patent drawing style, horse centred with generous white margin, no text, no labels, no numbers, no shading fills"
+ },
+ "liner": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Black and white 1912 newspaper engraving style illustration of a great four-funnel ocean liner sinking bow first at night among icebergs, lifeboats with people in the foreground, dramatic grey sky, fine cross-hatching, no text, no border, no signature"
+ },
+ "liner_cut": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Side-view longitudinal section technical drawing of an early twentieth-century ocean liner hull, the lower hull divided into sixteen watertight compartments by vertical bulkheads that stop below the upper decks, decks, boilers and engines drawn inside, clean thin black ink lines on a pure white background, ship centred with white margin, no text, no labels, no numbers, no colour"
+ },
+ "agents_engraving": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Nineteenth-century wood engraving, black ink cross-hatching on aged paper, a dim study at night lit by one oil lamp: an open modern laptop on a heavy writing desk, and a crowd of small brass clockwork automatons swarming over the desk, some carrying large keys, some pulling papers and ledgers from open drawers, one pressing the keyboard, dramatic chiaroscuro, dense fine detail, wide composition with the laptop left of centre, no text, no border, no signature"
+ },
+ "chrome_torus": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single glossy liquid-chrome 3D torus, thick and smooth, mirror reflections with soft white studio light and a faint lavender and black tint, tilted three-quarter view, isolated object on a transparent background, no shadow, no floor, no text"
+ },
+ "chrome_key": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single glossy liquid-chrome 3D key with a round bow and simple bit, smooth mirror finish with soft white studio reflections and a faint lavender and black tint, tilted diagonally, isolated object on a transparent background, no shadow, no floor, no text"
+ }
+}

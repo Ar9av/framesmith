@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.16.0 (2026-09-29)
+- Engine `framesmith.motion` (ideas from howseen-ai/claude-motion-design, MIT, ported to pure Python): closed-form springs, voice-synced masked word rises with accent fills, letter stretch, words on dashed paths, scatter, 3D perspective tilt, detection boxes, border and connector beams, spinner, code-synthesised SFX and a voice+SFX mixer.
+- Engine: `narration.transcribe_windows` (overlapping-window Whisper; long takes no longer lose stretches of timings); `Timeline.render` feeds the encoder in bounded batches (no more out-of-memory kills on small machines) and takes `preset=` / `FRAMESMITH_PRESET`.
+- Skill `kinetic-launch-film`: text-led launch film with product UI and synthesised sound. Example: Prismor launch (67 s).
+- Skill `archive-launch-film`: documentary cold open to product film, pastel prismor.dev ground, Enterprise beats (fleet wall, holographic reveal, enroll, console panels, repo end card). Examples: Prismor (65 s) and Prismor Enterprise (84 s).
+
 ## 0.15.0 (2026-09-28)
 - Skill `animated-character-explainer`: the layered, character-driven explainer as its own template. `cast` builds a whole cast from `cast.json` (bases → on-model poses via gpt-image-2 edits → props → backdrops), `init` copies a fill-in starter (11-beat arc, stand-in cast), `check` warns on unfilled placeholders and trailing periods, previews work before the voiceover exists. Example: Prismor Enterprise (4 characters, 14 poses).
 

@@ -42,6 +42,29 @@ def transcribe_words(wav, key=None, prompt=None):
     return {"duration": r["duration"], "words": r["words"]}
 
 
+def transcribe_windows(wav, key=None, win=12.0, overlap=1.0):
+    """Word timestamps for long takes: Whisper silently drops stretches of 60 s+ files, so transcribe
+    overlapping windows and stitch them (each word kept from the window where it sits away from the edges)."""
+    import subprocess, tempfile
+    dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", wav],
+                               capture_output=True, text=True, check=True).stdout)
+    words, a = [], 0.0
+    tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False).name
+    try:
+        while a < dur:
+            b = min(dur, a + win)
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(a), "-t", str(b - a), "-i", wav, tmp], check=True)
+            for x in transcribe_words(tmp, key)["words"]:
+                s = x["start"] + a
+                if (a == 0 or s >= a + overlap / 2) and (b >= dur or s < b - overlap / 2):
+                    words.append(dict(x, start=s, end=x["end"] + a))
+            a = b - overlap if b < dur else dur
+    finally:
+        os.unlink(tmp)
+    words.sort(key=lambda x: x["start"])
+    return {"duration": dur, "words": words}
+
+
 def align(script, words):
     """Give every script token a (start, end) from the transcript. Unmatched tokens are interpolated.
 

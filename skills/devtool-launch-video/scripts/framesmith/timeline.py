@@ -151,14 +151,14 @@ class Timeline:
         sheet.save(path)
         return path
 
-    def render(self, out, audio=None, workers=None, crf=16, log=True):
+    def render(self, out, audio=None, workers=None, crf=16, log=True, preset=None):
         os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
         cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24",
                "-s", f"{self.width}x{self.height}", "-r", str(self.fps), "-i", "-"]
         if audio:
             # pad the audio with silence so the video's own length (tails, black ends) is kept
             cmd += ["-i", audio, "-map", "0:v", "-map", "1:a", "-af", "apad", "-c:a", "aac", "-b:a", "160k", "-shortest"]
-        cmd += ["-c:v", "libx264", "-preset", "slow", "-crf", str(crf), "-pix_fmt", "yuv420p",
+        cmd += ["-c:v", "libx264", "-preset", preset or os.environ.get("FRAMESMITH_PRESET", "slow"), "-crf", str(crf), "-pix_fmt", "yuv420p",
                 "-movflags", "+faststart", out]
         ff = subprocess.Popen(cmd, stdin=subprocess.PIPE)
         n = self.n_frames
@@ -169,8 +169,12 @@ class Timeline:
         except ValueError:                  # no fork (Windows): render in-process
             ctx = None
         if ctx and (workers or os.cpu_count() or 1) > 1:
-            with ctx.Pool(workers or os.cpu_count()) as pool:
-                it = pool.imap(_frame_bytes, range(n), chunksize=4)
+            k = workers or os.cpu_count()
+            with ctx.Pool(k) as pool:
+                # bounded batches: imap has no backpressure, so a slow encoder would let finished
+                # frames (6 MB each at 1080p) pile up in memory until the process is killed
+                batch = max(8, k * 8)
+                it = (b for s in range(0, n, batch) for b in pool.imap(_frame_bytes, range(s, min(n, s + batch)), chunksize=2))
                 self._pipe(it, ff, n, log)
         else:
             self._pipe(map(_frame_bytes, range(n)), ff, n, log)

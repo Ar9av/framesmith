@@ -1,0 +1,625 @@
+{
+ "size": [
+  1920,
+  1080
+ ],
+ "fps": 30,
+ "assets_dir": "assets",
+ "vo": {
+  "script": "vo.txt",
+  "words": "words.json",
+  "audio": "vo.m4a",
+  "model": "gpt-4o-mini-tts-2025-12-15",
+  "voice": "marin",
+  "instructions": "Upbeat, warm female product-launch narrator. Friendly and confident, flowing and conversational, a light smile in the voice. Crisp on short punchy lines. Brighter lift on the product name."
+ },
+ "tail": 1.6,
+ "lead": 0.12,
+ "holds": [
+  {
+   "after": "Over-permissioned.",
+   "secs": 0.4
+  },
+  {
+   "after": "Meet Prismor.",
+   "secs": 1.6
+  },
+  {
+   "after": "Prismor can help.",
+   "secs": 0.5
+  },
+  {
+   "after": "ever sees them.",
+   "secs": 1.0
+  },
+  {
+   "after": "blocks destructive commands,",
+   "secs": 1.3
+  },
+  {
+   "after": "until a person approves.",
+   "secs": 0.8
+  },
+  {
+   "after": "under one policy.",
+   "secs": 0.9
+  },
+  {
+   "after": "going rogue.",
+   "secs": 1.2
+  }
+ ],
+ "beats": [
+  {
+   "at": "Your AI agents",
+   "type": "kin",
+   "side": 1,
+   "phrases": [
+    {
+     "at": "Your AI agents",
+     "text": "Your AI agents work *everywhere*",
+     "size": 78,
+     "stretch": {
+      "word": "everywhere",
+      "letter": 3,
+      "extra": 3,
+      "t0": 0.2,
+      "dur": 0.9
+     }
+    }
+   ]
+  },
+  {
+   "at": "In your terminal",
+   "type": "windows",
+   "items": [
+    {
+     "at": "terminal,",
+     "label": "Terminal",
+     "kind": "terminal",
+     "icons": [
+      "claude-code",
+      "openai"
+     ]
+    },
+    {
+     "at": "editor,",
+     "label": "Editor",
+     "kind": "editor",
+     "icons": [
+      "cursor",
+      "github-copilot"
+     ]
+    },
+    {
+     "at": "browser",
+     "label": "Browser",
+     "kind": "browser",
+     "icons": [
+      "langchain",
+      "crewai"
+     ]
+    },
+    {
+     "at": "cloud.",
+     "label": "Cloud",
+     "kind": "cloud",
+     "icons": [
+      "aws",
+      "model-context-protocol"
+     ]
+    }
+   ]
+  },
+  {
+   "at": "Messy.",
+   "type": "paths",
+   "items": [
+    {
+     "at": "Messy.",
+     "word": "Messy.",
+     "curve": [
+      [
+       0.14,
+       0.44
+      ],
+      [
+       0.2,
+       0.22
+      ],
+      [
+       0.36,
+       0.22
+      ],
+      [
+       0.42,
+       0.4
+      ]
+     ],
+     "start": 40
+    },
+    {
+     "at": "Unwatched.",
+     "word": "Unwatched.",
+     "curve": [
+      [
+       0.52,
+       0.34
+      ],
+      [
+       0.62,
+       0.26
+      ],
+      [
+       0.74,
+       0.52
+      ],
+      [
+       0.9,
+       0.42
+      ]
+     ],
+     "start": 60
+    },
+    {
+     "at": "Over-permissioned.",
+     "word": "Over-permissioned.",
+     "curve": [
+      [
+       0.22,
+       0.78
+      ],
+      [
+       0.3,
+       0.58
+      ],
+      [
+       0.5,
+       0.56
+      ],
+      [
+       0.66,
+       0.72
+      ]
+     ],
+     "start": 30
+    }
+   ]
+  },
+  {
+   "at": "And when",
+   "type": "kin",
+   "side": -1,
+   "phrases": [
+    {
+     "at": "And when",
+     "text": [
+      "And when you think of",
+      "*agent security?*"
+     ],
+     "size": 66
+    },
+    {
+     "at": "Most of it",
+     "text": "Most of it stops at the prompt",
+     "size": 66,
+     "fall": "prompt"
+    }
+   ]
+  },
+  {
+   "at": "Meet Prismor.",
+   "type": "meet",
+   "name_at": "Prismor.",
+   "name": "Prismor"
+  },
+  {
+   "at": "It sits between",
+   "type": "kin",
+   "backdrop": "ui",
+   "side": 1,
+   "push": 1.02,
+   "phrases": [
+    {
+     "at": "It sits between",
+     "text": [
+      "Sits between your agents",
+      "*and your machine*"
+     ],
+     "size": 110,
+     "align": "left",
+     "x": 0.08,
+     "y": 0.5
+    },
+    {
+     "at": "and checks",
+     "text": [
+      "Checks every action",
+      "*before it runs*"
+     ],
+     "size": 110,
+     "align": "left",
+     "x": 0.08,
+     "y": 0.5
+    }
+   ],
+   "feed": {
+    "title": "Live activity",
+    "every": 0.45,
+    "visible": 6,
+    "items": [
+     {
+      "icon": "package",
+      "title": "Dependency install",
+      "detail": "npm install zod",
+      "who": "claude-code · alice-mbp",
+      "verdict": "Allowed"
+     },
+     {
+      "icon": "file-text",
+      "title": "Credential read",
+      "detail": "read ~/.ssh/id_rsa",
+      "who": "cursor · sam-air",
+      "verdict": "Blocked"
+     },
+     {
+      "icon": "key-round",
+      "title": "API key in environment",
+      "detail": "env | grep KEY",
+      "who": "codex · omar-air",
+      "verdict": "Redacted"
+     },
+     {
+      "icon": "terminal",
+      "title": "Run tests",
+      "detail": "npm test",
+      "who": "claude-code · alice-mbp",
+      "verdict": "Allowed"
+     },
+     {
+      "icon": "globe",
+      "title": "Unknown webhook",
+      "detail": "POST webhook.site/3f9",
+      "who": "cursor · sam-air",
+      "verdict": "Blocked"
+     },
+     {
+      "icon": "git-branch",
+      "title": "Force push",
+      "detail": "git push --force",
+      "who": "codex · omar-air",
+      "verdict": "Held"
+     }
+    ]
+   }
+  },
+  {
+   "at": "It works with",
+   "type": "logos",
+   "phrases": [
+    {
+     "at": "It works with",
+     "text": "It works with",
+     "size": 64,
+     "y": 0.3
+    }
+   ],
+   "grid_y": 0.5,
+   "items": [
+    {
+     "at": "Claude Code,",
+     "icon": "claude-code",
+     "name": "Claude Code"
+    },
+    {
+     "at": "Codex,",
+     "icon": "openai",
+     "name": "Codex"
+    },
+    {
+     "at": "Cursor,",
+     "icon": "cursor",
+     "name": "Cursor"
+    },
+    {
+     "at": "LangChain,",
+     "icon": "langchain",
+     "name": "LangChain"
+    },
+    {
+     "at": "CrewAI",
+     "icon": "crewai",
+     "name": "CrewAI"
+    },
+    {
+     "at": "OpenAI Agents",
+     "icon": "openai",
+     "name": "OpenAI Agents SDK"
+    }
+   ]
+  },
+  {
+   "at": "One leaked key",
+   "type": "kin",
+   "side": -1,
+   "phrases": [
+    {
+     "at": "One leaked key",
+     "text": [
+      "One leaked key",
+      "can *sink a company*"
+     ],
+     "size": 80,
+     "scatter_at": 1.55
+    }
+   ]
+  },
+  {
+   "at": "Prismor can help.",
+   "type": "kin",
+   "side": 1,
+   "phrases": [
+    {
+     "at": "Prismor can help.",
+     "text": [
+      "Prismor",
+      "*can help*"
+     ],
+     "size": 150
+    }
+   ]
+  },
+  {
+   "at": "Watch it cloak",
+   "type": "tilt",
+   "box_at": "secrets before",
+   "curve_label": "0 keys exposed",
+   "phrases": [
+    {
+     "at": "Watch it cloak",
+     "text": "Watch it *cloak your secrets*",
+     "size": 58,
+     "y": 0.12
+    }
+   ]
+  },
+  {
+   "at": "It blocks",
+   "type": "activity",
+   "status": "Inspecting every tool call",
+   "agent": "codex",
+   "feed": {
+    "title": "Live activity",
+    "every": 0.42,
+    "visible": 5,
+    "items": [
+     {
+      "icon": "package",
+      "title": "Dependency install",
+      "detail": "npm install zod",
+      "who": "claude-code · alice-mbp",
+      "verdict": "Allowed"
+     },
+     {
+      "icon": "terminal",
+      "title": "Run tests",
+      "detail": "npm test",
+      "who": "claude-code · alice-mbp",
+      "verdict": "Allowed"
+     },
+     {
+      "icon": "key-round",
+      "title": "API key in environment",
+      "detail": "env | grep KEY",
+      "who": "codex · omar-air",
+      "verdict": "Redacted"
+     },
+     {
+      "icon": "trash-2",
+      "title": "Destructive command",
+      "detail": "rm -rf ~/projects",
+      "who": "codex · omar-air",
+      "verdict": "Blocked"
+     }
+    ]
+   }
+  },
+  {
+   "at": "and holds risky",
+   "type": "approve2",
+   "click_at": "approves.",
+   "title": "Waiting for approval",
+   "icon": "git-branch",
+   "action": "Push to a protected branch",
+   "cmd": "git push --force origin main",
+   "who": "release-bot · dan-linux · policy acme/release",
+   "done": "Approved by Priya",
+   "note": "Approved once, for this push only",
+   "toast": "Approved by Priya · this push only"
+  },
+  {
+   "at": "Every call lands",
+   "type": "structure",
+   "fly_at": "read back",
+   "phrases": [
+    {
+     "at": "Every call lands",
+     "text": "Every call lands in an *audit trail*",
+     "size": 60,
+     "y": 0.16
+    }
+   ],
+   "raw": [
+    "{\"ts\":\"14:02:11\",\"agent\":\"support-bot\",",
+    "  \"tool\":\"http\",\"call\":\"POST webhook.site\",",
+    "  \"verdict\":\"Blocked\",\"policy\":\"acme/support\"}",
+    "{\"ts\":\"14:01:48\",\"agent\":\"claude-code\",",
+    "  \"tool\":\"Bash\",\"call\":\"npm test\",",
+    "  \"verdict\":\"Allowed\",\"policy\":\"acme/org\"}",
+    "{\"ts\":\"13:59:02\",\"agent\":\"codex\",",
+    "  \"tool\":\"Bash\",\"call\":\"env | grep KEY\",",
+    "  \"verdict\":\"Redacted\",\"policy\":\"acme/org\"}"
+   ],
+   "columns": [
+    [
+     "Time",
+     0.18
+    ],
+    [
+     "Agent",
+     0.24
+    ],
+    [
+     "Action",
+     0.36
+    ],
+    [
+     "Verdict",
+     0.22
+    ]
+   ],
+   "rows": [
+    [
+     [
+      "14:02:11",
+      0
+     ],
+     [
+      "support-bot",
+      0
+     ],
+     [
+      "POST webhook.site",
+      1
+     ],
+     [
+      "Blocked",
+      2
+     ]
+    ],
+    [
+     [
+      "14:01:48",
+      3
+     ],
+     [
+      "claude-code",
+      3
+     ],
+     [
+      "npm test",
+      4
+     ],
+     [
+      "Allowed",
+      5
+     ]
+    ],
+    [
+     [
+      "13:59:02",
+      6
+     ],
+     [
+      "codex",
+      6
+     ],
+     [
+      "env | grep KEY",
+      7
+     ],
+     [
+      "Redacted",
+      8
+     ]
+    ]
+   ]
+  },
+  {
+   "at": "Prismor connects",
+   "type": "hub",
+   "left_title": "Agents",
+   "right_title": "Tools",
+   "left": [
+    {
+     "icon": "claude-code",
+     "name": "Claude Code"
+    },
+    {
+     "icon": "openai",
+     "name": "Codex"
+    },
+    {
+     "icon": "cursor",
+     "name": "Cursor"
+    },
+    {
+     "icon": "langchain",
+     "name": "LangChain"
+    },
+    {
+     "icon": "crewai",
+     "name": "CrewAI"
+    }
+   ],
+   "right": [
+    {
+     "icon": "github",
+     "name": "GitHub"
+    },
+    {
+     "icon": "slack",
+     "name": "Slack"
+    },
+    {
+     "icon": "postgresql",
+     "name": "Postgres"
+    },
+    {
+     "icon": "aws",
+     "name": "AWS"
+    },
+    {
+     "icon": "model-context-protocol",
+     "name": "MCP servers"
+    }
+   ]
+  },
+  {
+   "at": "No matter",
+   "type": "kin",
+   "side": -1,
+   "phrases": [
+    {
+     "at": "No matter",
+     "text": "No matter which agent your team runs",
+     "size": 64
+    },
+    {
+     "at": "One immune",
+     "text": [
+      "One immune layer",
+      "*for every agent action*"
+     ],
+     "size": 110
+    },
+    {
+     "at": "Open source,",
+     "text": [
+      "*Open source*",
+      "independent",
+      "running on your own machines"
+     ],
+     "size": 84
+    }
+   ]
+  },
+  {
+   "at": "Prismor. Stop",
+   "type": "end",
+   "tag_at": "Stop your",
+   "tagline": "*Stop your agents from going rogue*",
+   "url": "prismor.dev"
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+Your AI agents work everywhere.
+In your terminal, your editor, your browser and your cloud.
+Messy. Unwatched. Over-permissioned.
+And when you think of agent security?
+Most of it stops at the prompt.
+Meet Prismor.
+It sits between your agents and your machine, and checks every action before it runs.
+It works with Claude Code, Codex, Cursor, LangChain, CrewAI and the OpenAI Agents SDK.
+One leaked key can sink a company.
+Prismor can help.
+Watch it cloak your secrets before the model ever sees them.
+It blocks destructive commands, and holds risky ones until a person approves.
+Every call lands in an audit trail you can read back later.
+Prismor connects every agent to every tool, under one policy.
+No matter which agent your team runs.
+One immune layer, for every agent action.
+Open source, independent, and running on your own machines.
+Prismor. Stop your agents from going rogue.

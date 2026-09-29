@@ -1,0 +1,100 @@
+{
+ "slack": {
+  "title": "Slack",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/slack/default.svg",
+  "license": "MIT",
+  "brand_url": "https://www.slack.com"
+ },
+ "postgresql": {
+  "title": "PostgreSQL",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/postgresql/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.postgresql.org/"
+ },
+ "model-context-protocol": {
+  "title": "Model Context Protocol",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/model-context-protocol/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://modelcontextprotocol.io/"
+ },
+ "github-copilot": {
+  "title": "GitHub Copilot",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/github-copilot/light.svg",
+  "license": "MIT",
+  "brand_url": "https://github.com/features/copilot"
+ },
+ "langchain": {
+  "title": "LangChain",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/langchain/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.langchain.com"
+ },
+ "crewai": {
+  "title": "CrewAI",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/crewai/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://github.com/crewAIInc/crewAI/blob/a7696d5aed7a85333735dde370fd9f0547aaabf5/docs/favicon.svg"
+ },
+ "gemini": {
+  "title": "Gemini",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/gemini/default.svg",
+  "license": "MIT",
+  "brand_url": "https://gemini.google.com/"
+ },
+ "n8n": {
+  "title": "n8n",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/n8n/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://n8n.io/"
+ },
+ "perplexity": {
+  "title": "Perplexity",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/perplexity/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://www.perplexity.ai"
+ },
+ "mistral": {
+  "title": "Mistral",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/mistral/color.svg",
+  "license": "MIT",
+  "brand_url": "https://mistral.ai"
+ },
+ "windsurf": {
+  "title": "Windsurf",
+  "variant": "light",
+  "source": "https://thesvg.org/icons/windsurf/light.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://windsurf.com/editor"
+ },
+ "replit": {
+  "title": "Replit",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/replit/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://replit.com/"
+ },
+ "hugging-face": {
+  "title": "Hugging Face",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/hugging-face/default.svg",
+  "license": "CC0-1.0",
+  "brand_url": "https://huggingface.co/"
+ },
+ "aws": {
+  "title": "AWS",
+  "variant": "default",
+  "source": "https://thesvg.org/icons/aws/color.svg",
+  "license": "MIT",
+  "brand_url": "https://aws.amazon.com"
+ }
+}

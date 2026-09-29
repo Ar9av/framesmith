@@ -1,0 +1,14 @@
+Most of history's big failures started small, long before the end.
+Troy opened its gates for a gift. Nobody checked what was inside.
+The Titanic had sixteen watertight compartments. The walls stopped short of the top, and the sea poured over them.
+Today, teams hand their machines to AI agents. Claude Code, Codex, Cursor and many more read files, hold keys and run commands on their own.
+One poisoned file can tell an agent to send your keys to a stranger.
+Most teams find out afterwards, if they find out at all.
+This is Prismor.
+Prismor checks every tool call before it runs.
+Secrets stay placeholders, so the agent never sees the real key.
+Risky actions wait until a person approves them.
+Every agent, laptop and MCP server reports to one console, under one signed policy.
+Your auditors get a signed record of every action.
+Prismor is independent, open source, and runs on your own machines.
+Prismor dot dev.
