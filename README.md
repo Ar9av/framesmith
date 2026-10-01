@@ -22,6 +22,7 @@ The skills share a tiny engine (`core/framesmith`) with a seekable timeline, exa
 <!-- catalog:start -->
 | Skill | What it makes | Preview |
 |---|---|---|
+| [`abstract-journey-film`](skills/abstract-journey-film/SKILL.md) | Render a music-only abstract title film (about 80 s, 16:9, 24 fps) in which a small glowing orb travels through a chain of worlds and lands on the logo. | <img src="docs/media/abstract-journey-film.gif" width="120"> |
 | [`animated-character-explainer`](skills/animated-character-explainer/SKILL.md) | Render a narrated explainer video (about 45–90 s, 16:9) animated from layers. | <img src="docs/media/animated-character-explainer.gif" width="120"> |
 | [`archive-launch-film`](skills/archive-launch-film/SKILL.md) | Render a narrated archive-to-product launch film (about 60–90 s, 16:9). | <img src="docs/media/archive-launch-film.gif" width="120"> |
 | [`blue-story-film`](skills/blue-story-film/SKILL.md) | Render a music-driven SaaS story film (about 60–90 s, 16:9) in the blue-light style. | <img src="docs/media/blue-story-film.gif" width="120"> |

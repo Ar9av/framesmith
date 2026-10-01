@@ -1,0 +1,112 @@
+{
+ "orb": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single small luminous glass orb, bright white-blue glowing core, thin iridescent rim with violet and cyan reflections, soft outer glow, perfectly round, centred, isolated on a transparent background, no shadow, no text"
+ },
+ "sphere_pink": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single glossy 3D sphere with a smooth gradient from hot pink to warm orange, soft studio highlight at the top left, subtle iridescent rim, perfectly round, centred, isolated on a transparent background, no shadow, no text"
+ },
+ "sphere_cyan": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single glossy 3D sphere with a smooth gradient from bright cyan to deep cobalt blue, soft studio highlight at the top left, perfectly round, centred, isolated on a transparent background, no shadow, no text"
+ },
+ "sphere_lime": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single glossy 3D sphere with a smooth gradient from lime green to soft yellow and a hint of violet at the bottom edge, soft studio highlight, perfectly round, centred, isolated on a transparent background, no shadow, no text"
+ },
+ "sphere_violet": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single glossy 3D sphere with a smooth gradient from electric violet to indigo, soft studio highlight at the top left, perfectly round, centred, isolated on a transparent background, no shadow, no text"
+ },
+ "sphere_peach": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single matte soft 3D sphere with a gradient from peach to pale pink with a soft violet shadow side, gentle glow, perfectly round, centred, isolated on a transparent background, no shadow, no text"
+ },
+ "sphere_frost": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A large frosted glass sphere, milky white translucent surface with soft lavender and blue inner light, subtle rim highlight, perfectly round, centred, isolated on a transparent background, no shadow, no text"
+ },
+ "bubbles_sky": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Dreamy pastel sky filled with large soft translucent iridescent bubbles and glossy spheres of different sizes, lavender, pale pink, cyan and white, soft volumetric light, smooth 3D render, airy and bright, no horizon objects, no text"
+ },
+ "pastel_world": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "A pastel 3D landscape: smooth winding light-blue paths and pools on soft lavender ground, tall rounded blue cylinders, translucent frosted glass panels standing upright, a small glowing blue orb on the path, soft hazy morning light, minimal clean 3D render, wide view, no text, no people"
+ },
+ "landscape": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Dreamy illustrated fantasy landscape at sunset in a smooth flat-shaded 3D illustration style: turquoise rivers winding through soft lavender hills, small white minimalist towers and domes, a warm orange-pink horizon glow with a pale sun, layered purple clouds with soft highlights, wide panoramic view, vivid blue and violet sky at the top, no text, no people"
+ },
+ "clouds": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "Five separate stylized cartoon clouds in a smooth flat-shaded 3D illustration style, purple and indigo with soft lilac highlights on top, spread out with space between them, isolated on a transparent background, no text"
+ },
+ "space": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Deep indigo and violet outer space with a glowing golden-pink spiral galaxy disc seen at a low angle in the centre, fine scattered stars, soft nebula haze, smooth illustration style, no planets, no text"
+ },
+ "planet_peach": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single planet with a soft peach and pale orange glowing surface and a warm rim light, smooth illustration style, perfectly round, centred, isolated on a transparent background, no rings, no text"
+ },
+ "planet_blue": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single planet with a turquoise and cobalt blue surface with soft faceted bands, light from the top left, smooth illustration style, perfectly round, centred, isolated on a transparent background, no rings, no text"
+ },
+ "planet_lime": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single small planet with a lime green to pale yellow surface and a violet shadow side, smooth illustration style, perfectly round, centred, isolated on a transparent background, no text"
+ },
+ "ribbon": {
+  "size": "1536x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "A single long glossy ribbon curling through space in a smooth S curve, gradient from deep violet to blue to soft pink, satin highlights, 3D render, isolated on a transparent background, no text"
+ },
+ "iso_house": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "An isometric 3D house made of glowing blue glass with a peach and pink gradient roof panel and a small lit window, neon edge light, clean minimal render, centred, isolated on a transparent background, no text"
+ },
+ "iso_stairs": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "An isometric 3D staircase made of stacked translucent blue glass interface panels with thin glowing edges, each step a small app card, clean minimal render, centred, isolated on a transparent background, no text"
+ },
+ "iso_shield": {
+  "size": "1024x1024",
+  "quality": "medium",
+  "background": "transparent",
+  "prompt": "An isometric 3D shield made of dark blue glass with a glowing violet edge and a small lock keyhole cut-out in the middle, clean minimal render, centred, isolated on a transparent background, no text"
+ }
+}

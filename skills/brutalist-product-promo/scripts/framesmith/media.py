@@ -71,8 +71,11 @@ def pingpong(n):
 
 
 # ---------- gpt-image-2 ----------
+IMAGE_MODEL = os.environ.get("FRAMESMITH_IMAGE_MODEL", "gpt-image-2.5-sunburst")   # override per asset with "model"
+
+
 def generate_images(specs, out_dir, key=None, names=None, force=False, workers=6, fmt=None):
-    """Generate assets with OpenAI gpt-image-2.
+    """Generate assets with OpenAI gpt-image (default IMAGE_MODEL: gpt-image-2.5-sunburst, or -flare for speed; set FRAMESMITH_IMAGE_MODEL to change).
 
     specs: {name: {"prompt": str, "size": "1024x1536", "quality": "low|medium|high",
                    "background": "transparent" (optional)}}
@@ -89,7 +92,7 @@ def generate_images(specs, out_dir, key=None, names=None, force=False, workers=6
         """Reference-guided generation (/v1/images/edits): keeps a character on-model across poses."""
         import uuid
         bnd = uuid.uuid4().hex
-        fields = [("model", spec.get("model", "gpt-image-2")), ("prompt", fmt(spec["prompt"])),
+        fields = [("model", spec.get("model", IMAGE_MODEL)), ("prompt", fmt(spec["prompt"])),
                   ("size", spec.get("size", "1024x1024")), ("quality", spec.get("quality", "medium")), ("n", "1")]
         if spec.get("background"):
             fields.append(("background", spec["background"]))
@@ -111,26 +114,83 @@ def generate_images(specs, out_dir, key=None, names=None, force=False, workers=6
             f.write(base64.b64decode(r["data"][0]["b64_json"]))
         return f"{name}: ok (edit from {', '.join(refs)})"
 
-    def one(name):
+    def one(name, chroma=False):
         spec = specs[name]
         if spec.get("ref"):
             return edit(name, spec)
-        body = {"model": spec.get("model", "gpt-image-2"), "prompt": fmt(spec["prompt"]),
+        prompt = fmt(spec["prompt"])
+        keyhex = spec.get("key", "#00FF00")
+        if chroma:                                           # model refuses alpha: paint a flat key colour, cut it out
+            import re as _re
+            prompt = _re.sub(r"(isolated )?on a transparent background", f"isolated on a flat pure {keyhex} chroma key background", prompt)
+            prompt += (f" The background must be one perfectly flat, uniform pure {keyhex} colour filling the whole canvas: "
+                       "no gradient, no vignette, no floor, no shadow, no reflection of the background on the subject.")
+        body = {"model": spec.get("model", IMAGE_MODEL), "prompt": prompt,
                 "size": spec.get("size", "1024x1024"), "quality": spec.get("quality", "medium"), "n": 1}
-        if spec.get("background"):
+        if spec.get("background") and not chroma:
             body["background"] = spec["background"]
         req = urllib.request.Request("https://api.openai.com/v1/images/generations", data=json.dumps(body).encode(),
                                      headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
         try:
             r = json.load(urllib.request.urlopen(req, timeout=600))
         except urllib.error.HTTPError as e:
-            return f"{name}: HTTP {e.code} {e.read()[:300].decode(errors='replace')}"
-        with open(os.path.join(out_dir, name + ".png"), "wb") as f:
+            msg = e.read()[:300].decode(errors="replace")
+            if spec.get("background") == "transparent" and not chroma and "ransparent" in msg:
+                return one(name, chroma=True)
+            return f"{name}: HTTP {e.code} {msg}"
+        dst = os.path.join(out_dir, name + ".png")
+        with open(dst, "wb") as f:
             f.write(base64.b64decode(r["data"][0]["b64_json"]))
+        if chroma:
+            chroma_cutout(dst, dst, key=tuple(int(keyhex.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)))
+            return f"{name}: ok ({body['quality']}, {body['size']}, chroma-keyed {keyhex})"
         return f"{name}: ok ({body['quality']}, {body['size']})"
 
     with ThreadPoolExecutor(workers) as ex:
         return list(ex.map(one, todo))
+
+
+def chroma_cutout(src, dst, key=None, tol=90, despill=True):
+    """Remove a flat background colour: flood-fill from the border over pixels near the key colour (so key-like
+    colours inside the subject survive), feather the edge and unmix the key from edge pixels. Writes RGBA PNG."""
+    import numpy as np
+    from PIL import ImageDraw, ImageFilter
+    im = Image.open(src).convert("RGB")
+    a = np.asarray(im).astype(np.float32)
+    hh, ww = a.shape[:2]
+    if key is None:
+        border = np.concatenate([a[0], a[-1], a[:, 0], a[:, -1]])
+        key = tuple(np.median(border, 0))
+    k = np.array(key, np.float32)
+    dist = np.sqrt(((a - k) ** 2).sum(-1))
+    cand = Image.fromarray(((dist < tol) * 255).astype(np.uint8)).copy()   # writable (fromarray shares a read-only buffer)
+    for x in list(range(0, ww, 8)) + [ww - 1]:
+        for y in (0, hh - 1):
+            if cand.getpixel((x, y)) == 255:
+                ImageDraw.floodfill(cand, (x, y), 128)
+    for y in list(range(0, hh, 8)) + [hh - 1]:
+        for x in (0, ww - 1):
+            if cand.getpixel((x, y)) == 255:
+                ImageDraw.floodfill(cand, (x, y), 128)
+    bg = (np.asarray(cand) == 128) | (dist < tol * 0.3)    # border-connected background + enclosed holes of pure key
+    near = np.asarray(Image.fromarray((bg * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(5))) > 0
+    soft = np.clip((dist - tol * 0.35) / (tol * 0.65), 0, 1)
+    alpha = np.where(bg, 0.0, np.where(near, soft, 1.0))
+    al = np.maximum(alpha, 1e-3)[..., None]
+    rgb = np.clip((a - k * (1 - alpha[..., None])) / al, 0, 255)                # unmix the key colour from edges
+    edge = (near & ~bg)[..., None]
+    rgb = np.where(edge, rgb, a)
+    if despill and k[1] > 200 and k[0] < 80 and k[2] < 80:   # green key: no channel may spill above its neighbours
+        cap = np.maximum(rgb[..., 0], rgb[..., 2])
+        rgb[..., 1] = np.minimum(rgb[..., 1], cap * 1.05)
+    elif despill and k[0] > 200 and k[2] > 200 and k[1] < 80:  # magenta key
+        cap = rgb[..., 1] * 1.05 + 20
+        spill = np.minimum(rgb[..., 0], rgb[..., 2]) - cap
+        rgb[..., 0] -= np.clip(spill, 0, None) * near
+        rgb[..., 2] -= np.clip(spill, 0, None) * near
+    out = np.dstack([rgb, alpha * 255]).astype(np.uint8)
+    Image.fromarray(out, "RGBA").save(dst)
+    return dst
 
 
 # ---------- brand icons (thesvg.org) ----------

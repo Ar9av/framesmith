@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.17.0 (2026-10-01)
+- Engine: image generation defaults to `gpt-image-2.5-sunburst` (`FRAMESMITH_IMAGE_MODEL`, or `"model"` per asset; `-flare` for speed). When a model refuses `background: transparent`, `generate_images` falls back to a flat chroma key and `media.chroma_cutout` (border flood fill, enclosed-hole keying, feathered edge, despill).
+- Skill `abstract-journey-film`: music-only title film, a glowing orb through 22 abstract worlds to the logo, gpt-image-2.5 transparent assets, procedural scenes and a synthesised score. Example: Prismor (83 s).
+- video-to-template lessons: image model IDs, transparent fallback, read-only `fromarray` buffers, RGBA drawing semantics, seeded particle tables, Whisper windowing, TTS voice choice, render backpressure and presets, agent security hooks.
+
 ## 0.16.1 (2026-09-29)
 - brutalist-product-promo: `meta.logo` puts the brand's real logo beside the wordmark (hairline on dark grounds); new example `examples/prismor/` (software product in the ARC style: violet accent, key closeups, padlock sprite, server-rack line art, prismor.dev copy).
 

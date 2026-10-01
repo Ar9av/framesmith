@@ -1,0 +1,6 @@
+{
+ "fps": 24,
+ "assets_dir": "assets",
+ "name": "Prismor",
+ "assets": "assets.json"
+}
