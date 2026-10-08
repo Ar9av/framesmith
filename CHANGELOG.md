@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.18.0 (2026-10-08)
+- Skill `cartoon-launch-film`: music-only, hand-drawn cartoon launch film (square 1080, ~45 s). Features boiling linework, a mascot cast built from reference-guided gpt-image poses, squash and stretch, a 120 BPM synthesised score with cartoon SFX, and a hand-drawn Chrome window demoing a browser extension (capture a page, fill a form with sourced answers, leave unknowns blank). `check` samples the whole cut and fails on shrunk copy or missing assets. Example: obsidian-wiki 3.5k stars (44.9 s).
+
 ## 0.17.0 (2026-10-01)
 - Engine: image generation defaults to `gpt-image-2.5-sunburst` (`FRAMESMITH_IMAGE_MODEL`, or `"model"` per asset; `-flare` for speed). When a model refuses `background: transparent`, `generate_images` falls back to a flat chroma key and `media.chroma_cutout` (border flood fill, enclosed-hole keying, feathered edge, despill).
 - Skill `abstract-journey-film`: music-only title film, a glowing orb through 22 abstract worlds to the logo, gpt-image-2.5 transparent assets, procedural scenes and a synthesised score. Example: Prismor (83 s).

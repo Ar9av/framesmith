@@ -1,0 +1,199 @@
+{
+  "name": "obsidian-wiki",
+  "assets_dir": "assets",
+  "copy": {
+    "terminal": {
+      "header": "obsidian-wiki · ~/payments-api",
+      "prompt": "how did we fix that retry loop in March?",
+      "reply": "I don't have access to",
+      "reply_hit": "earlier sessions",
+      "menu": [
+        [
+          "/wiki-query",
+          "ask your vault, get cited answers"
+        ],
+        [
+          "/wiki-ingest",
+          "docs, PDFs, chats, URLs"
+        ],
+        [
+          "/wiki-history-ingest",
+          "mine your past agent sessions"
+        ],
+        [
+          "/wiki-capture",
+          "save this conversation"
+        ]
+      ],
+      "pick": 2,
+      "arg": " claude",
+      "status": "reading your Claude sessions…"
+    },
+    "title": "obsidian-wiki",
+    "title_sub": "a brain for your agent",
+    "cap_forget": "Your answers live in old chats",
+    "cap_ingest": "Mo reads all of it",
+    "cap_graph": "and links it into notes you own",
+    "notes": [
+      "retry-loop",
+      "rate-limits",
+      "postgres",
+      "auth-bug",
+      "mcp-servers",
+      "karpathy-gist"
+    ],
+    "cap_agents": "Works in the agent you already use",
+    "agents": [
+      [
+        "claude-code",
+        "Claude Code"
+      ],
+      [
+        "openai",
+        "Codex"
+      ],
+      [
+        "cursor",
+        "Cursor"
+      ],
+      [
+        "gemini",
+        "Gemini CLI"
+      ],
+      [
+        "windsurf",
+        "Windsurf"
+      ],
+      [
+        "github-copilot",
+        "Copilot"
+      ],
+      [
+        "antigravity-google",
+        "Antigravity"
+      ],
+      [
+        "openclaw-moltbot-clawdbot",
+        "OpenClaw"
+      ]
+    ],
+    "browser": {
+      "icon": "brain-ext",
+      "product": "OBSIDIAN WIKI",
+      "tabs": [
+        "Capture",
+        "Fill form"
+      ],
+      "cap_capture": "Save the page you're reading into your vault",
+      "cap_fill": "Then fill forms from what your vault knows",
+      "cap_blank": "Blank where it doesn't know. You press submit",
+      "article": {
+        "title": "Connection pooling in Postgres",
+        "url": "pgdocs.dev/guides/connection-pooling",
+        "meta": "pgdocs.dev  ·  6 min read",
+        "paragraphs": [
+          "Every Postgres connection is a full backend process with its own memory. Past a few hundred of them, the server spends more time switching between processes than running queries.",
+          "Put PgBouncer in transaction mode in front of the database and size the pool at two to four connections per CPU core."
+        ],
+        "select": 1,
+        "toc": [
+          "Why pool at all",
+          "Transaction mode",
+          "Sizing the pool",
+          "Caveats"
+        ],
+        "code_name": "pgbouncer.ini",
+        "code": [
+          "[pgbouncer]",
+          "pool_mode = transaction",
+          "default_pool_size = 64"
+        ]
+      },
+      "capture": {
+        "lede": "Turn this page into raw memory",
+        "target_label": "CAPTURE TARGET",
+        "target": "brain/_raw",
+        "button": "Capture current page",
+        "saved": "✓ Saved 2026-10-08-connection-pooling.md"
+      },
+      "form": {
+        "title": "Vendor security review",
+        "url": "forms.halvardpay.com/vendor-review",
+        "meta": "Halvard Pay  ·  procurement  ·  4 questions",
+        "fields": [
+          [
+            "Where is customer data stored?",
+            "Postgres 16 on AWS eu-west-1, encrypted at rest",
+            "postgres"
+          ],
+          [
+            "How are failed card-network calls retried?",
+            "Backoff with jitter, capped at 5 tries",
+            "retry-loop"
+          ],
+          [
+            "Max database connections at peak load?",
+            "PgBouncer in transaction mode, 4 per CPU core",
+            "connection-pooling"
+          ],
+          [
+            "Date of your last SOC 2 audit",
+            null,
+            null
+          ]
+        ],
+        "blank": "Not in your vault, left blank",
+        "submit": "Submit"
+      },
+      "fill": {
+        "lede": "Answer this form from your vault",
+        "rows": [
+          [
+            "ANSWER FROM",
+            "work vault"
+          ],
+          [
+            "REASONING ENGINE",
+            "Claude Code"
+          ]
+        ],
+        "button": "Fill from brain",
+        "reading": "Reading 6 pages from work vault…"
+      }
+    },
+    "answer": {
+      "caption": "Ask later and it answers from your notes",
+      "question": [
+        "how did we fix",
+        "the retry loop?"
+      ],
+      "note": "retry-loop",
+      "meta": "updated 14 Mar  ·  from 3 sessions",
+      "body": "Fixed on 14 Mar. Forty workers retried a declined card in lockstep and tripped the network's rate limit. Each retry now waits with exponential backoff plus jitter, capped at 5 tries.",
+      "sources": [
+        "rate-limits",
+        "payments-api"
+      ]
+    },
+    "gauge": {
+      "label": "ANSWER TIME",
+      "before": 81,
+      "after": 19,
+      "burst": "4.4x",
+      "burst_sub": "faster",
+      "footnote": "same model, same vault  ·  44% → 83% correct"
+    },
+    "stars": {
+      "count": 3529,
+      "caption": "stars on GitHub"
+    },
+    "end": {
+      "line1": "Solve it once",
+      "line2": "Your agent remembers",
+      "underline_word": 2,
+      "meta": "  ·  open source  ·  3,529 stars",
+      "install": "pip install obsidian-wiki",
+      "repo": "github.com/Ar9av/obsidian-wiki"
+    }
+  }
+}

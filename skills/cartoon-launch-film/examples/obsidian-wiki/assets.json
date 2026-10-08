@@ -1,0 +1,34 @@
+{
+  "note": "Mascot first, then poses as reference-guided edits of it so the character stays on-model. Restyle style/mascot/props for your brand; keep the slot names. icons/ holds real brand marks (agents in the grid, the extension icon): never generate those.",
+  "style": "Hand-drawn flat cartoon illustration in the style of a modern indie animated short film: bold slightly uneven dark ink outlines (#23202A) of consistent thickness, flat colour fills with a subtle pencil-grain texture and light diagonal hatching in the shadows, limited palette of cream #F4EFE1, coral #E36A4E, soft pink #F2A9B0, grass green #B5DB8C, mustard yellow #F0C04A, lavender purple #8C7CF0 and warm brown #9A6B4B. Isolated on a transparent background, no floor, no ground, no cast shadow, no text, no letters, no numbers, no logos. ",
+  "mascot": "Mo, an original cartoon mascot: a small chubby brain creature. The body is a soft pink #F2A9B0 brain with clearly drawn rounded folds outlined in dark ink, two big round glossy black eyes with a white highlight, a small expressive mouth, rosy cheeks, short noodle-like ink-outlined arms with round mitten hands, short stubby legs with tiny coral sneakers, and a small lavender bookmark ribbon sticking up out of the top of the brain. ",
+  "base": {
+    "name": "mo",
+    "prompt": "Full body, facing the viewer, standing happily with a friendly smile, arms relaxed."
+  },
+  "poses": {
+    "mo_sad": "Same character, now slouched and confused, droopy sad eyes, one hand scratching the side of its head, a small sweat drop beside it.",
+    "mo_gulp": "Same character, leaning back eagerly with its mouth opened very wide like it is about to catch something, both arms spread wide open, excited eyes.",
+    "mo_chomp": "Same character, cheeks puffed out full and round while chewing, eyes squeezed shut happily, hands on its belly.",
+    "mo_read": "Same character, sitting cross-legged on the ground reading an open lavender book held in both hands, wearing small round glasses, focused content expression.",
+    "mo_point": "Same character, pointing with one arm stretched out to the viewer's right, the other hand on its hip, confident grin, body turned slightly right.",
+    "mo_cheer": "Same character, jumping in the air with both arms raised high, huge open-mouth smile, eyes squeezed shut with joy, legs tucked.",
+    "mo_card": "Same character, standing and holding up a large blank cream index card above its head with both hands, proud happy expression. The card is completely blank.",
+    "mo_run": "Same character, running fast towards the viewer's right in a dynamic side view, legs mid-stride, arms pumping, determined happy face, the ribbon flapping behind.",
+    "mo_wave": "Same character, waving hello at the viewer with one hand raised high, big warm smile, slight head tilt."
+  },
+  "props": {
+    "paper": "A single sheet of paper document with a folded top-right corner, a small coral tab on the corner, grey scribble lines suggesting text, slightly tilted.",
+    "chat": "A chunky cartoon speech bubble with three dark dots inside, cream fill, pointer tail at the bottom left.",
+    "shot": "A single object only: a small rectangular app window card like a screenshot, lavender title bar with three tiny coloured dots, inside simple grey placeholder blocks and lines, cream body, slightly tilted. No people, no characters, no hands.",
+    "card": "A blank cream index card seen straight on, faint ruled lines, a small lavender paper clip on its top edge. The card face is blank.",
+    "notebook": "A closed hardcover notebook seen perfectly straight on from the front, lavender purple cover with a coral elastic band running vertically on the right side, a large blank cream label rectangle in the middle of the cover. The label is completely blank.",
+    "sun": "A cartoon sun: a mustard yellow disc filled with fine hand-drawn hatching texture, surrounded by short separate ink ray strokes.",
+    "burst": "A big comic book explosion burst: a jagged mustard yellow star-shaped centre surrounded by long rounded cream rays with thick coral outlines radiating outward, filling the frame.",
+    "smoke": "A big puffy cartoon smoke cloud made of overlapping round puffs, light grey fill, dark ink outline.",
+    "monitor": "A chunky retro CRT computer monitor seen straight on from the front, coral casing, a large empty flat cream-white screen, a small stand.",
+    "gauge": "A semicircular speedometer dial seen straight on: a thick arc divided into segments coloured green, then yellow, then coral red at the right end, with small tick marks, a cream face, a dark base bar along the bottom. No needle, no words.",
+    "star": "A single big chunky five-pointed star, mustard yellow fill with hatching, thick dark ink outline, slightly rounded points, no face.",
+    "plant": "A small tuft of cartoon grass with two tiny white daisies, side view."
+  }
+}
