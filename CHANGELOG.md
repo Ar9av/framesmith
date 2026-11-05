@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.19.0 (2026-11-04)
+- Skill `canvas-story-reel`: a 20 s, music-only story reel in the design-canvas style. Built from a 19.7 s Instagram reel with `video-to-template`. Type lands word by word under editor overlays (selection handles, a hopping anchor cluster, diamonds, code tags). The 11 shot types include a dot-matrix wave, a photo card zoom, a punch-in text frame, scattered words, a scrolling photo column, tilted flips, a stacked headline over full-bleed plates and a logo pop. Example: Prismor ("They governed the agents", 20 s).
+
 ## 0.18.0 (2026-10-08)
 - Skill `cartoon-launch-film`: music-only, hand-drawn cartoon launch film (square 1080, ~45 s). Features boiling linework, a mascot cast built from reference-guided gpt-image poses, squash and stretch, a 120 BPM synthesised score with cartoon SFX, and a hand-drawn Chrome window demoing a browser extension (capture a page, fill a form with sourced answers, leave unknowns blank). `check` samples the whole cut and fails on shrunk copy or missing assets. Example: obsidian-wiki 3.5k stars (44.9 s).
 
