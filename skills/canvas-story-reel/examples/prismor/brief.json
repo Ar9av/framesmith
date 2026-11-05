@@ -1,0 +1,56 @@
+{
+  "size": [1920, 1080],
+  "fps": 30,
+  "theme": {
+    "accent": "#5A6BFF",
+    "handle": "#E2264D",
+    "anchor": "#F4E409",
+    "lavender": "#A3ADFF",
+    "tint": "#2A4FA8"
+  },
+  "assets": {
+    "workshop": {"prompt": "Candid documentary photograph, 35mm film grain, realistic, no text, no logos. A lone engineer seen from behind working late at night at a desk in a cluttered garage workshop full of shelves, cables, old computers and boxes, single desk lamp, laptop glow, wide shot, dark moody room, cool tones.", "size": "1536x1024", "quality": "medium"},
+    "clouds": {"prompt": "Aerial view above a sea of soft white clouds at dawn with mountain ridges, blue sky, cinematic wide. A floating translucent rounded software window hovers in the centre showing a dark terminal with lines of code and a small dashboard of green and red status rows. Realistic, no brand names.", "size": "1536x1024", "quality": "medium"},
+    "p1": {"prompt": "Candid documentary photograph, 35mm film grain, no text. 1980s black and white photo of three engineers seen from behind gathered around a beige desktop computer in an office, one pointing at the screen.", "size": "1536x1024", "quality": "medium"},
+    "p2": {"prompt": "Candid documentary photograph, 35mm film grain, no text. Young developer seen from the side wearing big headphones typing on a laptop at a messy kitchen table at night, on-camera flash, mid-2000s snapshot feel, blue t-shirt.", "size": "1536x1024", "quality": "medium"},
+    "p3": {"prompt": "Candid documentary photograph, 35mm film grain, no text. Black and white photo of a person sitting cross-legged on the wooden floor of an empty apartment with a laptop on their lap, window light, minimalist.", "size": "1536x1024", "quality": "medium"},
+    "p4": {"prompt": "Candid documentary photograph, no text. Long datacenter aisle with server racks and blinking blue and green lights, an engineer with a laptop on a cart in the distance, cool cinematic tones.", "size": "1536x1024", "quality": "medium"},
+    "p5": {"prompt": "Candid documentary photograph, 35mm film grain, no text. Warm moody photo of a founder in a dark blazer holding a coffee mug in a dim office, shallow depth of field, red-brown background, face turned away.", "size": "1536x1024", "quality": "medium"},
+    "p6": {"prompt": "Candid documentary photograph, no text. Small startup team of four seen from behind around a whiteboard covered in boxes-and-arrows diagrams, late evening, laptops open.", "size": "1536x1024", "quality": "medium"}
+  },
+  "shots": [
+    {"type": "words", "dur": 1.67, "bg": "black", "lead_arrow": true, "every": 0.37, "size": 64,
+     "lines": ["Somewhere right now"],
+     "tags": [
+       {"t": "agent.run(\"deploy --prod\")", "x": 0.375, "y": 0.08, "at": 0.45},
+       {"t": "rm -rf ./build && git push -f", "x": 0.094, "y": 0.6, "at": 0.75},
+       {"t": "cat .env | head", "x": 0.6, "y": 0.84, "at": 1.0}
+     ]},
+    {"type": "ring", "dur": 0.33},
+    {"type": "wave", "dur": 0.33},
+    {"type": "plate", "dur": 1.34, "media": "clouds"},
+    {"type": "frame", "dur": 2.33, "media": "workshop", "text": "An agent is touching everything", "every": 0.27, "size": 60, "punch_at": 1.4, "close": 0.33},
+    {"type": "grid", "dur": 0.67},
+    {"type": "scatter", "dur": 0.67, "size": 64, "converge": [0.2, 0.55], "words": [
+      {"t": "AND", "from": [160, -220], "to": [-60, -100]},
+      {"t": "NOBODY", "from": [-440, 40], "to": [-20, -30]},
+      {"t": "SEES", "from": [300, 380], "to": [40, 45], "green": true},
+      {"t": "IT", "from": [340, -100], "to": [150, 45], "green": true}
+    ]},
+    {"type": "column", "dur": 1.33, "left": "The teams", "right": "who win", "every": 0.27, "right_at": 0.33,
+     "media": ["p1", "p2", "p3", "p4", "p6", "p5", "p1"]},
+    {"type": "words", "dur": 1.33, "bg": "black", "every": 0.2, "size": 56,
+     "lines": ["who win didn't just ship agents"],
+     "tags": [
+       {"t": "policy.yaml: enforce", "x": 0.54, "y": 0.24, "at": 0.13},
+       {"t": "$ prismor setup", "x": 0.17, "y": 0.65, "at": 0.4},
+       {"t": "deny: secrets.exfil", "x": 0.58, "y": 0.7, "at": 0.67}
+     ]},
+    {"type": "flip", "dur": 1.0, "media": ["p1", "p4", "p2"], "tilts": [-2, -6, 5]},
+    {"type": "stack", "dur": 2.33, "size": 150, "words": ["THEY", "GOVERNED", "THE", "AGENTS"],
+     "plates": [{"media": "p5", "look": "color"}, {"media": "p2", "look": "color"}, {"media": "p3", "look": "bw"}, {"media": "p1", "look": "bw"}]},
+    {"type": "words", "dur": 3.67, "bg": "glow", "every": 0.17, "size": 52, "particles": 10,
+     "lines": [{"text": "Govern", "at": 0, "chars": true}, {"text": "Ship agents the world can trust", "at": 1.47}]},
+    {"type": "logo", "dur": 3.0, "name": "Prismor", "size": 112}
+  ]
+}
