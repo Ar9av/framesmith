@@ -1,0 +1,29 @@
+{
+  "size": [1920, 1080],
+  "fps": 30,
+  "bpm": 120,
+  "seed": 5,
+  "theme": {
+    "paper": "#EDE6D5",
+    "graphite": "#16161A",
+    "blueprint": "#1B3ED2",
+    "line": "#F4F1EA",
+    "void": "#07080A",
+    "holo": "#45F0DD"
+  },
+  "gear": {"sun": 12, "planet": 24, "module": 10.5},
+  "copy": {
+    "brand": "Brannock Motion",
+    "product": "BX-6",
+    "kind": "Planetary gearbox",
+    "parts": {
+      "sun": ["Sun gear", "12 teeth, input shaft"],
+      "planet": ["Three planets", "24 teeth on needle bearings"],
+      "ring": ["Ring gear", "60 teeth, fixed to the housing"],
+      "housing": ["Housing", "62 mm, machined aluminium"]
+    },
+    "dimension": "Ø62",
+    "specs": [["6:1", "in one stage"], ["92%", "efficient at rated torque"], ["<3′", "backlash"], ["1.8 kg", "with flange"]],
+    "url": "brannockmotion.cz/bx6"
+  }
+}

@@ -25,18 +25,22 @@ The skills share a tiny engine (`core/framesmith`) with a seekable timeline, exa
 | [`abstract-journey-film`](skills/abstract-journey-film/SKILL.md) | Render a music-only abstract title film (about 80 s, 16:9, 24 fps) in which a small glowing orb travels through a chain of worlds and lands on the logo. | <img src="docs/media/abstract-journey-film.gif" width="120"> |
 | [`animated-character-explainer`](skills/animated-character-explainer/SKILL.md) | Render a narrated explainer video (about 45–90 s, 16:9) animated from layers. | <img src="docs/media/animated-character-explainer.gif" width="120"> |
 | [`archive-launch-film`](skills/archive-launch-film/SKILL.md) | Render a narrated archive-to-product launch film (about 60–90 s, 16:9). | <img src="docs/media/archive-launch-film.gif" width="120"> |
+| [`bauhaus-grid-poster`](skills/bauhaus-grid-poster/SKILL.md) | Render a kinetic Bauhaus / Swiss poster film (20 s, 4:5, 120 BPM, synthesised score) that assembles itself on a module grid. | <img src="docs/media/bauhaus-grid-poster.gif" width="120"> |
 | [`blue-story-film`](skills/blue-story-film/SKILL.md) | Render a music-driven SaaS story film (about 60–90 s, 16:9) in the blue-light style. | <img src="docs/media/blue-story-film.gif" width="120"> |
 | [`brand-icons`](skills/brand-icons/SKILL.md) | Find, fetch, preview and credit real brand/logo SVG icons from thesvg.org (7,400+ marks, e.g. | — |
 | [`brutalist-product-promo`](skills/brutalist-product-promo/SKILL.md) | Render a 22-second brutalist / industrial product promo video (spec-sheet motion graphics) for any hardware, device, robot, drone, vehicle or tech product. | <img src="docs/media/brutalist-product-promo.gif" width="120"> |
-| [`canvas-story-reel`](skills/canvas-story-reel/SKILL.md) | Render a 20-second, music-only story reel (16:9, 30 fps) in the design-canvas style. | — |
+| [`canvas-story-reel`](skills/canvas-story-reel/SKILL.md) | Render a 20-second, music-only story reel (16:9, 30 fps) in the design-canvas style. | <img src="docs/media/canvas-story-reel.gif" width="120"> |
 | [`cartoon-launch-film`](skills/cartoon-launch-film/SKILL.md) | Render a music-only, hand-drawn cartoon launch film (about 45 s, square 1080, 30 fps) for an X, LinkedIn or Threads post. | <img src="docs/media/cartoon-launch-film.gif" width="120"> |
 | [`devtool-launch-video`](skills/devtool-launch-video/SKILL.md) | Render a 34-second 16:9 launch film for a developer tool, CLI, AI agent product or security product. | <img src="docs/media/devtool-launch-video.gif" width="120"> |
+| [`drafting-table-film`](skills/drafting-table-film/SKILL.md) | Render a 16:9 drafting-table product film (24 s, 120 BPM, synthesised score) where one mechanism is drawn in three inks on a locked camera. | <img src="docs/media/drafting-table-film.gif" width="120"> |
 | [`glass-saas-promo`](skills/glass-saas-promo/SKILL.md) | Render a bright, music-driven SaaS promo (about 30–40 s, 16:9) in the frosted-glass style: a lavender-white field, blue-to-violet gradients, gpt-image-2 glass 3D objects (shield, folder, check, sparkle, laptop), real pro | <img src="docs/media/glass-saas-promo.gif" width="120"> |
+| [`halftone-dot-film`](skills/halftone-dot-film/SKILL.md) | Render a square one-dot film (20 s, 1:1, 120 BPM, synthesised score) in ink, paper and a single accent, where one dot carries every scene. | <img src="docs/media/halftone-dot-film.gif" width="120"> |
 | [`illustrated-explainer`](skills/illustrated-explainer/SKILL.md) | Render a narrated, flat-vector corporate explainer video (about 60–100 s, 16:9). | <img src="docs/media/illustrated-explainer.gif" width="120"> |
 | [`keynote-product-film`](skills/keynote-product-film/SKILL.md) | Render a 16:9 keynote-style product film (about 60–90 s, music-driven, no voiceover) in the clean Apple-event look. | <img src="docs/media/keynote-product-film.gif" width="120"> |
 | [`kinetic-launch-film`](skills/kinetic-launch-film/SKILL.md) | Render a narrated kinetic-typography product launch film (about 60–90 s, 16:9) on a light gridded ground with one drifting brand glow. | <img src="docs/media/kinetic-launch-film.gif" width="120"> |
 | [`narrated-collage-explainer`](skills/narrated-collage-explainer/SKILL.md) | Render a square (1080×1080), voiceover-driven explainer or founder-story video in a warm paper-white collage style. | <img src="docs/media/narrated-collage-explainer.gif" width="120"> |
 | [`no-ai-slop`](skills/no-ai-slop/SKILL.md) | Edit drafts into sharper, more human writing while preserving the writer's personal voice, or detect AI-slop patterns without rewriting. | — |
+| [`riso-poster-promo`](skills/riso-poster-promo/SKILL.md) | Render a vertical risograph street-poster promo (20 s, 9:16, 120 BPM, synthesised score) printed in two inks, fluorescent pink and riso blue by default, multiplied onto paper with riso grain re-rolled every other frame. | <img src="docs/media/riso-poster-promo.gif" width="120"> |
 | [`video-to-template`](skills/video-to-template/SKILL.md) | Turn any reference video (a URL or file) into a reusable framesmith template and a finished video for the user's own brand. | — |
 <!-- catalog:end -->
 
@@ -109,7 +113,7 @@ docs/media/             previews
 
 ## Credits
 
-Motion and craft rules draw on public skills by Emil Kowalski (animation), Jakub Krehel (type and colour), Replicate (image prompting), HeyGen HyperFrames (seekable HTML video) and Anthropic (canvas design), all found via [AI UX Playground](https://aiuxplayground.com/skills/category/visual-design/). See [docs/credits.md](docs/credits.md). Bundled fonts: Inter Display and Geist Mono (OFL-1.1), and Departure Mono (MIT).
+Motion and craft rules draw on public skills by Emil Kowalski (animation), Jakub Krehel (type and colour), Replicate (image prompting), HeyGen HyperFrames (seekable HTML video) and Anthropic (canvas design), all found via [AI UX Playground](https://aiuxplayground.com/skills/category/visual-design/). See [docs/credits.md](docs/credits.md). Bundled fonts: Inter Display, Geist Mono and Anton (OFL-1.1), and Departure Mono (MIT). The print-and-grid templates (Bauhaus, riso, drafting table, halftone dot) draw on public Opus 5.5 motion-design collections; see the credits.
 
 ## License
 

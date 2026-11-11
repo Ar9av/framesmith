@@ -10,6 +10,9 @@ FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 ROLES = {
     "sans": "InterDisplay-Regular.otf",
     "sans_medium": "InterDisplay-Medium.otf",
+    "sans_bold": "InterDisplay-Bold.otf",
+    "sans_black": "InterDisplay-Black.otf",      # heavy geometric display (posters, Bauhaus)
+    "condensed": "Anton-Regular.ttf",            # ultra-condensed display (riso / street poster)
     "mono": "GeistMono-Regular.otf",
     "mono_medium": "GeistMono-Medium.otf",
     "mono_bold": "GeistMono-SemiBold.otf",

@@ -1,0 +1,31 @@
+{
+  "size": [1080, 1920],
+  "fps": 30,
+  "bpm": 120,
+  "seed": 11,
+  "theme": {
+    "paper": "#F2EEE3",
+    "ink": "#1A1A1A",
+    "plate_a": "#FF48B0",
+    "plate_b": "#0078BF"
+  },
+  "copy": {
+    "brand": "Ferrum Audio",
+    "product": "FX-9",
+    "kicker": "Tape echo pedal",
+    "slam": "TAPE",
+    "echo": "ECHO",
+    "specs": [["40–900", "ms of delay"], ["9 V", "true bypass"], ["1/4\"", "tape loop inside"]],
+    "facts": ["Real tape, not a sample", "Wow and flutter on one knob", "Sound-on-sound looping", "Built in Ostrava"],
+    "price": "€289",
+    "ships": "400 units, ships 3 December",
+    "url": "ferrum.audio/fx9"
+  },
+  "assets": {
+    "hero": {
+      "size": "1024x1536", "quality": "medium",
+      "prompt": "Top-down studio product photo of a boutique guitar effects pedal, a rugged hammered-metal enclosure with three chunky knobs, one footswitch and a small visible window showing a spinning loop of brown magnetic tape on two reels. Small engraved text '{product}' on the enclosure. Shot straight from above, centred, filling about 70% of the frame, on a plain flat light grey background, soft even light with one hard shadow to the lower right, very high contrast, crisp detail, no other objects, no cables."
+    }
+  },
+  "meta": {}
+}

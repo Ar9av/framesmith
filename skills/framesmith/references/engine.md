@@ -25,7 +25,7 @@ tl.still(3.2, "f.png"); tl.contact_sheet("sheet.png"); tl.render("out.mp4", audi
 
 ## Typography (`fs.typography`)
 
-Font roles (bundled): `sans` / `sans_medium` (Inter Display), `mono` / `mono_medium` / `mono_bold` (Geist Mono), and `pixel` (Departure Mono, snapped to its 11 px grid). Get a font with `F(role, px)`. Pairing that works: the sans for statements, pixel for accents and voice, and Geist Mono only for real code. No italics.
+Font roles (bundled): `sans` / `sans_medium` / `sans_bold` / `sans_black` (Inter Display), `condensed` (Anton, ultra-condensed display for posters), `mono` / `mono_medium` / `mono_bold` (Geist Mono), and `pixel` (Departure Mono, snapped to its 11 px grid). Get a font with `F(role, px)`. Pairing that works: the sans for statements, pixel for accents and voice, and Geist Mono only for real code. No italics.
 
 - `text(draw, xy, s, font, fill, track=0, anchor="la", max_w=None, fit_to=None)`: tracking in px; anchors as in PIL (`mm`, `rm`…). **Always pass `max_w`.** The type shrinks to fit (down to 55%). Unfittable text is logged in `OVERFLOWS`, and heavy shrinks in `SHRINKS`; `overflow_report()` / `overflow_report(warn=True)` summarise them. Pass `fit_to=final_copy` during reveals so the size stays stable.
 - `scramble(s, p, seed, fi, tail=5)`: decode reveal. `typed(s, p)`: typewriter. `decay(s, p, keep)`: random dropout.
@@ -106,3 +106,22 @@ These are native, animatable panels rebuilt from Prismor's enterprise console (p
 | `mcp` | McpHub (gateway) | `agents`, `servers`, `block_agent`, `note` |
 
 In `glass-saas-promo` and `blue-story-film`, a `tilt` shot with `"component": "<name>"` (and `"data"`, which is inline or a key into `console_data`) shows the component live in 3D. Icons are Lucide, cached in `~/.cache/framesmith/lucide`.
+
+## Print finishes (`fs.press`)
+
+A subtractive model: a frame is paper, and each plate is an ink colour plus a float coverage mask (HxW, 0–1). Overlaps multiply like real ink.
+
+| Function | What it does |
+|---|---|
+| `tooth(size, seed)` / `paper(size, col, seed, strength)` | Paper fibre field and a cached paper ground with the tooth multiplied in |
+| `plates(ground, [(mask, rgb, (dx, dy))], tooth_field, tooth_k, density)` | Multiply ink plates at their own offsets (misregistration); tooth knocks ink out; `density > 1` deepens ink (a "press lock") |
+| `grain(size, fi, amount, cell, seed, hold)` | Riso grain multiplier, `1 - amount·r²·2` per cell, re-rolled every `hold` frames |
+| `halftone(field, pitch, angle)` | AM screen: area-true round dots from a coverage field, at a screen angle (use 15° and 75° for two plates) |
+| `dot_grid(size, pitch, radius_fn)` | Square dot grid with an analytic radius per centre |
+| `hatch(mask, pitch, angle, width, p)` | Hatching clipped to a mask; `p` draws it on one line at a time |
+| `wobble(pts, fi, amp, seed, rate)` / `partial(pts, p)` / `stroke(d, pts, w)` | Boiling pencil lines, draw-on by length, round-capped strokes |
+| `mask_from(draw_fn, size, ss)`, `shift`, `outline`, `circle_pts` | Supersampled PIL masks, integer shifts, outline rings, arcs |
+
+## Score (`fs.score`)
+
+A beat-grid synth so the picture and the sound read one cue sheet. `Score(bpm, dur)` gives `beat(k)` / `bar(k)` times, `hit(kind, t, gain, pan, **kw)` for one-shots (`kick`, `clack`, `tick`, `hat`, `snare`, `blip`, `thud`, `riser`, `slap`, `scratch`), `pattern(kind, every, start, end)` for loops, `bass(notes)` (Karplus–Strong), `keys(notes)` (felt piano), `chord(notes, t, dur)` (soft pad), and `write("x.m4a")` (peak-normalised to −1 dBFS). Pure numpy, seeded.

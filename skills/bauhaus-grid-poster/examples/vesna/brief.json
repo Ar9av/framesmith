@@ -1,0 +1,30 @@
+{
+  "size": [1080, 1350],
+  "fps": 30,
+  "bpm": 120,
+  "beats": 40,
+  "press_lock_beat": 30,
+  "grid": [8, 10],
+  "seed": 7,
+  "theme": {
+    "paper": "#F1E9DA",
+    "ink": "#111111",
+    "red": "#E03C31",
+    "yellow": "#F2B705",
+    "blue": "#1E4FA3"
+  },
+  "copy": {
+    "brand": "Vesna Print Week",
+    "edition": "Seventh edition, 2027",
+    "title": "VESNA",
+    "sub": "Riso · Letterpress · Screen",
+    "facts": [
+      "Ljubljana, 9–14 March",
+      "32 studios, 6 presses",
+      "140 workshops, free entry",
+      "Studios open 10:00–19:00"
+    ],
+    "url": "vesnaprint.si"
+  },
+  "meta": {}
+}

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.20.0 (2026-11-11)
+- Four templates built from a survey of Opus 5.5 motion-design repos (mg-styles-15, awesome-opus-5-5-motion-design, awesome-opus5-5-videos). Each is music-only, with a synthesised score that reads the same cue sheet as the picture.
+  - `bauhaus-grid-poster`: 4:5 kinetic poster on a module grid. Integer-module moves on the beat with no overshoot, an escapement group turn, a cascade wave, four ink plates that drift and then press-lock into register. Example: a fictional print festival (Vesna Print Week).
+  - `riso-poster-promo`: 9:16 two-plate riso promo. Grain, ghost-plate misregistration on impacts only, glyph slams, delay-tap word echoes, a fly-through an O's counter into a duotone halftone product photo, inverse-video fact bands. Example: a fictional tape-echo pedal (Ferrum FX-9).
+  - `drafting-table-film`: 16:9 pencil → blueprint → hologram. Boiling double-stroked pencil and hatching, a hard-edged blueprint flood, a planetary gear train with true ratios and callouts, a scan line into an exploded hologram. Example: a fictional 6:1 gearbox (Brannock BX-6).
+  - `halftone-dot-film`: 1:1 one-dot film. Spring curve, the tittle of the brand's i, a month of habit dots, a flood, a halftone year that follows the dot, a flip to ink. Example: a fictional habit tracker (tiri).
+- Engine `framesmith.press`: paper tooth, multiplied ink plates with misregistration and press density, riso grain, AM halftone screens, dot grids, hatching, boiling pencil strokes.
+- Engine `framesmith.score`: beat-grid synth (kick, clack, tick, hat, snare, blip, thud, riser, paper slap, pencil scratch, plucked bass, felt piano, pad).
+- Fonts: `sans_bold` and `sans_black` (Inter Display) and `condensed` (Anton, OFL).
+
 ## 0.19.0 (2026-11-04)
 - Skill `canvas-story-reel`: a 20 s, music-only story reel in the design-canvas style. Built from a 19.7 s Instagram reel with `video-to-template`. Type lands word by word under editor overlays (selection handles, a hopping anchor cluster, diamonds, code tags). The 11 shot types include a dot-matrix wave, a photo card zoom, a punch-in text frame, scattered words, a scrolling photo column, tilted flips, a stacked headline over full-bleed plates and a logo pop. Example: Prismor ("They governed the agents", 20 s).
 

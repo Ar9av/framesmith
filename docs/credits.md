@@ -13,3 +13,15 @@ framesmith's templates apply rules distilled from these public agent skills. No 
 | [canvas-design](https://github.com/anthropics/skills/tree/main/skills/canvas-design) | Anthropic | Grid discipline and negative space |
 
 Catalogue: [AI UX Playground: visual design skills](https://aiuxplayground.com/skills/category/visual-design/).
+
+## Opus 5.5 motion-design references (v0.20.0)
+
+The four print-and-grid templates follow styles from public collections of motion design made with Claude Opus 5.5 writing animation code. We used them as written references only; no code was copied.
+
+- [Vincentwei1021/mg-styles-15](https://github.com/Vincentwei1021/mg-styles-15): the Bauhaus / geometric study (`prompts/09-bauhaus.md`) for `bauhaus-grid-poster`, and its "how to work" rules (hook in 0.5 s, hero at 60–75 %, a held end frame with micro-motion).
+- [motionvideohq/awesome-opus-5-5-motion-design](https://github.com/motionvideohq/awesome-opus-5-5-motion-design): the risograph street-poster prompt (techhalla) for `riso-poster-promo`, the drafting-table three-ink prompt (heyiamnick) for `drafting-table-film`, and the one-dot / halftone films (ultimaxbt) for `halftone-dot-film`.
+- [yihui-dev/awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-opus5-5-videos) and [zhuyansen/awesome-opus-5.5-video](https://github.com/zhuyansen/awesome-opus-5.5-video): broader surveys we used to choose styles.
+- [makevoid/motion-graphics-music-video-skill](https://github.com/makevoid/motion-graphics-music-video-skill): the riso grain recipe (`1 - amount·r²·2` per 2 px cell).
+- [howseen-ai/claude-motion-design](https://github.com/howseen-ai/claude-motion-design) (MIT): craft rules on object-carried transitions and flood circles that clear the farthest corner.
+
+Bundled font added in this release: Anton (OFL-1.1, The Anton Project Authors), plus the Inter Display Bold and Black weights (OFL-1.1).

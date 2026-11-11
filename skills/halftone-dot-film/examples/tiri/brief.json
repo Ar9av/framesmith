@@ -1,0 +1,24 @@
+{
+  "size": [1080, 1080],
+  "fps": 30,
+  "bpm": 120,
+  "seed": 4,
+  "theme": {
+    "paper": "#F4F1EA",
+    "ink": "#141414",
+    "accent": "#FF5A1F"
+  },
+  "copy": {
+    "brand": "tiri",
+    "kind": "Habit tracker for iPhone and Mac",
+    "habit": "Read 20 pages",
+    "month": "March",
+    "kept": [1,2,3,4,6,7,8,9,10,11,13,14,15,17,18,19,20,21,24,25,26,27,28],
+    "days": 31,
+    "count": "23 of 31 days",
+    "features": ["One dot for every day you keep a habit", "A missed day doesn’t reset your streak", "No account, your data stays on the phone"],
+    "year": "287 days of reading in 2026",
+    "offer": "Free on iPhone and Mac",
+    "url": "tiri.app"
+  }
+}
