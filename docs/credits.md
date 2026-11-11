@@ -25,3 +25,9 @@ The four print-and-grid templates follow styles from public collections of motio
 - [howseen-ai/claude-motion-design](https://github.com/howseen-ai/claude-motion-design) (MIT): craft rules on object-carried transitions and flood circles that clear the farthest corner.
 
 Bundled font added in this release: Anton (OFL-1.1, The Anton Project Authors), plus the Inter Display Bold and Black weights (OFL-1.1).
+
+## More Opus 5.5 references (v0.21.0)
+
+- `type-architecture-film`: the "BUILD THE FLOOR" brief by [Gdgtify](https://x.com/Gdgtify/status/2103458245213929495), via [yihui-dev/awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-opus5-5-videos).
+- `one-line-film`, `morph-chain-film`, `pixel-quest-intro`: the line-art, morph and pixel-art studies in [Vincentwei1021/mg-styles-15](https://github.com/Vincentwei1021/mg-styles-15).
+- The 16-colour palette in `pixel-quest-intro` is PICO-8's (Lexaloffle). Bundled font added: Instrument Serif (OFL-1.1, The Instrument Serif Project Authors).

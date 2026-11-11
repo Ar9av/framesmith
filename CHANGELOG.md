@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.21.0 (2026-11-11)
+- Four more templates from the Opus 5.5 motion-design survey:
+  - `type-architecture-film`: a square, seamless spoken-word loop. Words become a lintel, a suspended load, supports and a platform; there's a fly-through an O and 400 ms of stillness. Example: a fictional library reopening (Halden Street Library).
+  - `one-line-film`: 16:9. The whole film is one continuous line (seed → sapling → house → skyline → monogram), with the camera following the pen tip, older lines dimmed, a line-to-fill monogram and a poster dolly-out. Example: a fictional architecture studio (Atelier Vrana).
+  - `morph-chain-film`: 1:1. One shape morphs through icons on the beat (via a circle, with squash and stretch); arc-length correspondence with a knot check, colour-block wipes, and an app-icon end. Example: a fictional rain-alert app (Kestrel).
+  - `pixel-quest-intro`: 16:9 at 320×180 ×6. A 16-colour attract mode with whole-pixel parallax, a hand-authored run cycle, a day → sunset palette, a chest burst, a typing dialogue, a logo drop and a synthesised chiptune. Example: a fictional platformer (Moss Courier).
+- Fonts: `serif` role (Instrument Serif, OFL).
+
 ## 0.20.0 (2026-11-11)
 - Four templates built from a survey of Opus 5.5 motion-design repos (mg-styles-15, awesome-opus-5-5-motion-design, awesome-opus5-5-videos). Each is music-only, with a synthesised score that reads the same cue sheet as the picture.
   - `bauhaus-grid-poster`: 4:5 kinetic poster on a module grid. Integer-module moves on the beat with no overshoot, an escapement group turn, a cascade wave, four ink plates that drift and then press-lock into register. Example: a fictional print festival (Vesna Print Week).

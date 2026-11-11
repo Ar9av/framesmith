@@ -1,0 +1,14 @@
+{
+  "size": [1920, 1080],
+  "fps": 30,
+  "theme": {
+    "ground": "#0B1320",
+    "line": "#E9D7A5"
+  },
+  "monogram": "V",
+  "copy": {
+    "brand": "Atelier Vrana",
+    "line": "Houses and small civic buildings in Brno",
+    "url": "ateliervrana.cz"
+  }
+}

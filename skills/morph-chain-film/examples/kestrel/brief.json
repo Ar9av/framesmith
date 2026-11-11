@@ -1,0 +1,27 @@
+{
+  "size": [1080, 1080],
+  "fps": 30,
+  "bpm": 120,
+  "palette": [
+    ["#1D3CF0", "#F3F0E7"],
+    ["#F3F0E7", "#1D3CF0"],
+    ["#FF5B2E", "#151515"],
+    ["#151515", "#FF5B2E"],
+    ["#C9E36B", "#151515"],
+    ["#F3F0E7", "#151515"]
+  ],
+  "chain": [
+    {"shape": "drop", "caption": "Rain in 12 minutes, on your street"},
+    {"shape": "cloud", "caption": "Forecasts on a 500 m grid"},
+    {"shape": "sun", "caption": "UV index hour by hour"},
+    {"shape": "leaf", "caption": "Gusts over 50 km/h flagged for cyclists"},
+    {"shape": "pin", "caption": "Saved places: home, work, the allotment"},
+    {"shape": "bell", "caption": "Only the alerts you set"},
+    {"shape": "squircle", "caption": ""}
+  ],
+  "copy": {
+    "brand": "Kestrel",
+    "line": "Free on iPhone and Android",
+    "url": "kestrel.app"
+  }
+}

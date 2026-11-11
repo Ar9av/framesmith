@@ -13,6 +13,7 @@ ROLES = {
     "sans_bold": "InterDisplay-Bold.otf",
     "sans_black": "InterDisplay-Black.otf",      # heavy geometric display (posters, Bauhaus)
     "condensed": "Anton-Regular.ttf",            # ultra-condensed display (riso / street poster)
+    "serif": "InstrumentSerif-Regular.ttf",      # high-contrast editorial serif (roman only; no italics)
     "mono": "GeistMono-Regular.otf",
     "mono_medium": "GeistMono-Medium.otf",
     "mono_bold": "GeistMono-SemiBold.otf",

@@ -1,0 +1,15 @@
+{
+  "fps": 30,
+  "scale": 6,
+  "bpm": 120,
+  "seed": 3,
+  "copy": {
+    "title": "MOSS COURIER",
+    "dialogue": [
+      "Deliver 40 parcels across six hill villages",
+      "Rain, ferries and one very stubborn goat"
+    ],
+    "release": "Out 14 March on Steam and Switch",
+    "url": "mosscourier.com"
+  }
+}

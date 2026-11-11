@@ -1,0 +1,18 @@
+{
+  "size": [1080, 1080],
+  "fps": 30,
+  "theme": {
+    "ground": "#102820",
+    "paper": "#F4E9D5",
+    "accent": "#F2B544"
+  },
+  "copy": {
+    "lintel": {"line": "The roof leaked for nine years", "word": "ROOF"},
+    "load": {"line": "Every winter the shelves took the weight", "word": "WEIGHT"},
+    "support_a": {"line": "Then 312 neighbours paid for one beam", "word": "BEAM", "aperture": "ONE"},
+    "support_b": {"line": "Then the council paid for the rest", "word": "COUNCIL"},
+    "platform": {"line": "The reading room opens on", "emphasis": "4 May"},
+    "credit": "Halden Street Library",
+    "url": "haldenlibrary.org"
+  }
+}

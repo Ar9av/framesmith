@@ -25,7 +25,7 @@ tl.still(3.2, "f.png"); tl.contact_sheet("sheet.png"); tl.render("out.mp4", audi
 
 ## Typography (`fs.typography`)
 
-Font roles (bundled): `sans` / `sans_medium` / `sans_bold` / `sans_black` (Inter Display), `condensed` (Anton, ultra-condensed display for posters), `mono` / `mono_medium` / `mono_bold` (Geist Mono), and `pixel` (Departure Mono, snapped to its 11 px grid). Get a font with `F(role, px)`. Pairing that works: the sans for statements, pixel for accents and voice, and Geist Mono only for real code. No italics.
+Font roles (bundled): `sans` / `sans_medium` / `sans_bold` / `sans_black` (Inter Display), `condensed` (Anton, ultra-condensed display for posters), `serif` (Instrument Serif, roman only), `mono` / `mono_medium` / `mono_bold` (Geist Mono), and `pixel` (Departure Mono, snapped to its 11 px grid). Get a font with `F(role, px)`. Pairing that works: the sans for statements, pixel for accents and voice, and Geist Mono only for real code. No italics.
 
 - `text(draw, xy, s, font, fill, track=0, anchor="la", max_w=None, fit_to=None)`: tracking in px; anchors as in PIL (`mm`, `rm`…). **Always pass `max_w`.** The type shrinks to fit (down to 55%). Unfittable text is logged in `OVERFLOWS`, and heavy shrinks in `SHRINKS`; `overflow_report()` / `overflow_report(warn=True)` summarise them. Pass `fit_to=final_copy` during reveals so the size stays stable.
 - `scramble(s, p, seed, fi, tail=5)`: decode reveal. `typed(s, p)`: typewriter. `decay(s, p, keep)`: random dropout.
