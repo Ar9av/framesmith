@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.23.0 (2026-11-16)
+- Skill `ui-macro-launch-film`: a white, type-led SaaS launch film (57.5 s, 16:9, music only), back-engineered with `video-to-template` from an 87 s Instagram reel for a workspace app.
+  - Every scene is one UI fragment drawn natively through a camera, so type stays sharp at 2.6× zoom.
+  - The scenes: a caret hook with a dot trail that swells into shapes, "<Brand> is not a …" rows ending in struck-out button/card/field objects, the logo growing into the app window, an AI composer, a thinking beat, an activity table with a detail panel, a checklist writing itself, search with marker sweeps, a thread with a ticking counter, an integrations grid, a timeline row going to Done, and a "<Brand> does" checklist cascade whose last box turns into the logo.
+  - Departures from the reference: monogram tiles instead of faces, thesvg agent icons, and typeset status instead of badges.
+  - Example: Prismor (agent tool-call checks for a fictional robotics team).
+
 ## 0.22.0 (2026-11-16)
 - Skill `world-hop-reel`: a beat-cut style-hop reel, about 18 s, with a 9:16 creator-reel wrapper or a 16:9 film. It was built from an Instagram reel whose pitch was "one character, the same rules, every world, zero re-prompts, all on the beat". One 12-bone rig on a beat-locked run cycle runs through cave wall, Egyptian wall painting, Greek black-figure, stained glass, green CRT and hologram worlds. Each world is only a plate, a brush over the same bones, a keyword type rule and a post pass. Whip-pans land on downbeats, with blur on the world layer only, so the runner carries every cut. A gallery end card shows the same figure in every style. The score is synthesised. Example: a fictional exhibition (Walk Cycle, Halvard Gallery).
 - video-to-template lessons: style-hop reels (rig plus brushes instead of per-style regeneration, blur the world rather than the carrier, the 9:16 wrapper recipe), and downloading or transcribing reference reels with yt-dlp and local faster-whisper.

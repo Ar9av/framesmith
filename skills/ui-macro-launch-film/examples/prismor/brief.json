@@ -1,0 +1,143 @@
+{
+  "size": [1920, 1080],
+  "fps": 30,
+  "theme": {
+    "ink": "#111111",
+    "paper": "#FFFFFF",
+    "accent": "#6E56CF",
+    "line": "#E7E7E7",
+    "muted": "#8C8C8C",
+    "red": "#D93F3F",
+    "amber": "#C7701C",
+    "green": "#23935A",
+    "blue": "#2F7BEA",
+    "marker": "#FFE68A",
+    "light": ["#9C8CFF", "#B9A4FF", "#F2A6E6"]
+  },
+  "assets_dir": "assets",
+  "copy": {
+    "brand": "Prismor",
+    "url": "prismor.dev",
+    "cta": "Try it at prismor.dev"
+  },
+  "hook": {"giant": "Pr", "line": "Prismor is"},
+  "not_a": {
+    "lead": "Prismor is not a",
+    "rows": [
+      {"kind": "button", "label": "Code scanner", "icon": "claude-code"},
+      {"kind": "card", "label": "Firewall", "icon": "openai"},
+      {"kind": "field", "label": "Antivirus", "icon": "cursor"}
+    ]
+  },
+  "console": {
+    "workspace": "Halden Robotics",
+    "greeting": "Good morning, Ines",
+    "stats": ["14 agents", "3,208 tool calls today"],
+    "stats_alert": "2 blocked",
+    "nav": ["Overview", "Activity", "Policies", "Secrets", "Agents", "Ask Prismor", "Reports"],
+    "nav_alert": {"Activity": "2"},
+    "workspaces_label": "WORKSPACES",
+    "fleet": "Production fleet",
+    "focus_title": "Needs a look",
+    "focus_sub": "1 tool call blocked and 1 rule to review",
+    "focus": [
+      {"title": "Credential read on firmware", "sub": "Codex · wes-mbp", "status": "Blocked 2 min ago", "col": "red"},
+      {"title": "New MCP server: linear-sync", "sub": "Claude Code · teo-mbp", "status": "Review today", "col": "amber"},
+      {"title": "Weekly policy report", "sub": "All agents", "status": "Due Friday", "col": "muted"}
+    ],
+    "fleet_title": "Agents online",
+    "fleet_line": "13 of 14 checking in",
+    "fleet_pct": 0.93,
+    "ask_title": "What should change?",
+    "search": "Search or jump to…"
+  },
+  "composer": {
+    "crumb": "Engineering policy · v16",
+    "prompt": "Block agents from reading .env files",
+    "ai": "Ask Prismor",
+    "actions": ["Draft a rule", "Test on last week"],
+    "click": 1
+  },
+  "thinking": "Checking",
+  "table": {
+    "title": "Activity",
+    "tabs": ["Feed", "Table", "Timeline"],
+    "cols": ["TOOL CALL", "AGENT", "VERDICT", "WHEN"],
+    "rows": [
+      ["npm install zod", "Claude Code", "Allowed", "9:02"],
+      ["git push origin fix/login", "Copilot", "Allowed", "9:04"],
+      ["cat .env", "Codex", "Blocked", "9:06"],
+      ["curl api.openai.com/v1/models", "Codex", "Allowed", "9:12"],
+      ["rm -rf ./build", "Cursor", "Allowed", "9:15"],
+      ["read ~/.ssh/id_ed25519", "Gemini CLI", "Blocked", "9:21"],
+      ["pip install requests", "Windsurf", "Allowed", "9:30"],
+      ["git push --force main", "Cline", "Held", "9:41"]
+    ],
+    "open": 2,
+    "detail": {
+      "crumb": "Activity  ›  Blocked",
+      "title": "Credential read",
+      "cmd": "cat .env",
+      "why": "The file holds 6 live keys",
+      "fields": [["Agent", "Codex · wes-mbp"], ["Repo", "halden/firmware"], ["Policy", "Engineering · v16"], ["Rule", "No reads of .env files"]]
+    }
+  },
+  "checklist": {
+    "title": "Rule preview",
+    "action": "Suggest steps",
+    "writing": "Writing the rule",
+    "items": ["Deny reads of any .env file", "Allow .env.example", "Ping #security on every block", "Apply to all 14 agents"]
+  },
+  "search": {
+    "heading": "What are you looking for?",
+    "placeholder": "Search or jump to…",
+    "query": "curl",
+    "works": "Works with the agents you already use",
+    "results": [
+      {"kind": "Tool call", "text": "curl api.openai.com/v1/models", "where": "Codex · wes-mbp"},
+      {"kind": "Policy", "text": "Network rules for curl and wget", "where": "Engineering"},
+      {"kind": "Tool call", "text": "curl -X POST hooks.slack.com", "where": "Claude Code"}
+    ],
+    "summary": "curl ran 41 times today. The OpenAI key stayed cloaked every time"
+  },
+  "thread": {
+    "messages": [
+      {"name": "Hugo Brandt", "time": "9:41 AM", "text": "Can Codex push to main yet?"},
+      {"name": "Teo Lindqvist", "time": "9:42 AM", "text": "Is the staging key rotated?"},
+      {"name": "Ruben Ortiz", "time": "9:44 AM", "text": "Which agents still use it?"}
+    ],
+    "reply": {"name": "Ines Varga", "time": "9:45 AM", "text": "Rotated at 9:40. It's in the activity log", "link": "Open the entry", "big": "Rotated at 9:40"},
+    "counter": {"from": 1, "to": 8}
+  },
+  "agents": {
+    "items": [
+      {"icon": "claude-code", "name": "Claude Code"},
+      {"icon": "openai", "name": "Codex"},
+      {"icon": "cursor", "name": "Cursor"},
+      {"icon": "github-copilot", "name": "Copilot"},
+      {"icon": "google-gemini", "name": "Gemini CLI"},
+      {"icon": "windsurf", "name": "Windsurf"},
+      {"icon": "cline", "name": "Cline"},
+      {"icon": "langchain", "name": "LangChain"}
+    ],
+    "punch": 0
+  },
+  "timeline": {
+    "rows": [
+      {"text": "Rotate the staging key", "date": "Nov 17", "col": "amber"},
+      {"text": "Review new MCP servers", "date": "Nov 19", "col": "red"},
+      {"text": "Lock .env reads", "date": "Tomorrow", "col": "amber", "done": true}
+    ],
+    "done": "Done"
+  },
+  "team": [
+    {"name": "Wes Okafor", "time": "Just now", "text": "@team every agent is on policy v16"},
+    {"name": "Ines Varga", "time": "Just now", "text": "Zero .env reads since Monday"},
+    {"name": "Teo Lindqvist", "time": "Just now", "text": "Old keys are gone"}
+  ],
+  "outro": {
+    "line": "Prismor does",
+    "items": ["Read every tool call", "Cloak real keys", "Block .env reads", "Hold force pushes", "Check MCP servers", "Log who ran what", "Ping #security", "Write the weekly report"],
+    "final": "Agent review"
+  }
+}
