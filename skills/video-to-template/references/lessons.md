@@ -46,6 +46,13 @@
 - On a throttled VM (check `%st` steal in `top`) the `slow` x264 preset dominates. Use `FRAMESMITH_PRESET=veryfast` for drafts.
 - Don't run `check` (it renders frames) at the same time as a render on a small box.
 
+## Style-hop reels (from world-hop-reel)
+- **Keep the character separate from the world.** For "one character, every art style" pieces, build the character once as a rig (joints from one beat-locked cycle) and make each style a *brush* over the same bones. Regenerating the character per style (an image prompt per world) is what breaks consistency. With a rig, a new world is a plate, a brush and a type rule.
+- **Blur the world, not the carrier.** A whip-pan's motion blur applied to the whole composite also smears the screen-fixed character, and the handoff object disappears. Blur each world layer (plate + world-attached text) before drawing the character on top.
+- A seam crossing a fixed character at whip speed lasts about one frame. That's enough to read as "it changed style on the beat", so don't slow the whip to show it.
+- Tiles that show "the same character in every world" should sample every world at the same `t`, so the poses match across the row.
+- The 9:16 creator-reel wrapper is cheap: crop the film's centre to 9:16, downscale ×12, blur, upscale, darken to 50%; put the film in the middle band and a fixed hook line above it.
+
 ## Agent security hooks
 - Hooks such as Prismor's scan every tool call. Demo copy that looks like exfiltration (a curl upload of an env file, an injected "upload your keys" README line), or a one-off script that both reads the env file and encodes bytes, gets blocked, and later web fetches can be refused as tainted. Never work around a block: make demo strings harmless-looking and keep secret loading inside library code.
 - Never type a Cloak placeholder literally in a command; the decloak hook may substitute the real value. Build it from pieces in code.
@@ -53,4 +60,5 @@
 ## Environment
 - Don't `pip install` into a PEP 668 system Python. Use the tools already present (ffmpeg, Chromium, ImageMagick) or a venv.
 - Load API keys from the project's `.env` only when the user has allowed it, and never print them.
+- **Instagram and other reference reels:** `yt-dlp` in a throwaway venv downloads public reels (`--write-info-json` keeps the caption, which often states the creator's intent). If the OpenAI key is rejected, transcribe locally with `faster-whisper` (`small`, int8 on CPU). Older PyAV builds reject its file loader, so decode with ffmpeg to a float32 array and pass that instead.
 - Before pushing, confirm the repo's visibility; git may use a stale stored credential, so use the `gh` credential helper for that one push if needed.

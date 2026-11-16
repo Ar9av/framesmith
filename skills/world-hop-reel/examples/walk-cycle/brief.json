@@ -1,0 +1,24 @@
+{
+  "fps": 30,
+  "bpm": 120,
+  "beats_per_world": 4,
+  "end_hold": 6.5,
+  "seed": 7,
+  "format": "reel",
+  "hook_color": "#ffe14d",
+  "copy": {
+    "hook": "One runner, six eras",
+    "title": "Walk Cycle",
+    "details": "Halvard Gallery · 14 March to 30 August 2027",
+    "url": "halvard.org/walkcycle",
+    "footer": "Tickets at halvard.org"
+  },
+  "worlds": [
+    {"style": "cave",  "label": "Chauvet",  "year": "30,000 BC"},
+    {"style": "egypt", "label": "Thebes",   "year": "1400 BC"},
+    {"style": "greek", "label": "Athens",   "year": "520 BC"},
+    {"style": "glass", "label": "Chartres", "year": "1220"},
+    {"style": "crt",   "label": "Arcade",   "year": "1981"},
+    {"style": "holo",  "label": "Headset",  "year": "2026", "note": "one rig · 12 bones"}
+  ]
+}

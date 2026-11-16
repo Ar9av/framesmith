@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.22.0 (2026-11-16)
+- Skill `world-hop-reel`: a beat-cut style-hop reel, about 18 s, with a 9:16 creator-reel wrapper or a 16:9 film. It was built from an Instagram reel whose pitch was "one character, the same rules, every world, zero re-prompts, all on the beat". One 12-bone rig on a beat-locked run cycle runs through cave wall, Egyptian wall painting, Greek black-figure, stained glass, green CRT and hologram worlds. Each world is only a plate, a brush over the same bones, a keyword type rule and a post pass. Whip-pans land on downbeats, with blur on the world layer only, so the runner carries every cut. A gallery end card shows the same figure in every style. The score is synthesised. Example: a fictional exhibition (Walk Cycle, Halvard Gallery).
+- video-to-template lessons: style-hop reels (rig plus brushes instead of per-style regeneration, blur the world rather than the carrier, the 9:16 wrapper recipe), and downloading or transcribing reference reels with yt-dlp and local faster-whisper.
+
 ## 0.21.0 (2026-11-11)
 - Four more templates from the Opus 5.5 motion-design survey:
   - `type-architecture-film`: a square, seamless spoken-word loop. Words become a lintel, a suspended load, supports and a platform; there's a fly-through an O and 400 ms of stillness. Example: a fictional library reopening (Halden Street Library).

@@ -40,6 +40,7 @@ framesmith templates are **skills**: a `SKILL.md`, a brief schema, an example br
 | [`one-line-film`](../one-line-film/SKILL.md) | 20 s 16:9, felt-piano score | Architecture, luxury or studio brand film drawn as one continuous champagne line (seed → sapling → house → skyline → monogram), camera on the pen tip, line-to-fill monogram, poster dolly-out |
 | [`morph-chain-film`](../morph-chain-film/SKILL.md) | ~17 s 1:1, synthesised arpeggio | App launch or feature tour where one solid shape morphs through icons on the beat (through a circle, with squash and stretch), colour-block wipes, one fact per icon, app-icon + wordmark end |
 | [`pixel-quest-intro`](../pixel-quest-intro/SKILL.md) | 20 s 16:9 at 320×180 ×6, chiptune | Indie game or retro-branded launch as a side-scroller attract mode: parallax by whole pixels, hand-authored run cycle, coins, slime bop, day → sunset palette steps, chest burst, typing dialogue, logo drop with shine |
+| [`world-hop-reel`](../world-hop-reel/SKILL.md) | ~18 s 9:16 reel (or 16:9), synthesised 120 BPM score | One character through many art styles on the beat: cave wall, Egyptian wall, Greek vase, stained glass, CRT, hologram; whip-pan on each downbeat with the runner carrying the cut; gallery card of the same figure in every style; blurred-cover reel wrapper with a hook line. Exhibition, "through the ages", mascot or style-showcase reels |
 <!-- catalog:end -->
 
 If nothing fits, say so and offer to build a new template (section 3) rather than forcing the wrong one.

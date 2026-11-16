@@ -46,6 +46,7 @@ The skills share a tiny engine (`core/framesmith`) with a seekable timeline, exa
 | [`riso-poster-promo`](skills/riso-poster-promo/SKILL.md) | Render a vertical risograph street-poster promo (20 s, 9:16, 120 BPM, synthesised score) printed in two inks, fluorescent pink and riso blue by default, multiplied onto paper with riso grain re-rolled every other frame. | <img src="docs/media/riso-poster-promo.gif" width="120"> |
 | [`type-architecture-film`](skills/type-architecture-film/SKILL.md) | Render a square spoken-word typography film (20 s, 1:1, seamless loop, quiet piano score) in which a five-line statement builds a structure out of its own words. | <img src="docs/media/type-architecture-film.gif" width="120"> |
 | [`video-to-template`](skills/video-to-template/SKILL.md) | Turn any reference video (a URL or file) into a reusable framesmith template and a finished video for the user's own brand. | — |
+| [`world-hop-reel`](skills/world-hop-reel/SKILL.md) | Render a beat-cut "style hop" reel (about 18 s, 9:16 Instagram/TikTok wrapper or 16:9) where ONE rigged character runs through a chain of art-style worlds without changing. | <img src="docs/media/world-hop-reel.gif" width="120"> |
 <!-- catalog:end -->
 
 Plus [`framesmith`](skills/framesmith/SKILL.md), a start-here router that picks the right template and explains how to build new ones.
