@@ -1,0 +1,95 @@
+{
+  "size": [1920, 1080],
+  "fps": 30,
+  "theme": {
+    "ground": "#E2E2E4",
+    "ink": "#17171A",
+    "muted": "#86868E",
+    "line": "#C6C6CC",
+    "red": "#D5452F",
+    "amber": "#C27A16",
+    "green": "#23935A",
+    "accent": "#5672E0",
+    "aura": ["#86E3F2", "#A9F2D6", "#B3A6F6", "#F5B3DA", "#8FA8F0"]
+  },
+  "assets_dir": "assets",
+  "copy": {
+    "brand": "Prismor",
+    "kicker": "Open source",
+    "lines": ["Runtime security for AI coding agents", "Every tool call checked before it runs"],
+    "independent": "Independent and open source",
+    "cta": "Try it at prismor.dev"
+  },
+  "policy": {
+    "label": "Policy",
+    "placeholder": "What should your agents never do?",
+    "prompt": "Never let an agent read a live key or force-push to main",
+    "button": "Apply to 14 agents",
+    "rails": ["01", "POLICY", "v16", "ENFORCE"]
+  },
+  "stats": {
+    "heading": "Tool calls",
+    "cards": [
+      {"label": "Checked today", "value": 3208, "kind": "area", "series": [3, 4, 4, 6, 5, 7, 9, 8, 11, 13, 12, 15, 17, 16, 19]},
+      {"label": "Blocked", "value": 2, "kind": "bars", "series": [5, 3, 4, 2, 2, 1, 2]},
+      {"label": "Keys cloaked", "value": 6, "of": 6, "kind": "segments"}
+    ],
+    "feed": [
+      ["9:02", "Claude Code", "npm install zod", "Allowed", "green"],
+      ["9:04", "Copilot", "git push origin fix/login", "Allowed", "green"],
+      ["9:06", "Codex", "cat .env", "Blocked", "red"],
+      ["9:12", "Codex", "curl api.openai.com", "Cloaked", "accent"],
+      ["9:15", "Cursor", "rm -rf ./build", "Allowed", "green"],
+      ["9:21", "Windsurf", "pip install requestz", "Blocked", "red"],
+      ["9:30", "Qwen Code", "pytest -q", "Allowed", "green"],
+      ["9:41", "Goose", "git push --force main", "Held", "amber"],
+      ["9:44", "OpenHands", "docker compose up -d", "Allowed", "green"],
+      ["9:47", "Claude Code", "cat ~/.aws/credentials", "Blocked", "red"]
+    ]
+  },
+  "findings": {
+    "groups": [
+      {"level": "HIGH", "col": "red", "rows": [["Codex ran cat .env on wes-mbp", "Codex · wes-mbp"], ["MCP server linear-sync asks for shell access", "Claude Code · teo-mbp"]]},
+      {"level": "MEDIUM", "col": "amber", "rows": [["pip install requestz matches the IOC feed", "Windsurf · maya-xps"], ["Goose tried git push --force main", "Goose · hugo-mbp"]]},
+      {"level": "LOW", "col": "muted", "rows": [["Cursor reached a new host, api.mixpanel.com", "Cursor · ines-mbp"], ["Copilot hooks still in observe mode", "Copilot · ruben-lt"]]}
+    ]
+  },
+  "detail": {
+    "heading": ["Codex ran cat .env on wes-mbp", "The file holds 6 live keys"],
+    "rows": [
+      {"title": "Block reads of .env files", "desc": "The agent gets a denied tool call with the reason. Reads of .env.example still run"},
+      {"title": "Cloak the 6 keys", "desc": "Agents only see placeholders. Prismor swaps in the real value when the command runs"},
+      {"title": "Ping #security on every block", "desc": "Each block posts the agent, the device and the exact command"}
+    ],
+    "focus": 1,
+    "action": "Apply",
+    "code": [
+      {"text": "# what the agent wrote", "muted": true},
+      {"text": "curl api.openai.com/v1/models \\"},
+      {"text": "  -H \"Authorization: Bearer @@SECRET:openai@@\""},
+      {"text": "# what ran, outside the model", "muted": true},
+      {"text": "  -H \"Authorization: Bearer sk-proj-••••••••\"", "accent": true}
+    ]
+  },
+  "trend": {
+    "heading": ["Blocked", "tool calls"],
+    "series": [["MON", 14], ["TUE", 11], ["WED", 9], ["THU", 6], ["FRI", 5], ["SAT", 3], ["SUN", 2]],
+    "note": "Enforce mode on since Monday"
+  },
+  "agents": {
+    "heading": "Hooks for 14 coding agents",
+    "items": [
+      {"icon": "claude-code", "name": "Claude Code"},
+      {"icon": "openai", "name": "Codex"},
+      {"icon": "cursor", "name": "Cursor"},
+      {"icon": "github-copilot", "name": "Copilot"},
+      {"icon": "windsurf", "name": "Windsurf"},
+      {"icon": "qwen", "name": "Qwen Code"},
+      {"icon": "openhands", "name": "OpenHands"},
+      {"icon": "goose-codename", "name": "Goose"}
+    ]
+  },
+  "loop": {
+    "nodes": ["TOOL CALL", "CHECK POLICY", "RUN OR BLOCK", "WRITE AUDIT LOG"]
+  }
+}

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.24.0 (2026-11-21)
+- Skill `halo-glass-film`: a pale-grey, iridescent "labs launch" film (32.9 s, 16:9, music only, plus a 1080×1350 letterboxed feed cut via `render --ig`), back-engineered with `video-to-template` from a 32.7 s Instagram post of a Google Labs agent launch.
+  - One world: pale grey ground, lavender/cyan/mint light pools, frosted glass cards (the frame under the card, blurred and lifted to white), analytic anti-aliased rings and discs, hairline rails with mono marks.
+  - Object handoffs: ring → the wordmark's "o" → glass prompt card; findings row → heading; fix row → code card; disc grid → gradient agent card → dot → two loop rings → wordmark → real logo.
+  - Departures from the reference: no pill buttons or chips (agent tiles with thesvg icons instead), solid white wordmark with light behind it, real logo on the end card.
+  - Example: Prismor (cloaked keys, a blocked `.env` read, policies across 14 agents).
+
 ## 0.23.0 (2026-11-16)
 - Skill `ui-macro-launch-film`: a white, type-led SaaS launch film (57.5 s, 16:9, music only), back-engineered with `video-to-template` from an 87 s Instagram reel for a workspace app.
   - Every scene is one UI fragment drawn natively through a camera, so type stays sharp at 2.6× zoom.
